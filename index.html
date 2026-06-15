@@ -538,7 +538,15 @@
         let headerHtml = `<div class="font-extrabold text-xl md:text-2xl text-gray-800 mb-5 border-b border-pink-100 pb-4 flex items-center gap-3"><span class="bg-gradient-to-br from-pink-400 to-pink-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-base shadow-sm">${sIndex+1}</span> ${student.name}</div>`;
         let rulesHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
         ruleItems.forEach((rule, rIndex) => {
-          let savedVal = student.record ? student.record[rule] : 'ผ่าน';
+          // ── ค่า default เมื่อยังไม่มีข้อมูลบันทึก ──
+          let savedVal;
+          if (student.record) {
+            savedVal = student.record[rule];
+          } else {
+            savedVal = 'ไม่ผ่าน';
+            if (rule === 'โบว์' && student.name.startsWith('นาย')) savedVal = 'ไม่ต้องใส่';
+            if (rule === 'หนวดเครา' && student.name.startsWith('นางสาว')) savedVal = 'ไม่ต้องใส่';
+          }
           let radName = `st_${sIndex}_rule_${rIndex}`;
           rulesHtml += `<div class="bg-gray-50/80 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-pink-200 transition shadow-sm"><div class="text-sm font-bold text-gray-700 mb-3">${rule}</div><div class="flex gap-2 text-sm font-bold bg-white p-1 rounded-xl border border-gray-100"><label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer py-2 rounded-lg hover:bg-green-50 transition has-[:checked]:bg-green-100 has-[:checked]:text-green-700 has-[:checked]:border has-[:checked]:border-green-200 text-gray-500 border border-transparent"><input type="radio" name="${radName}" value="ผ่าน" class="hidden" ${savedVal === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label><label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer py-2 rounded-lg hover:bg-red-50 transition has-[:checked]:bg-red-100 has-[:checked]:text-red-700 has-[:checked]:border has-[:checked]:border-red-200 text-gray-500 border border-transparent"><input type="radio" name="${radName}" value="ไม่ผ่าน" class="hidden" ${savedVal === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label><label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer py-2 rounded-lg hover:bg-gray-100 transition has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 has-[:checked]:border has-[:checked]:border-gray-300 text-gray-500 border border-transparent"><input type="radio" name="${radName}" value="ไม่ต้องใส่" class="hidden" ${savedVal === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label></div></div>`;
         });
