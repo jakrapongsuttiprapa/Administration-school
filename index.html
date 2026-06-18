@@ -416,6 +416,17 @@
     const ruleItems = ['การปักชื่อ','เลขประจำตัว','กระโปรง/กางเกง','เข็มตราโรงเรียน','จุดระดับชั้น','เข็มขัดตราโรงเรียน','ถุงเท้า','ผม','สีผม','เล็บ','โบว์','ชื่อชุดพละ','ชื่อชุดวิถีพุทธ','หนวดเครา'];
     const ALL_CLASSES = ['ม.4/1','ม.4/2','ม.4/3','ม.4/4','ม.5/1','ม.5/2','ม.5/3','ม.5/4','ม.6/1','ม.6/2','ม.6/3','ม.6/4'];
 
+    // เรียงเดือนใหม่: เดือนปัจจุบัน "ล่าสุด" จะขึ้นก่อนเสมอ แล้วไล่ย้อนกลับ (เดือนที่ผ่าน/ตรวจไปแล้วจะอยู่ถัดลงมา)
+    // ส่วนเดือนที่ยังไม่มาถึงในปีนี้ จะต่อท้ายไว้ล่างสุด เพราะยังไม่มีการตรวจ
+    function getRecentMonthsFirst() {
+      const thMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      const currentIdx = new Date().getMonth();
+      let ordered = [];
+      for (let i = currentIdx; i >= 0; i--) ordered.push(thMonths[i]);
+      for (let i = currentIdx + 1; i < 12; i++) ordered.push(thMonths[i]);
+      return ordered;
+    }
+
     const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-student','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison'];
 
     function showView(id) {
@@ -512,9 +523,9 @@
 
     async function selectClassAndMonth() {
       const classes = ALL_CLASSES;
-      const months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      const months = getRecentMonthsFirst(); // เดือนล่าสุดอยู่บนสุด เดือนที่ผ่าน/ตรวจไปแล้วไล่ลงด้านล่าง
       let classOptions = classes.map(c => `<option value="${c}">${c}</option>`).join('');
-      let monthOptions = months.map(m => `<option value="${m}">${m}</option>`).join('');
+      let monthOptions = months.map((m, i) => `<option value="${m}">${m}${i === 0 ? ' (เดือนปัจจุบัน)' : ''}</option>`).join('');
       const { value: formValues } = await MySwal.fire({
         title: 'เลือกห้องและเดือนที่ตรวจ',
         html: `<select id="swal-class" class="swal2-select mb-4" style="display:flex;width:85%;margin:15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องเรียน --</option>${classOptions}</select><select id="swal-month" class="swal2-select" style="display:flex;width:85%;margin:10px auto 20px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกเดือน --</option>${monthOptions}</select>`,
@@ -600,25 +611,66 @@
     function renderDisciplineReport(reportData, startMonth, endMonth) {
       const container = document.getElementById('discipline-report-container'); container.innerHTML = '';
       if (reportData.length === 0) { container.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl text-green-600 font-extrabold text-2xl shadow">🎉 ยอดเยี่ยมมาก!<br><span class="text-gray-500 text-sm font-medium mt-3 block">ไม่มีนักเรียนที่ผิดระเบียบในช่วงเวลาที่เลือก</span></div>`; return; }
-      let grouped = {};
-      reportData.forEach(item => { if (!grouped[item.className]) grouped[item.className] = []; grouped[item.className].push(item); });
+
+      const thMonthsOrder = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+      // จัดกลุ่มข้อมูล: ห้อง -> นักเรียน -> สรุปจำนวนครั้ง / รายการที่ผิด / เดือนที่พบ ของนักเรียนคนนั้นทั้งหมด
+      let classMap = {};
+      reportData.forEach(item => {
+        if (!classMap[item.className]) classMap[item.className] = {};
+        if (!classMap[item.className][item.name]) classMap[item.className][item.name] = { count: 0, months: [], ruleCounts: {} };
+        let agg = classMap[item.className][item.name];
+        agg.count += 1;
+        agg.months.push(item.month);
+        (item.brokenRules || []).forEach(rule => { agg.ruleCounts[rule] = (agg.ruleCounts[rule] || 0) + 1; });
+      });
+
+      // สรุปภาพรวมทั้งโรงเรียนไว้ด้านบนสุด ให้เห็นภาพรวมเร็วๆ ก่อนลงรายละเอียด
+      let totalFlagged = 0, totalIncidents = 0, ruleTotals = {};
+      Object.values(classMap).forEach(students => Object.values(students).forEach(agg => {
+        totalFlagged++; totalIncidents += agg.count;
+        Object.entries(agg.ruleCounts).forEach(([r, c]) => { ruleTotals[r] = (ruleTotals[r] || 0) + c; });
+      }));
+      let topRuleEntry = Object.entries(ruleTotals).sort((a, b) => b[1] - a[1])[0];
+
+      let overviewHtml = `<div class="glass-card rounded-3xl p-6 mb-6 border-t-4 border-purple-500 shadow-md"><div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-purple-700">${totalFlagged}</div><div class="text-[11px] text-purple-500 font-bold uppercase tracking-wide mt-1">นักเรียนที่มีรายการ</div></div>
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-red-600">${totalIncidents}</div><div class="text-[11px] text-red-500 font-bold uppercase tracking-wide mt-1">จำนวนครั้งที่บันทึก</div></div>
+        <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-center col-span-2 sm:col-span-1"><div class="font-black text-lg text-amber-700 truncate">${topRuleEntry ? topRuleEntry[0] : '-'}</div><div class="text-[11px] text-amber-500 font-bold uppercase tracking-wide mt-1">เรื่องที่พบบ่อยที่สุด</div></div>
+      </div></div>`;
+
       let html = '';
-      for (const [className, students] of Object.entries(grouped)) {
-        html += `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 shadow-md border-t-4 border-purple-500"><h3 class="text-2xl font-extrabold text-purple-700 mb-5 border-b border-purple-100 pb-3 flex items-center gap-2"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> ชั้น ${className}</h3><div class="space-y-4">`;
-        students.forEach((st, idx) => {
-          html += `<div class="bg-white p-4 md:p-5 rounded-2xl border border-red-100 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-sm hover:shadow-md transition"><div class="font-bold text-gray-800 flex items-center flex-wrap text-lg"><span class="bg-red-100 text-red-600 w-8 h-8 flex items-center justify-center rounded-full text-sm mr-3 shadow-sm">${idx+1}</span>${st.name} <span class="bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded-md ml-2 font-bold border border-gray-200">เดือน: ${st.month}</span></div><div class="text-sm text-red-700 bg-red-50 px-4 py-3 rounded-xl border border-red-100"><strong>เรื่องที่ไม่ผ่าน:</strong> <span class="mt-1.5 block text-gray-700 font-medium">${st.brokenRules.join(', ')}</span></div></div>`;
+      for (const [className, students] of Object.entries(classMap)) {
+        // เรียงนักเรียนตามจำนวนครั้งที่ผิด (มากไปน้อย) เพื่อให้เห็นเคสที่ต้องดูแลก่อนเป็นอันดับแรก
+        let studentEntries = Object.entries(students).sort((a, b) => b[1].count - a[1].count);
+
+        html += `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 shadow-md border-t-4 border-purple-500"><h3 class="text-2xl font-extrabold text-purple-700 mb-5 border-b border-purple-100 pb-3 flex items-center gap-2"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> ชั้น ${className}<span class="ml-auto text-xs bg-purple-100 text-purple-600 px-3 py-1.5 rounded-full font-bold">${studentEntries.length} คน</span></h3><div class="space-y-4">`;
+
+        studentEntries.forEach(([studentName, agg], idx) => {
+          let sortedMonths = [...new Set(agg.months)].sort((a, b) => thMonthsOrder.indexOf(b) - thMonthsOrder.indexOf(a));
+          let sev = agg.count >= 4 ? { badge: 'bg-red-600 text-white', card: 'border-red-300 bg-red-50/40', label: 'ผิดซ้ำหลายครั้ง' }
+                  : agg.count >= 2 ? { badge: 'bg-orange-500 text-white', card: 'border-orange-200 bg-orange-50/40', label: 'ผิดซ้ำ' }
+                  : { badge: 'bg-amber-400 text-white', card: 'border-amber-100', label: 'พบ 1 ครั้ง' };
+          let ruleChips = Object.entries(agg.ruleCounts).sort((a, b) => b[1] - a[1]).map(([rule, c]) => `<span class="inline-flex items-center gap-1 bg-white border border-red-100 text-red-600 text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">${rule}${c > 1 ? ` <span class="text-red-400">×${c}</span>` : ''}</span>`).join('');
+          html += `<div class="bg-white p-4 md:p-5 rounded-2xl border ${sev.card} shadow-sm hover:shadow-md transition">
+            <div class="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-3">
+              <div class="font-bold text-gray-800 flex items-center gap-3 text-lg"><span class="bg-purple-100 text-purple-600 w-8 h-8 flex items-center justify-center rounded-full text-sm font-extrabold flex-shrink-0">${idx + 1}</span>${studentName}</div>
+              <span class="${sev.badge} text-xs font-extrabold px-3 py-1.5 rounded-full whitespace-nowrap shadow-sm self-start md:self-center">⚠ ${sev.label} (${agg.count} ครั้ง)</span>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-3">${ruleChips}</div>
+            <div class="text-[11px] text-gray-400 font-medium">เดือนที่พบ: ${sortedMonths.join(' • ')}</div>
+          </div>`;
         });
         html += `</div></div>`;
       }
-      container.innerHTML = html;
+      container.innerHTML = overviewHtml + html;
     }
 
     function exportDisciplineReportList() {
       if (!currentDiscStartMonth || !currentDiscEndMonth) { MySwal.fire('ข้อผิดพลาด', 'ไม่พบข้อมูลเดือนที่เลือก', 'error'); return; }
       MySwal.fire({ title: 'กำลังสร้างหนังสือราชการ...', html: 'กรุณารอสักครู่ ระบบกำลังสร้างไฟล์เอกสาร', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       callAPI('exportMonthlyDisciplineReportDoc', { startMonth: currentDiscStartMonth, endMonth: currentDiscEndMonth }).then(res => {
-        if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` });
-        } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
+        if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` }); } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
       });
     }
 
@@ -664,6 +716,9 @@
     function renderStudentResult(result, conductData, studentName) {
       const container = document.getElementById('studentResultContainer'); container.innerHTML = '';
       const records = result.records.map(rec => { let cleanRec = { brokenRules: rec.brokenRules }; for (let key in rec) { if (key !== 'brokenRules') cleanRec[key.trim()] = rec[key]; } return cleanRec; });
+      // เรียงประวัติให้เดือนล่าสุดอยู่บนสุด (เดือนที่ตรวจไปแล้วจะไหลลงด้านล่าง)
+      const thMonthsCalendarOrder = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      records.sort((a, b) => thMonthsCalendarOrder.indexOf(b['เดือน']) - thMonthsCalendarOrder.indexOf(a['เดือน']));
       let overallBroken = {}; for (let key in result.overallBroken) overallBroken[key.trim()] = result.overallBroken[key];
 
       // --- Widget คะแนนพฤติกรรม ---
@@ -717,6 +772,31 @@
         </div>`;
 
       container.innerHTML += conductCard;
+
+      // --- คำเตือนสำหรับเรื่องที่ทำผิดซ้ำๆ (โทนให้กำลังใจ ไม่ตำหนิ) ---
+      let repeatedUniformIssues = Object.entries(overallBroken).filter(([rule, count]) => count >= 2).sort((a, b) => b[1] - a[1]);
+      let conductIncidentCount = conductRecs.length;
+      if (repeatedUniformIssues.length > 0 || conductIncidentCount >= 2) {
+        let warningLines = '';
+        repeatedUniformIssues.forEach(([rule, count]) => {
+          if (count >= 4) {
+            warningLines += `<li class="flex items-start gap-2.5"><span class="text-lg flex-shrink-0">⚠️</span><span><strong>${rule}</strong> — พบซ้ำแล้ว ${count} ครั้ง ควรรีบแก้ไขโดยเร็วนะครับ</span></li>`;
+          } else {
+            warningLines += `<li class="flex items-start gap-2.5"><span class="text-lg flex-shrink-0">🔸</span><span><strong>${rule}</strong> — พบซ้ำ ${count} ครั้งแล้ว ลองดูแลให้เรียบร้อยนะครับ</span></li>`;
+          }
+        });
+        if (conductIncidentCount >= 2) {
+          warningLines += `<li class="flex items-start gap-2.5"><span class="text-lg flex-shrink-0">🔺</span><span>มีบันทึกพฤติกรรมแล้ว ${conductIncidentCount} ครั้ง หากเกิดขึ้นอีก อาจมีการแจ้งผู้ปกครองให้ทราบครับ</span></li>`;
+        }
+        container.innerHTML += `
+        <div class="glass-card bg-amber-50/80 border-t-4 border-amber-400 rounded-3xl p-6 md:p-8 mb-6 shadow-md">
+          <h3 class="text-amber-700 font-extrabold text-xl mb-4 flex items-center gap-2">
+            <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77-1.333.192 3 1.732 3z"></path></svg>
+            ข้อควรระวัง
+          </h3>
+          <ul class="space-y-3 text-sm text-amber-800 font-medium">${warningLines}</ul>
+        </div>`;
+      }
 
       if (records.length === 0) {
         container.innerHTML += `<div class="glass-card p-12 text-center rounded-3xl mt-4 border border-gray-100"><div class="text-6xl mb-4">👻</div><div class="text-red-500 font-extrabold text-2xl">ไม่พบข้อมูลการตรวจแต่งกาย</div></div>`;
