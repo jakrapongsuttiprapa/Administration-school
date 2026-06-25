@@ -209,6 +209,17 @@
               <svg class="w-6 h-6 text-emerald-200 relative z-10 transform group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
           </div>
+          <button onclick="showClassroomOverview()" class="btn-pastel nav-card w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white p-5 rounded-3xl shadow-lg border border-pink-400 flex justify-between items-center group relative overflow-hidden">
+  <div class="absolute right-[-10px] bottom-[-20px] opacity-10 transform group-hover:scale-110 transition duration-500"><svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg></div>
+  <div class="relative z-10 text-left">
+    <div class="font-extrabold text-lg text-white flex items-center gap-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+      📊 ภาพรวมการแต่งกายรายห้อง
+    </div>
+    <div class="text-xs text-pink-100 mt-1 font-medium">ดูสถิติรวมทุกห้อง — ไม่ต้อง login</div>
+  </div>
+  <svg class="w-6 h-6 text-pink-100 relative z-10 transform group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+</button>
 
           <!-- ปุ่มวิชาการ (เด่นพิเศษ - ใช้บ่อย) -->
           <a href="https://jakrapongsuttiprapa.github.io/academic/"
@@ -438,6 +449,13 @@
       </div>
       <div id="comparison-content"></div>
     </div>
+    <!-- 10. หน้า Dashboard ภาพรวมรายห้อง -->
+<div id="view-overview" class="hidden">
+  <div class="flex justify-between items-center mb-4 no-print glass-card p-3 rounded-2xl">
+    <button onclick="goHome(true)" class="text-pink-600 font-bold flex items-center gap-1 hover:text-pink-800 bg-pink-50 px-4 py-2 rounded-xl transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
+  </div>
+  <div id="overview-container"></div>
+</div>
 
   </main>
 
@@ -503,7 +521,7 @@
       return ordered;
     }
 
-    const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-student','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison'];
+    const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-student','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison','view-overview'];
 
     function showView(id) {
       ALL_VIEWS.forEach(v => document.getElementById(v).classList.add('hidden'));
@@ -1294,6 +1312,97 @@
 
       document.getElementById('comparison-content').innerHTML = bannerHtml + overviewHtml + rulesHtml + classHtml;
     }
+    // ==================== Dashboard ภาพรวมรายห้อง ====================
+function showClassroomOverview() {
+  showView('view-overview');
+  document.getElementById('overview-container').innerHTML =
+    '<div class="glass-card rounded-3xl p-8 text-center"><div class="skeleton h-8 w-48 mx-auto rounded-xl mb-4"></div><div class="skeleton h-4 w-64 mx-auto rounded"></div></div>';
+  MySwal.fire({ title: 'กำลังโหลดข้อมูล...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); } });
+  callAPI('getClassroomOverview', {})
+    .then(function(res) {
+      Swal.close();
+      if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; }
+      renderClassroomOverview(res);
+    })
+    .catch(function(e) { MySwal.fire('ผิดพลาด', e.message, 'error'); });
+}
+
+function renderClassroomOverview(res) {
+  var container = document.getElementById('overview-container');
+  var gradeColors = { 4: '#ec4899', 5: '#9333ea', 6: '#3b82f6' };
+  var totalPct = res.totalInspected > 0 ? Math.round(res.totalFail / res.totalInspected * 100) : 0;
+  var passPct = 100 - totalPct;
+
+  var html = '<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-pink-500 shadow-md">'
+    + '<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">'
+    + '<div>'
+    + '<h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">📊 ภาพรวมการแต่งกายรายห้อง</h2>'
+    + '<p class="text-gray-500 text-sm mt-1 font-medium">เดือน <span class="text-pink-600 font-extrabold bg-pink-50 px-2 py-0.5 rounded-lg">' + res.currentMonth + '</span> · สถิติรวม ไม่ระบุตัวบุคคล</p>'
+    + '</div>'
+    + '<span class="text-xs bg-green-100 text-green-700 font-bold px-3 py-1.5 rounded-full border border-green-300 self-start">🌐 สาธารณะ — ไม่ต้อง login</span>'
+    + '</div>'
+    + '<div class="grid grid-cols-3 gap-4">'
+    + '<div class="bg-pink-50 border border-pink-100 rounded-2xl p-4 text-center"><div class="font-black text-3xl text-pink-700 mb-1">' + res.totalStudents.toLocaleString() + '</div><div class="text-xs text-pink-500 font-bold uppercase tracking-wide">นักเรียนทั้งหมด</div></div>'
+    + '<div class="bg-green-50 border border-green-100 rounded-2xl p-4 text-center"><div class="font-black text-3xl text-green-600 mb-1">' + passPct + '%</div><div class="text-xs text-green-500 font-bold uppercase tracking-wide">แต่งกายผ่าน</div></div>'
+    + '<div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-center"><div class="font-black text-3xl text-red-600 mb-1">' + totalPct + '%</div><div class="text-xs text-red-500 font-bold uppercase tracking-wide">ไม่ผ่าน</div></div>'
+    + '</div></div>';
+
+  html += '<div class="glass-card rounded-3xl p-6 mb-6 border-t-4 border-rose-400 shadow-md">'
+    + '<h3 class="font-extrabold text-gray-800 text-lg mb-4">📋 อัตราการแต่งกายไม่ผ่านรายห้อง</h3>'
+    + '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">';
+
+  res.rooms.forEach(function(room) {
+    var pct = room.total > 0 ? Math.round(room.fail / room.total * 100) : 0;
+    var color = gradeColors[room.grade] || '#ec4899';
+    var borderColor = pct >= 40 ? '#ef4444' : pct >= 25 ? '#f97316' : '#22c55e';
+    var bgColor = pct >= 40 ? '#fef2f2' : pct >= 25 ? '#fff7ed' : '#ffffff';
+    var badge = pct >= 40
+      ? '<span style="font-size:9px;background:#ef4444;color:white;padding:1px 6px;border-radius:10px;font-weight:700;">ต้องแก้ไข</span>'
+      : pct >= 25
+      ? '<span style="font-size:9px;background:#f97316;color:white;padding:1px 6px;border-radius:10px;font-weight:700;">ระวัง</span>'
+      : '<span style="font-size:9px;background:#22c55e;color:white;padding:1px 6px;border-radius:10px;font-weight:700;">ปกติ</span>';
+
+    html += '<div style="background:' + bgColor + ';border-radius:14px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.05);border-left:5px solid ' + borderColor + ';">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+      + '<span style="font-weight:800;color:#1f2937;font-size:14px;">' + room.cls + '</span>' + badge
+      + '</div>'
+      + '<div style="background:#f3f4f6;border-radius:4px;height:6px;margin-bottom:5px;overflow:hidden;">'
+      + '<div style="height:100%;border-radius:4px;background:' + color + ';width:' + pct + '%;"></div>'
+      + '</div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;">'
+      + '<span style="color:#6b7280;">ไม่ผ่าน ' + room.fail + ' คน</span>'
+      + '<span style="color:' + color + ';">' + pct + '%</span>'
+      + '</div></div>';
+  });
+
+  html += '</div></div>';
+
+  if (res.topRules && res.topRules.length > 0) {
+    var maxCount = res.topRules[0].count || 1;
+    html += '<div class="glass-card rounded-3xl p-6 mb-6 border-t-4 border-amber-400 shadow-md">'
+      + '<h3 class="font-extrabold text-gray-800 text-lg mb-4">⚠️ รายการที่พบปัญหาบ่อยที่สุด</h3>';
+    res.topRules.forEach(function(r) {
+      var pct = Math.round(r.count / maxCount * 100);
+      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
+        + '<span style="font-size:13px;font-weight:700;color:#374151;width:100px;flex-shrink:0;">' + r.rule + '</span>'
+        + '<div style="flex:1;background:#fce7f3;border-radius:4px;height:18px;overflow:hidden;">'
+        + '<div style="background:linear-gradient(to right,#ec4899,#f43f5e);height:100%;border-radius:4px;width:' + pct + '%;"></div>'
+        + '</div>'
+        + '<span style="font-size:13px;font-weight:800;color:#9d174d;width:45px;text-align:right;">' + r.count + ' คน</span>'
+        + '</div>';
+    });
+    html += '<div class="mt-4 bg-amber-50 border border-amber-200 rounded-2xl p-3 text-xs text-amber-700 font-medium">'
+      + '⚠️ ข้อมูลนี้แสดงเฉพาะสถิติรวม — รายชื่อรายบุคคลเข้าถึงได้เฉพาะครูที่ login เท่านั้น'
+      + '</div></div>';
+  } else {
+    html += '<div class="glass-card rounded-3xl p-8 mb-6 text-center border border-gray-100">'
+      + '<div class="text-4xl mb-3">🎉</div>'
+      + '<p class="font-extrabold text-green-600 text-lg">ยังไม่มีข้อมูลการตรวจในเดือนนี้</p>'
+      + '</div>';
+  }
+
+  container.innerHTML = html;
+}
 
   </script>
 </body>
