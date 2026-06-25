@@ -566,7 +566,7 @@
           actsContainer.innerHTML = `<div class="text-center text-gray-400 py-6 text-sm font-medium border-2 border-dashed border-gray-100 rounded-2xl">ยังไม่มีกิจกรรมวันนี้</div>`;
         } else {
           let actsHtml = '';
-          stats.activities.forEach(act => {
+          stats.activities.slice(0, 3).forEach(act => {
             let icon = '', bgClass = '', textClass = '';
             if (act.type === 'inspect') { icon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`; bgClass = 'bg-pink-50 border border-pink-100'; textClass = 'text-pink-500'; }
             else if (act.type === 'attendance') { icon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path></svg>`; bgClass = 'bg-blue-50 border border-blue-100'; textClass = 'text-blue-500'; }
