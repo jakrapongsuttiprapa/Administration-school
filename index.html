@@ -37,10 +37,10 @@
       transform: translateZ(0);
     }
     .glass-dark {
-      background: rgba(20,20,20,0.95);
+      background: linear-gradient(160deg, rgba(43,18,32,0.96) 0%, rgba(24,12,20,0.97) 100%);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,50,50,0.3);
+      border: 1px solid rgba(244,114,182,0.22);
     }
     .btn-pastel {
       transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s cubic-bezier(0.4,0,0.2,1);
@@ -57,6 +57,11 @@
     }
     .skeleton {
       background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+      background-size: 200% 100%;
+      animation: 1.5s shine linear infinite;
+    }
+    .skeleton-dark {
+      background: linear-gradient(110deg, rgba(255,255,255,0.06) 8%, rgba(255,255,255,0.16) 18%, rgba(255,255,255,0.06) 33%);
       background-size: 200% 100%;
       animation: 1.5s shine linear infinite;
     }
@@ -186,7 +191,7 @@
 
           <!-- ปุ่มบันทึกพฤติกรรม + สมุดโทรศัพท์ -->
           <div class="grid grid-cols-1 gap-4 mt-2">
-            <button onclick="loginConduct()" class="btn-pastel nav-card w-full bg-gray-900 hover:bg-black text-white p-5 rounded-3xl shadow-lg border border-red-900/50 flex justify-between items-center group relative overflow-hidden">
+            <button onclick="loginConduct()" class="btn-pastel nav-card w-full bg-gradient-to-br from-gray-900 to-rose-950 hover:to-rose-900 text-white p-5 rounded-3xl shadow-lg border border-rose-800/40 flex justify-between items-center group relative overflow-hidden">
               <div class="absolute right-[-10px] bottom-[-30px] opacity-10 text-red-500 transform group-hover:scale-110 transition duration-500"><svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg></div>
               <div class="relative z-10 text-left">
                 <div class="font-extrabold text-lg text-red-400 flex items-center gap-2">
@@ -392,21 +397,21 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
           <div class="space-y-5">
-            <div><label class="block text-sm font-bold text-red-200 mb-2">ชื่อ-สกุล นักเรียน</label><input type="text" id="conduct-student-name" class="w-full p-4 bg-black/50 border border-red-900/50 rounded-xl text-white outline-none cursor-not-allowed font-medium" readonly></div>
-            <div><label class="block text-sm font-bold text-red-200 mb-2">ชั้นเรียน</label><input type="text" id="conduct-student-class" class="w-full p-4 bg-black/50 border border-red-900/50 rounded-xl text-white outline-none cursor-not-allowed font-medium" readonly></div>
+            <div><label class="block text-sm font-bold text-red-200 mb-2">ชื่อ-สกุล นักเรียน</label><input type="text" id="conduct-student-name" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white outline-none cursor-not-allowed font-medium" readonly></div>
+            <div><label class="block text-sm font-bold text-red-200 mb-2">ชั้นเรียน</label><input type="text" id="conduct-student-class" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white outline-none cursor-not-allowed font-medium" readonly></div>
             <div class="grid grid-cols-2 gap-4">
-              <div><label class="block text-sm font-bold text-red-200 mb-2">วันที่กระทำผิด</label><input type="date" id="conduct-date" class="w-full p-4 bg-gray-900 border border-red-800 rounded-xl text-white focus:border-red-500 outline-none font-medium transition"></div>
-              <div><label class="block text-sm font-bold text-red-200 mb-2">เวลา</label><input type="time" id="conduct-time" class="w-full p-4 bg-gray-900 border border-red-800 rounded-xl text-white focus:border-red-500 outline-none font-medium transition"></div>
+              <div><label class="block text-sm font-bold text-red-200 mb-2">วันที่กระทำผิด</label><input type="date" id="conduct-date" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white focus:border-rose-400 outline-none font-medium transition"></div>
+              <div><label class="block text-sm font-bold text-red-200 mb-2">เวลา</label><input type="time" id="conduct-time" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white focus:border-rose-400 outline-none font-medium transition"></div>
             </div>
           </div>
           <div class="space-y-5">
-            <div><label class="block text-sm font-bold text-red-200 mb-2">เลือกรายการพฤติกรรมผิดระเบียบ (40 ข้อ)</label><select id="conduct-rule" onchange="updateConductPoints()" class="w-full p-4 bg-gray-900 border border-red-800 rounded-xl text-white focus:border-red-500 outline-none appearance-none font-medium transition"><option value="">-- กรุณาเลือกความผิด --</option></select></div>
-            <div><label class="block text-sm font-bold text-red-200 mb-2">คะแนนที่ถูกตัด (เต็ม 100)</label><div class="flex items-center gap-4"><input type="number" id="conduct-points" class="w-32 p-4 bg-black/50 border border-red-800 rounded-xl text-red-400 font-extrabold text-3xl text-center outline-none focus:border-red-500 transition" value="0"><span class="text-red-200/50 text-sm font-medium">คะแนน<br>(แก้ไขตัวเลขเองได้)</span></div></div>
+            <div><label class="block text-sm font-bold text-red-200 mb-2">เลือกรายการพฤติกรรมผิดระเบียบ (40 ข้อ)</label><select id="conduct-rule" onchange="updateConductPoints()" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white focus:border-rose-400 outline-none appearance-none font-medium transition"><option value="">-- กรุณาเลือกความผิด --</option></select></div>
+            <div><label class="block text-sm font-bold text-red-200 mb-2">คะแนนที่ถูกตัด (เต็ม 100)</label><div class="flex items-center gap-4"><input type="number" id="conduct-points" class="w-32 p-4 bg-black/30 border border-rose-800/40 rounded-xl text-red-300 font-extrabold text-3xl text-center outline-none focus:border-rose-400 transition" value="0"><span class="text-red-200/50 text-sm font-medium">คะแนน<br>(แก้ไขตัวเลขเองได้)</span></div></div>
           </div>
         </div>
         <div class="mt-8 relative z-10">
           <label class="block text-sm font-bold text-red-200 mb-2">คำอธิบายเพิ่มเติม <span class="text-red-300/60 font-normal">(ไม่บังคับ)</span></label>
-          <textarea id="conduct-description" rows="3" placeholder="รายละเอียดเพิ่มเติม เช่น เหตุการณ์ บุคคลที่เกี่ยวข้อง หรือบริบทอื่นๆ" class="w-full p-4 bg-gray-900 border border-red-800 rounded-xl text-white focus:border-red-500 outline-none font-medium transition resize-none"></textarea>
+          <textarea id="conduct-description" rows="3" placeholder="รายละเอียดเพิ่มเติม เช่น เหตุการณ์ บุคคลที่เกี่ยวข้อง หรือบริบทอื่นๆ" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white focus:border-rose-400 outline-none font-medium transition resize-none"></textarea>
         </div>
         <div class="mt-10 text-center relative z-10 pt-8 border-t border-red-900/30">
           <button onclick="saveConductData()" class="btn-pastel bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-extrabold py-4 px-12 rounded-xl shadow-2xl text-xl border border-red-500/50 w-full md:w-auto">⚠ บันทึกและสร้างเอกสารราชการ</button>
@@ -554,6 +559,23 @@
         <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-3/4 rounded mb-2"></div><div class="skeleton h-3 w-1/2 rounded"></div></div></div>`;
     }
 
+    // ─── Skeleton การ์ดกลาง ใช้ร่วมกันได้ทุกหน้าที่ต้องโหลดรายชื่อ/รายงาน ───
+    // แสดงแทนที่ SweetAlert แบบบล็อกหน้าจอ ให้ผู้ใช้เห็นโครงร่างของเนื้อหาที่กำลังจะมา ลื่นไหลกว่าเดิม
+    function cardSkeletonRows(n, cols) {
+      cols = cols || 3;
+      let colClass = cols === 1 ? '' : (cols === 2 ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3');
+      let html = '';
+      for (let i = 0; i < n; i++) {
+        html += `<div class="glass-card rounded-3xl p-5 md:p-8 mb-6 border border-gray-100 shadow-sm">
+          <div class="flex items-center gap-3 mb-5"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="skeleton h-5 w-40 rounded"></div></div>
+          <div class="grid grid-cols-1 ${colClass} gap-4">
+            <div class="skeleton h-14 rounded-2xl"></div><div class="skeleton h-14 rounded-2xl"></div><div class="skeleton h-14 rounded-2xl"></div>
+          </div>
+        </div>`;
+      }
+      return html;
+    }
+
     function loadDashboardStats() {
       callAPI('getDashboardStats').then(stats => {
         document.getElementById('stat-date-label').innerText = "อัปเดตล่าสุด: " + stats.todayDisplay;
@@ -631,8 +653,8 @@
 
     function loadStudents() {
       showView('view-teacher');
-      MySwal.fire({ title: 'กำลังโหลดรายชื่อ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('getStudentsForInspection', { className: currentClass, month: currentMonth }).then(students => { Swal.close(); currentStudents = students; renderStudentCards(); });
+      document.getElementById('students-container').innerHTML = cardSkeletonRows(3);
+      callAPI('getStudentsForInspection', { className: currentClass, month: currentMonth }).then(students => { currentStudents = students; renderStudentCards(); });
     }
 
     function renderStudentCards() {
@@ -698,8 +720,8 @@
       showView('view-discipline');
       let label = startMonth === endMonth ? startMonth : `ตั้งแต่ ${startMonth} ถึง ${endMonth}`;
       document.getElementById('discipline-month-label').innerText = label;
-      MySwal.fire({ title: 'กำลังดึงรายงาน...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('getDisciplineReport', { startMonth, endMonth }).then(reportData => { Swal.close(); renderDisciplineReport(reportData, startMonth, endMonth); });
+      document.getElementById('discipline-report-container').innerHTML = cardSkeletonRows(3);
+      callAPI('getDisciplineReport', { startMonth, endMonth }).then(reportData => { renderDisciplineReport(reportData, startMonth, endMonth); });
     }
 
     function renderDisciplineReport(reportData, startMonth, endMonth) {
@@ -796,13 +818,12 @@
     function searchStudent() {
       const name = document.getElementById('studentSearchName').value;
       if (!name) { MySwal.fire({ title: 'เดี๋ยวก่อน!', text: 'กรุณาเลือกชื่อของคุณก่อนกดค้นหาครับ', icon: 'warning', confirmButtonColor: '#ec4899' }); return; }
-      MySwal.fire({ title: 'กำลังค้นหา...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      document.getElementById('studentResultContainer').innerHTML = cardSkeletonRows(2);
       // ดึงทั้งผลตรวจแต่งกาย และคะแนนพฤติกรรม พร้อมกัน
       Promise.all([
         callAPI('searchStudentData', { studentName: name }),
         callAPI('getStudentConductScore', { studentName: name })
       ]).then(([inspectResult, conductResult]) => {
-        Swal.close();
         renderStudentResult(inspectResult, conductResult, name);
       });
     }
@@ -981,8 +1002,8 @@
     function switchAttendanceClass(cls) { currentClass = cls; document.getElementById('att-display-class').innerText = currentClass; renderAttendanceTabs(); loadAttendanceData(currentClass); }
 
     function loadAttendanceData(cls) {
-      MySwal.fire({ title: `กำลังโหลดรายชื่อ ${cls}...`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('getStudentsForAttendance', { className: cls, dateStr: currentAttDate }).then(students => { Swal.close(); currentStudents = students; renderAttendanceCards(currentAttDate); });
+      document.getElementById('attendance-students-container').innerHTML = cardSkeletonRows(3, 1);
+      callAPI('getStudentsForAttendance', { className: cls, dateStr: currentAttDate }).then(students => { currentStudents = students; renderAttendanceCards(currentAttDate); });
     }
 
     function renderAttendanceCards(dateStr) {
@@ -1013,8 +1034,8 @@
 
     function loadAbsenceReport() {
       showView('view-absence-stats');
-      MySwal.fire({ title: 'กำลังประมวลผลสถิติ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('getAbsenceReport').then(reportData => { Swal.close(); renderAbsenceReport(reportData); });
+      document.getElementById('absence-stats-container').innerHTML = cardSkeletonRows(3);
+      callAPI('getAbsenceReport').then(reportData => { renderAbsenceReport(reportData); });
     }
 
     function renderAbsenceReport(reportData) {
@@ -1045,10 +1066,19 @@
     function loadConductOverview() {
       showView('view-conduct-overview');
       const container = document.getElementById('conduct-overview-container');
-      container.innerHTML = `<div class="glass-dark rounded-3xl p-8 text-center text-white"><div class="skeleton h-8 w-48 mx-auto rounded-xl mb-4 bg-white/10"></div><div class="skeleton h-4 w-64 mx-auto rounded bg-white/10"></div></div>`;
-      MySwal.fire({ title: 'กำลังโหลดภาพรวม...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      container.innerHTML = `<div class="glass-dark rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-red-600">
+        <div class="skeleton-dark h-7 w-56 rounded-xl mb-3"></div>
+        <div class="skeleton-dark h-4 w-72 rounded mb-6"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="skeleton-dark h-20 rounded-2xl"></div><div class="skeleton-dark h-20 rounded-2xl"></div>
+          <div class="skeleton-dark h-20 rounded-2xl"></div><div class="skeleton-dark h-20 rounded-2xl"></div>
+        </div>
+      </div>
+      <div class="glass-dark rounded-3xl p-6 mb-6 border border-red-900/30">
+        <div class="skeleton-dark h-5 w-44 rounded mb-4"></div>
+        <div class="space-y-2"><div class="skeleton-dark h-14 rounded-xl"></div><div class="skeleton-dark h-14 rounded-xl"></div><div class="skeleton-dark h-14 rounded-xl"></div></div>
+      </div>`;
       callAPI('getConductOverview').then(res => {
-        Swal.close();
         if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; }
         renderConductOverview(res);
       });
@@ -1206,8 +1236,8 @@
       if (selectedClass) {
         showView('view-contact');
         document.getElementById('contact-display-class').innerText = selectedClass;
-        MySwal.fire({ title: 'กำลังโหลดข้อมูลติดต่อ...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
-        callAPI('getContactsByClass', { className: selectedClass }).then(students => { MySwal.close(); renderContactCards(students); });
+        document.getElementById('contact-students-container').innerHTML = cardSkeletonRows(3, 1);
+        callAPI('getContactsByClass', { className: selectedClass }).then(students => { renderContactCards(students); });
       }
     }
 
@@ -1266,9 +1296,13 @@
       });
       if (!form) return;
       showView('view-comparison');
-      document.getElementById('comparison-content').innerHTML = `<div class="glass-card rounded-3xl p-8 text-center"><div class="skeleton h-8 w-64 mx-auto rounded-xl mb-4"></div><div class="skeleton h-4 w-48 mx-auto rounded"></div></div>`;
-      MySwal.fire({ title: 'กำลังวิเคราะห์ข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('getComparisonData', { monthA: form.monthA, monthB: form.monthB }).then(res => { Swal.close(); if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; } renderComparison(res); });
+      document.getElementById('comparison-content').innerHTML = `<div class="glass-card rounded-3xl p-6 md:p-10 mb-6 border-t-4 border-violet-500">
+        <div class="skeleton h-6 w-72 rounded-xl mb-8"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="skeleton h-48 rounded-3xl"></div><div class="skeleton h-48 rounded-3xl"></div><div class="skeleton h-48 rounded-3xl"></div>
+        </div>
+      </div>`;
+      callAPI('getComparisonData', { monthA: form.monthA, monthB: form.monthB }).then(res => { if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; } renderComparison(res); });
     }
 
     function renderComparison(res) {
@@ -1279,31 +1313,33 @@
       const trendColor = pctB < pctA ? 'text-green-600' : pctB > pctA ? 'text-red-600' : 'text-gray-500';
 
       let overviewHtml = `<div class="glass-card rounded-3xl p-6 md:p-10 mb-6 border-t-4 border-violet-500 shadow-md"><h2 class="text-2xl font-extrabold text-gray-800 mb-2">ภาพรวมทั้งโรงเรียน</h2><p class="text-gray-500 text-sm mb-8 font-medium">เปรียบเทียบอัตราการไม่ผ่านระเบียบแต่งกายรายเดือน</p><div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-        <div class="bg-violet-50 border-2 border-violet-200 rounded-3xl p-6 text-center"><div class="text-xs font-extrabold text-violet-400 uppercase tracking-widest mb-3">เดือนที่ 1</div><div class="text-3xl font-extrabold text-violet-700 mb-1">${monthA}</div><div class="text-6xl font-black text-violet-600 my-4">${pctA}<span class="text-2xl">%</span></div><div class="text-sm text-violet-500 font-medium">ไม่ผ่าน ${dataA.totalFailed} / ${dataA.totalStudents} คน</div><div class="mt-4 bg-violet-200 rounded-full h-3 overflow-hidden"><div class="bg-violet-500 h-3 rounded-full" style="width:${pctA}%"></div></div></div>
+        <div class="bg-violet-50 border-2 border-violet-200 rounded-3xl p-6 text-center"><div class="text-xs font-extrabold text-violet-400 uppercase tracking-widest mb-3">เดือนที่ 1</div><div class="text-3xl font-extrabold text-violet-700 mb-1">${monthA}</div><div class="text-6xl font-black text-violet-600 my-4">${pctA}<span class="text-2xl">%</span></div><div class="text-sm text-violet-500 font-medium">ไม่ผ่าน ${dataA.totalFailed} / ${dataA.totalStudents} คน</div><div class="mt-4 bg-violet-200 rounded-full h-3 overflow-hidden"><div class="cmp-bar bg-violet-500 h-3 rounded-full" data-target="${pctA}" style="width:0%;transition:width 1.1s cubic-bezier(0.16,1,0.3,1) 100ms;"></div></div></div>
         <div class="text-center py-4"><div class="text-5xl mb-3">${pctB < pctA ? '✅' : pctB > pctA ? '⚠️' : '⚖️'}</div><div class="font-extrabold text-2xl ${trendColor}">${trend}</div><div class="text-gray-400 text-sm mt-2 font-medium">${Math.abs(pctB - pctA)} จุด${pctB < pctA ? ' ลดลง' : pctB > pctA ? ' เพิ่มขึ้น' : ''}</div></div>
-        <div class="bg-rose-50 border-2 border-rose-200 rounded-3xl p-6 text-center"><div class="text-xs font-extrabold text-rose-400 uppercase tracking-widest mb-3">เดือนที่ 2</div><div class="text-3xl font-extrabold text-rose-700 mb-1">${monthB}</div><div class="text-6xl font-black text-rose-600 my-4">${pctB}<span class="text-2xl">%</span></div><div class="text-sm text-rose-500 font-medium">ไม่ผ่าน ${dataB.totalFailed} / ${dataB.totalStudents} คน</div><div class="mt-4 bg-rose-200 rounded-full h-3 overflow-hidden"><div class="bg-rose-500 h-3 rounded-full" style="width:${pctB}%"></div></div></div>
+        <div class="bg-rose-50 border-2 border-rose-200 rounded-3xl p-6 text-center"><div class="text-xs font-extrabold text-rose-400 uppercase tracking-widest mb-3">เดือนที่ 2</div><div class="text-3xl font-extrabold text-rose-700 mb-1">${monthB}</div><div class="text-6xl font-black text-rose-600 my-4">${pctB}<span class="text-2xl">%</span></div><div class="text-sm text-rose-500 font-medium">ไม่ผ่าน ${dataB.totalFailed} / ${dataB.totalStudents} คน</div><div class="mt-4 bg-rose-200 rounded-full h-3 overflow-hidden"><div class="cmp-bar bg-rose-500 h-3 rounded-full" data-target="${pctB}" style="width:0%;transition:width 1.1s cubic-bezier(0.16,1,0.3,1) 250ms;"></div></div></div>
       </div></div>`;
 
-      let ruleRows = ruleItems.map(rule => {
+      let ruleRows = ruleItems.map((rule, ruleIdx) => {
         let rA = dataA.byRule[rule] || { total: 0, failed: 0 };
         let rB = dataB.byRule[rule] || { total: 0, failed: 0 };
         let pA = rA.total > 0 ? Math.round(rA.failed / rA.total * 100) : 0;
         let pB = rB.total > 0 ? Math.round(rB.failed / rB.total * 100) : 0;
         let diff = pB - pA;
         let diffBadge = diff === 0 ? `<span class="text-gray-400 text-xs font-bold">-</span>` : diff < 0 ? `<span class="text-green-600 text-xs font-extrabold bg-green-50 px-2 py-0.5 rounded-md border border-green-200">▼${Math.abs(diff)}%</span>` : `<span class="text-red-600 text-xs font-extrabold bg-red-50 px-2 py-0.5 rounded-md border border-red-200">▲${diff}%</span>`;
-        return `<div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition"><div class="flex justify-between items-center mb-3"><span class="text-sm font-bold text-gray-700">${rule}</span>${diffBadge}</div><div class="space-y-2"><div class="flex items-center gap-2"><span class="text-xs text-violet-500 font-bold w-20 shrink-0">${monthA}</span><div class="flex-grow bg-violet-100 rounded-full h-4 overflow-hidden"><div class="bg-violet-500 h-4 rounded-full" style="width:${Math.max(pA,4)}%"></div></div><span class="text-xs font-extrabold text-violet-600 w-10 text-right shrink-0">${pA}%</span></div><div class="flex items-center gap-2"><span class="text-xs text-rose-500 font-bold w-20 shrink-0">${monthB}</span><div class="flex-grow bg-rose-100 rounded-full h-4 overflow-hidden"><div class="bg-rose-500 h-4 rounded-full" style="width:${Math.max(pB,4)}%"></div></div><span class="text-xs font-extrabold text-rose-600 w-10 text-right shrink-0">${pB}%</span></div></div></div>`;
+        let delay = ruleIdx * 60;
+        return `<div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition"><div class="flex justify-between items-center mb-3"><span class="text-sm font-bold text-gray-700">${rule}</span>${diffBadge}</div><div class="space-y-2"><div class="flex items-center gap-2"><span class="text-xs text-violet-500 font-bold w-20 shrink-0">${monthA}</span><div class="flex-grow bg-violet-100 rounded-full h-4 overflow-hidden"><div class="cmp-bar bg-violet-500 h-4 rounded-full" data-target="${Math.max(pA,4)}" style="width:0%;transition:width 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms;"></div></div><span class="text-xs font-extrabold text-violet-600 w-10 text-right shrink-0">${pA}%</span></div><div class="flex items-center gap-2"><span class="text-xs text-rose-500 font-bold w-20 shrink-0">${monthB}</span><div class="flex-grow bg-rose-100 rounded-full h-4 overflow-hidden"><div class="cmp-bar bg-rose-500 h-4 rounded-full" data-target="${Math.max(pB,4)}" style="width:0%;transition:width 0.9s cubic-bezier(0.16,1,0.3,1) ${delay + 120}ms;"></div></div><span class="text-xs font-extrabold text-rose-600 w-10 text-right shrink-0">${pB}%</span></div></div></div>`;
       }).join('');
 
       let rulesHtml = `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-amber-400 shadow-md"><h2 class="text-xl font-extrabold text-gray-800 mb-2">เปรียบเทียบรายข้อ (% ไม่ผ่าน)</h2><div class="flex gap-4 text-xs font-bold mb-6"><span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-violet-500 inline-block"></span>${monthA}</span><span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>${monthB}</span><span class="ml-auto flex items-center gap-1.5 text-green-600"><span class="font-black">▼</span> ดีขึ้น</span><span class="flex items-center gap-1.5 text-red-600"><span class="font-black">▲</span> แย่ลง</span></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${ruleRows}</div></div>`;
 
-      let classRows = ALL_CLASSES.map(cls => {
+      let classRows = ALL_CLASSES.map((cls, clsIdx) => {
         let cA = dataA.byClass[cls] || { total: 0, failed: 0 };
         let cB = dataB.byClass[cls] || { total: 0, failed: 0 };
         let pA = cA.total > 0 ? Math.round(cA.failed / cA.total * 100) : 0;
         let pB = cB.total > 0 ? Math.round(cB.failed / cB.total * 100) : 0;
         let diff = pB - pA;
         let arrow = diff < 0 ? `<span class="text-green-600 font-extrabold">▼${Math.abs(diff)}%</span>` : diff > 0 ? `<span class="text-red-600 font-extrabold">▲${diff}%</span>` : `<span class="text-gray-400">-</span>`;
-        return `<div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition"><div class="flex justify-between items-center mb-4"><span class="font-extrabold text-gray-800 text-lg">${cls}</span><div class="text-sm">${arrow}</div></div><div class="space-y-2.5"><div><div class="flex justify-between text-xs font-bold mb-1"><span class="text-violet-500">${monthA}</span><span class="text-violet-600">${pA}% (${cA.failed}/${cA.total} คน)</span></div><div class="bg-violet-100 rounded-full h-5 overflow-hidden"><div class="bg-gradient-to-r from-violet-400 to-violet-600 h-5 rounded-full" style="width:${Math.max(pA,2)}%"></div></div></div><div><div class="flex justify-between text-xs font-bold mb-1"><span class="text-rose-500">${monthB}</span><span class="text-rose-600">${pB}% (${cB.failed}/${cB.total} คน)</span></div><div class="bg-rose-100 rounded-full h-5 overflow-hidden"><div class="bg-gradient-to-r from-rose-400 to-rose-600 h-5 rounded-full" style="width:${Math.max(pB,2)}%"></div></div></div></div></div>`;
+        let delay = clsIdx * 50;
+        return `<div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition"><div class="flex justify-between items-center mb-4"><span class="font-extrabold text-gray-800 text-lg">${cls}</span><div class="text-sm">${arrow}</div></div><div class="space-y-2.5"><div><div class="flex justify-between text-xs font-bold mb-1"><span class="text-violet-500">${monthA}</span><span class="text-violet-600">${pA}% (${cA.failed}/${cA.total} คน)</span></div><div class="bg-violet-100 rounded-full h-5 overflow-hidden"><div class="cmp-bar bg-gradient-to-r from-violet-400 to-violet-600 h-5 rounded-full" data-target="${Math.max(pA,2)}" style="width:0%;transition:width 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms;"></div></div></div><div><div class="flex justify-between text-xs font-bold mb-1"><span class="text-rose-500">${monthB}</span><span class="text-rose-600">${pB}% (${cB.failed}/${cB.total} คน)</span></div><div class="bg-rose-100 rounded-full h-5 overflow-hidden"><div class="cmp-bar bg-gradient-to-r from-rose-400 to-rose-600 h-5 rounded-full" data-target="${Math.max(pB,2)}" style="width:0%;transition:width 0.9s cubic-bezier(0.16,1,0.3,1) ${delay + 120}ms;"></div></div></div></div></div>`;
       }).join('');
 
       let classHtml = `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-cyan-400 shadow-md"><h2 class="text-xl font-extrabold text-gray-800 mb-6">เปรียบเทียบแยกรายห้อง</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${classRows}</div></div>`;
@@ -1311,16 +1347,31 @@
       let bannerHtml = `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-violet-500 shadow-md text-center md:text-left"><h2 class="text-2xl font-extrabold text-gray-800 mb-1">📊 รายงานเปรียบเทียบการตรวจแต่งกาย</h2><p class="text-gray-500 font-medium text-sm"><span class="bg-violet-100 text-violet-700 font-extrabold px-3 py-1 rounded-lg">${monthA}</span><span class="mx-2 font-black text-gray-400">VS</span><span class="bg-rose-100 text-rose-700 font-extrabold px-3 py-1 rounded-lg">${monthB}</span></p></div>`;
 
       document.getElementById('comparison-content').innerHTML = bannerHtml + overviewHtml + rulesHtml + classHtml;
+
+      // เล่น animation แท่งกราฟให้ค่อยๆ โตขึ้นหลัง DOM วาดเสร็จ
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.querySelectorAll('#comparison-content .cmp-bar').forEach(bar => {
+            bar.style.width = bar.dataset.target + '%';
+          });
+        });
+      });
     }
     // ==================== Dashboard ภาพรวมรายห้อง ====================
 function showClassroomOverview() {
   showView('view-overview');
   document.getElementById('overview-container').innerHTML =
-    '<div class="glass-card rounded-3xl p-8 text-center"><div class="skeleton h-8 w-48 mx-auto rounded-xl mb-4"></div><div class="skeleton h-4 w-64 mx-auto rounded"></div></div>';
-  MySwal.fire({ title: 'กำลังโหลดข้อมูล...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); } });
+    '<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-pink-500">'
+    + '<div class="skeleton h-8 w-64 rounded-xl mb-3"></div><div class="skeleton h-4 w-48 rounded mb-6"></div>'
+    + '<div class="grid grid-cols-3 gap-4"><div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div></div>'
+    + '</div>'
+    + '<div class="glass-card rounded-3xl p-6 border-t-4 border-rose-400">'
+    + '<div class="skeleton h-5 w-52 rounded mb-4"></div>'
+    + '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">'
+    + '<div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div>'
+    + '</div></div>';
   callAPI('getClassroomOverview', {})
     .then(function(res) {
-      Swal.close();
       if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; }
       renderClassroomOverview(res);
     })
@@ -1351,26 +1402,27 @@ function renderClassroomOverview(res) {
     + '<h3 class="font-extrabold text-gray-800 text-lg mb-4">📋 อัตราการแต่งกายไม่ผ่านรายห้อง</h3>'
     + '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">';
 
-  res.rooms.forEach(function(room) {
+  res.rooms.forEach(function(room, roomIdx) {
     var pct = room.total > 0 ? Math.round(room.fail / room.total * 100) : 0;
     var color = gradeColors[room.grade] || '#ec4899';
-    var borderColor = pct >= 40 ? '#ef4444' : pct >= 25 ? '#f97316' : '#22c55e';
-    var bgColor = pct >= 40 ? '#fef2f2' : pct >= 25 ? '#fff7ed' : '#ffffff';
-    var badge = pct >= 40
-      ? '<span style="font-size:9px;background:#ef4444;color:white;padding:1px 6px;border-radius:10px;font-weight:700;">ต้องแก้ไข</span>'
-      : pct >= 25
-      ? '<span style="font-size:9px;background:#f97316;color:white;padding:1px 6px;border-radius:10px;font-weight:700;">ระวัง</span>'
-      : '<span style="font-size:9px;background:#22c55e;color:white;padding:1px 6px;border-radius:10px;font-weight:700;">ปกติ</span>';
+    var statusKey = pct >= 40 ? 'danger' : pct >= 25 ? 'warn' : 'ok';
+    var badge = statusKey === 'danger'
+      ? '<span class="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full font-bold shadow-sm">ต้องแก้ไข</span>'
+      : statusKey === 'warn'
+      ? '<span class="text-[9px] bg-orange-500 text-white px-2 py-0.5 rounded-full font-bold shadow-sm">ระวัง</span>'
+      : '<span class="text-[9px] bg-green-500 text-white px-2 py-0.5 rounded-full font-bold shadow-sm">ปกติ</span>';
+    var cardBorder = statusKey === 'danger' ? 'border-red-200' : statusKey === 'warn' ? 'border-orange-200' : 'border-gray-100';
+    var cardBg = statusKey === 'danger' ? 'bg-red-50/60' : statusKey === 'warn' ? 'bg-orange-50/50' : 'bg-white/80';
 
-    html += '<div style="background:' + bgColor + ';border-radius:14px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.05);border-left:5px solid ' + borderColor + ';">'
-      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
-      + '<span style="font-weight:800;color:#1f2937;font-size:14px;">' + room.cls + '</span>' + badge
+    html += '<div class="glass-card ' + cardBg + ' rounded-2xl p-4 border ' + cardBorder + ' hover:shadow-lg hover:-translate-y-0.5 transition duration-300" style="border-left:5px solid ' + color + ';">'
+      + '<div class="flex justify-between items-center mb-2.5">'
+      + '<span class="font-extrabold text-gray-800 text-sm">' + room.cls + '</span>' + badge
       + '</div>'
-      + '<div style="background:#f3f4f6;border-radius:4px;height:6px;margin-bottom:5px;overflow:hidden;">'
-      + '<div style="height:100%;border-radius:4px;background:' + color + ';width:' + pct + '%;"></div>'
+      + '<div class="bg-gray-100 rounded-full h-2 mb-2 overflow-hidden">'
+      + '<div class="h-full rounded-full overview-bar" data-target="' + pct + '" style="width:0%;background:' + color + ';transition:width 1s cubic-bezier(0.16,1,0.3,1) ' + (roomIdx * 60) + 'ms;"></div>'
       + '</div>'
-      + '<div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;">'
-      + '<span style="color:#6b7280;">ไม่ผ่าน ' + room.fail + ' คน</span>'
+      + '<div class="flex justify-between text-[11px] font-bold">'
+      + '<span class="text-gray-500">ไม่ผ่าน ' + room.fail + ' คน</span>'
       + '<span style="color:' + color + ';">' + pct + '%</span>'
       + '</div></div>';
   });
@@ -1381,14 +1433,14 @@ function renderClassroomOverview(res) {
     var maxCount = res.topRules[0].count || 1;
     html += '<div class="glass-card rounded-3xl p-6 mb-6 border-t-4 border-amber-400 shadow-md">'
       + '<h3 class="font-extrabold text-gray-800 text-lg mb-4">⚠️ รายการที่พบปัญหาบ่อยที่สุด</h3>';
-    res.topRules.forEach(function(r) {
+    res.topRules.forEach(function(r, rIdx) {
       var pct = Math.round(r.count / maxCount * 100);
-      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
-        + '<span style="font-size:13px;font-weight:700;color:#374151;width:100px;flex-shrink:0;">' + r.rule + '</span>'
-        + '<div style="flex:1;background:#fce7f3;border-radius:4px;height:18px;overflow:hidden;">'
-        + '<div style="background:linear-gradient(to right,#ec4899,#f43f5e);height:100%;border-radius:4px;width:' + pct + '%;"></div>'
+      html += '<div class="flex items-center gap-3 mb-3 last:mb-0">'
+        + '<span class="text-[13px] font-bold text-gray-600 w-24 flex-shrink-0 truncate">' + r.rule + '</span>'
+        + '<div class="flex-1 bg-pink-50 border border-pink-100 rounded-lg h-[18px] overflow-hidden">'
+        + '<div class="h-full rounded-lg overview-bar" data-target="' + pct + '" style="width:0%;background:linear-gradient(to right,#ec4899,#f43f5e);transition:width 1s cubic-bezier(0.16,1,0.3,1) ' + (rIdx * 80) + 'ms;"></div>'
         + '</div>'
-        + '<span style="font-size:13px;font-weight:800;color:#9d174d;width:45px;text-align:right;">' + r.count + ' คน</span>'
+        + '<span class="text-[13px] font-extrabold text-rose-700 w-14 text-right flex-shrink-0">' + r.count + ' คน</span>'
         + '</div>';
     });
     html += '<div class="mt-4 bg-amber-50 border border-amber-200 rounded-2xl p-3 text-xs text-amber-700 font-medium">'
@@ -1402,6 +1454,15 @@ function renderClassroomOverview(res) {
   }
 
   container.innerHTML = html;
+
+  // เล่น animation ของแท่งกราฟหลังจาก DOM วาดเสร็จ (ให้ค่อยๆ โตขึ้นแทนที่จะโผล่มาทันที)
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      container.querySelectorAll('.overview-bar').forEach(function(bar) {
+        bar.style.width = bar.dataset.target + '%';
+      });
+    });
+  });
 }
 
   </script>
