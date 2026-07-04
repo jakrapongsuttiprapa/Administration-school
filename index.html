@@ -342,19 +342,14 @@
       <button onclick="goHome(true)" class="text-pink-600 font-bold flex items-center gap-1 hover:text-pink-800 mb-4 no-print glass-card px-4 py-2 rounded-xl inline-flex shadow-sm transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
      <div class="glass-card rounded-3xl p-8 mb-6 border-t-4 border-pink-400 shadow-md sticky top-[70px] z-40">
         <h2 class="text-2xl font-extrabold text-gray-800 mb-2 text-center">🔍 ตรวจสอบผลการแต่งกาย</h2>
-        <p class="text-center text-gray-500 text-sm mb-6 font-medium" id="student-class-label">กรุณาเลือกชื่อของคุณเพื่อดูผลการตรวจ</p>
+        <p class="text-center text-gray-500 text-sm mb-6 font-medium" id="student-class-label">กรุณากรอกรหัสประจำตัวนักเรียนเพื่อดูผลการตรวจ</p>
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="w-full relative">
-            <select id="studentSearchName" class="w-full p-4 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 appearance-none bg-white/90 text-lg font-bold shadow-sm transition">
-              <option value="">-- เลือกชื่อของคุณ --</option>
-            </select>
+            <input type="password" id="studentSearchId" placeholder="กรอกรหัสประจำตัวนักเรียน" inputmode="numeric" autocomplete="off" onkeypress="if(event.key==='Enter'){event.preventDefault();searchStudent();}" class="w-full p-4 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 bg-white/90 text-lg font-bold shadow-sm transition text-center">
           </div>
-          <div class="w-full sm:w-64 relative">
-            <input type="password" id="studentSearchId" placeholder="รหัสประจำตัวนักเรียน" inputmode="numeric" autocomplete="off" onkeypress="if(event.key==='Enter'){event.preventDefault();searchStudent();}" class="w-full p-4 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 bg-white/90 text-lg font-bold shadow-sm transition">
-          </div>
-          <button onclick="searchStudent()" class="btn-pastel bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 px-10 rounded-xl shadow-md whitespace-nowrap text-lg">🔎 ค้นหาข้อมูล</button>
+          <button onclick="searchStudent()" class="btn-pastel bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 px-10 rounded-xl shadow-md whitespace-nowrap text-lg">🔎 ตรวจสอบ</button>
         </div>
-        <p class="text-xs text-gray-400 text-center mt-4 font-medium">🔒 กรุณากรอกรหัสประจำตัวนักเรียนเพื่อยืนยันตัวตน ก่อนเข้าดูผลการตรวจและคะแนนความประพฤติ (เพื่อความปลอดภัยของข้อมูลส่วนตัวนักเรียน)</p>
+        <p class="text-xs text-gray-400 text-center mt-4 font-medium">🔒 กรอกรหัสประจำตัวนักเรียนของคุณ ระบบจะแสดงชื่อและผลการตรวจให้อัตโนมัติ (รหัสนี้เป็นความลับเฉพาะตัว ไม่ควรบอกให้ผู้อื่นทราบ)</p>
       </div>
       <div id="studentResultContainer" class="space-y-6"></div>
     </div>
@@ -519,7 +514,6 @@
     let globalConductRules = [];
     let currentAttDate = "";
     let conductPasswordVerified = false;
-    let currentStudentViewClass = "";
 
     const ruleItems = ['การปักชื่อ','เลขประจำตัว','กระโปรง/กางเกง','เข็มตราโรงเรียน','จุดระดับชั้น','เข็มขัดตราโรงเรียน','ถุงเท้า','ผม','สีผม','เล็บ','โบว์','ชื่อชุดพละ','ชื่อชุดวิถีพุทธ','หนวดเครา'];
     const ALL_CLASSES = ['ม.4/1','ม.4/2','ม.4/3','ม.4/4','ม.5/1','ม.5/2','ม.5/3','ม.5/4','ม.6/1','ม.6/2','ม.6/3','ม.6/4'];
@@ -800,47 +794,27 @@
     }
 
     // ==================== ส่วนนักเรียน ====================
-    async function showStudentView() {
-      const classes = ALL_CLASSES;
-      let classOptions = classes.map(c => `<option value="${c}">${c}</option>`).join('');
-      const { value: selectedClass } = await MySwal.fire({
-        title: '🎒 เลือกห้องเรียน',
-        html: `<p class="text-sm text-gray-500 mb-4 font-medium">หนูๆ อยู่ห้องไหนเอ่ย?</p><select id="swal-student-class" class="swal2-select" style="display:flex;width:85%;margin:10px auto;font-size:18px;border-radius:12px;padding:12px;border:2px solid #fbcfe8;"><option value="" disabled selected>-- คลิกเพื่อเลือกห้อง --</option>${classOptions}</select>`,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135810.png', imageWidth: 100, imageHeight: 100,
-        showCancelButton: true, cancelButtonText: 'ยกเลิก', confirmButtonText: 'ตกลง 💖', confirmButtonColor: '#ec4899',
-        preConfirm: () => { const c = document.getElementById('swal-student-class').value; if (!c) MySwal.showValidationMessage('อย่าลืมเลือกห้องเรียนนะจ๊ะ!'); return c; }
-      });
-      if (!selectedClass) return;
-      currentStudentViewClass = selectedClass;
+    function showStudentView() {
       showView('view-student');
-      document.getElementById('student-class-label').innerHTML = `ห้องเรียนที่เลือก: <span class="font-black text-pink-600 bg-pink-100 px-3 py-1 rounded-md ml-1 shadow-sm">${selectedClass}</span>`;
-      MySwal.fire({ title: 'กำลังดึงรายชื่อ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('getAllStudentsList').then(students => {
-        Swal.close();
-        let filtered = students.filter(st => st.className === selectedClass);
-        const selectBox = document.getElementById('studentSearchName');
-        selectBox.innerHTML = `<option value="">-- เลือกชื่อของคุณ (${selectedClass}) --</option>`;
-        filtered.forEach(st => { let opt = document.createElement('option'); opt.value = st.name; opt.textContent = st.name; selectBox.appendChild(opt); });
-        const idInput = document.getElementById('studentSearchId');
-        if (idInput) idInput.value = '';
-        document.getElementById('studentResultContainer').innerHTML = '';
-      });
+      document.getElementById('student-class-label').innerText = 'กรุณากรอกรหัสประจำตัวนักเรียนเพื่อดูผลการตรวจ';
+      document.getElementById('studentResultContainer').innerHTML = '';
+      const idInput = document.getElementById('studentSearchId');
+      if (idInput) { idInput.value = ''; setTimeout(() => idInput.focus(), 150); }
     }
 
     function searchStudent() {
-      const name = document.getElementById('studentSearchName').value;
       const studentId = document.getElementById('studentSearchId').value.trim();
-      if (!name) { MySwal.fire({ title: 'เดี๋ยวก่อน!', text: 'กรุณาเลือกชื่อของคุณก่อนกดค้นหาครับ', icon: 'warning', confirmButtonColor: '#ec4899' }); return; }
-      if (!studentId) { MySwal.fire({ title: 'เดี๋ยวก่อน!', text: 'กรุณากรอกรหัสประจำตัวนักเรียนเพื่อยืนยันตัวตนก่อนครับ', icon: 'warning', confirmButtonColor: '#ec4899' }); return; }
+      if (!studentId) { MySwal.fire({ title: 'เดี๋ยวก่อน!', text: 'กรุณากรอกรหัสประจำตัวนักเรียนก่อนครับ', icon: 'warning', confirmButtonColor: '#ec4899' }); return; }
       document.getElementById('studentResultContainer').innerHTML = cardSkeletonRows(2);
-      // ยืนยันตัวตนด้วยรหัสประจำตัวนักเรียนที่ฝั่งเซิร์ฟเวอร์ก่อน แล้วค่อยดึงข้อมูลผลตรวจ+คะแนนพฤติกรรมกลับมาในคราวเดียว
-      callAPI('studentSecureLogin', { studentName: name, studentId: studentId, className: currentStudentViewClass }).then(res => {
+      // ค้นหานักเรียนด้วยรหัสประจำตัวโดยตรง — ระบบจะยืนยันตัวตนและดึงชื่อ+ข้อมูลกลับมาในคราวเดียว
+      callAPI('studentLoginById', { studentId: studentId }).then(res => {
         if (!res.success) {
           document.getElementById('studentResultContainer').innerHTML = '';
-          MySwal.fire({ icon: 'error', title: 'เข้าสู่ระบบไม่สำเร็จ', text: res.message || 'รหัสประจำตัวนักเรียนไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง', confirmButtonColor: '#ec4899' });
+          MySwal.fire({ icon: 'error', title: 'ไม่พบข้อมูล', text: res.message || 'ไม่พบรหัสประจำตัวนักเรียนนี้ในระบบ กรุณาตรวจสอบอีกครั้ง', confirmButtonColor: '#ec4899' });
           return;
         }
-        renderStudentResult(res.inspectResult, res.conductResult, name);
+        document.getElementById('student-class-label').innerHTML = `สวัสดี <span class="font-black text-pink-600">${res.studentName}</span> ห้อง <span class="font-black text-pink-600">${res.studentClass}</span>`;
+        renderStudentResult(res.inspectResult, res.conductResult, res.studentName);
       }).catch(() => {
         document.getElementById('studentResultContainer').innerHTML = '';
         MySwal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#ec4899' });
