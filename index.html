@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="bingbot" content="noindex, nofollow">
   <title>ระบบฝ่ายปกครองม.ปลาย</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
@@ -346,8 +349,12 @@
               <option value="">-- เลือกชื่อของคุณ --</option>
             </select>
           </div>
+          <div class="w-full sm:w-64 relative">
+            <input type="password" id="studentSearchId" placeholder="รหัสประจำตัวนักเรียน" inputmode="numeric" autocomplete="off" onkeypress="if(event.key==='Enter'){event.preventDefault();searchStudent();}" class="w-full p-4 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 bg-white/90 text-lg font-bold shadow-sm transition">
+          </div>
           <button onclick="searchStudent()" class="btn-pastel bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 px-10 rounded-xl shadow-md whitespace-nowrap text-lg">🔎 ค้นหาข้อมูล</button>
         </div>
+        <p class="text-xs text-gray-400 text-center mt-4 font-medium">🔒 กรุณากรอกรหัสประจำตัวนักเรียนเพื่อยืนยันตัวตน ก่อนเข้าดูผลการตรวจและคะแนนความประพฤติ (เพื่อความปลอดภัยของข้อมูลส่วนตัวนักเรียน)</p>
       </div>
       <div id="studentResultContainer" class="space-y-6"></div>
     </div>
@@ -442,6 +449,7 @@
           สมุดโทรศัพท์ห้อง: <span id="contact-display-class" class="text-emerald-600 text-3xl font-black"></span>
         </h2>
         <p class="text-sm text-gray-500 mt-2 font-medium">สามารถแก้ไขเบอร์โทรศัพท์ และกดปุ่มเพื่อโทรออกได้ทันทีบนมือถือ</p>
+        <p class="text-xs text-emerald-600 font-bold mt-2 bg-emerald-50 inline-block px-3 py-1.5 rounded-lg border border-emerald-200">🔒 การแก้ไข/ลบเบอร์โทรศัพท์ ต้องกรอกรหัสผ่านคุณครูเพื่อยืนยันก่อนบันทึกทุกครั้ง</p>
       </div>
       <div id="contact-students-container" class="space-y-4"></div>
     </div>
@@ -511,6 +519,7 @@
     let globalConductRules = [];
     let currentAttDate = "";
     let conductPasswordVerified = false;
+    let currentStudentViewClass = "";
 
     const ruleItems = ['การปักชื่อ','เลขประจำตัว','กระโปรง/กางเกง','เข็มตราโรงเรียน','จุดระดับชั้น','เข็มขัดตราโรงเรียน','ถุงเท้า','ผม','สีผม','เล็บ','โบว์','ชื่อชุดพละ','ชื่อชุดวิถีพุทธ','หนวดเครา'];
     const ALL_CLASSES = ['ม.4/1','ม.4/2','ม.4/3','ม.4/4','ม.5/1','ม.5/2','ม.5/3','ม.5/4','ม.6/1','ม.6/2','ม.6/3','ม.6/4'];
@@ -802,6 +811,7 @@
         preConfirm: () => { const c = document.getElementById('swal-student-class').value; if (!c) MySwal.showValidationMessage('อย่าลืมเลือกห้องเรียนนะจ๊ะ!'); return c; }
       });
       if (!selectedClass) return;
+      currentStudentViewClass = selectedClass;
       showView('view-student');
       document.getElementById('student-class-label').innerHTML = `ห้องเรียนที่เลือก: <span class="font-black text-pink-600 bg-pink-100 px-3 py-1 rounded-md ml-1 shadow-sm">${selectedClass}</span>`;
       MySwal.fire({ title: 'กำลังดึงรายชื่อ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
@@ -811,20 +821,29 @@
         const selectBox = document.getElementById('studentSearchName');
         selectBox.innerHTML = `<option value="">-- เลือกชื่อของคุณ (${selectedClass}) --</option>`;
         filtered.forEach(st => { let opt = document.createElement('option'); opt.value = st.name; opt.textContent = st.name; selectBox.appendChild(opt); });
+        const idInput = document.getElementById('studentSearchId');
+        if (idInput) idInput.value = '';
         document.getElementById('studentResultContainer').innerHTML = '';
       });
     }
 
     function searchStudent() {
       const name = document.getElementById('studentSearchName').value;
+      const studentId = document.getElementById('studentSearchId').value.trim();
       if (!name) { MySwal.fire({ title: 'เดี๋ยวก่อน!', text: 'กรุณาเลือกชื่อของคุณก่อนกดค้นหาครับ', icon: 'warning', confirmButtonColor: '#ec4899' }); return; }
+      if (!studentId) { MySwal.fire({ title: 'เดี๋ยวก่อน!', text: 'กรุณากรอกรหัสประจำตัวนักเรียนเพื่อยืนยันตัวตนก่อนครับ', icon: 'warning', confirmButtonColor: '#ec4899' }); return; }
       document.getElementById('studentResultContainer').innerHTML = cardSkeletonRows(2);
-      // ดึงทั้งผลตรวจแต่งกาย และคะแนนพฤติกรรม พร้อมกัน
-      Promise.all([
-        callAPI('searchStudentData', { studentName: name }),
-        callAPI('getStudentConductScore', { studentName: name })
-      ]).then(([inspectResult, conductResult]) => {
-        renderStudentResult(inspectResult, conductResult, name);
+      // ยืนยันตัวตนด้วยรหัสประจำตัวนักเรียนที่ฝั่งเซิร์ฟเวอร์ก่อน แล้วค่อยดึงข้อมูลผลตรวจ+คะแนนพฤติกรรมกลับมาในคราวเดียว
+      callAPI('studentSecureLogin', { studentName: name, studentId: studentId, className: currentStudentViewClass }).then(res => {
+        if (!res.success) {
+          document.getElementById('studentResultContainer').innerHTML = '';
+          MySwal.fire({ icon: 'error', title: 'เข้าสู่ระบบไม่สำเร็จ', text: res.message || 'รหัสประจำตัวนักเรียนไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง', confirmButtonColor: '#ec4899' });
+          return;
+        }
+        renderStudentResult(res.inspectResult, res.conductResult, name);
+      }).catch(() => {
+        document.getElementById('studentResultContainer').innerHTML = '';
+        MySwal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#ec4899' });
       });
     }
 
@@ -1267,11 +1286,24 @@
       });
     }
 
-    function saveSingleContact(rowNumber, studentInputId, parentInputId) {
+    async function saveSingleContact(rowNumber, studentInputId, parentInputId) {
+      // ป้องกันนักเรียนแก้ไข/ลบเบอร์โทรศัพท์เล่น — ต้องกรอกรหัสผ่านคุณครูก่อนบันทึกทุกครั้ง
+      const { value: password } = await MySwal.fire({
+        title: '🔒 ยืนยันตัวตนก่อนบันทึก',
+        text: 'การแก้ไขหรือลบเบอร์โทรศัพท์ต้องกรอกรหัสผ่านคุณครูเพื่อยืนยันก่อนทุกครั้ง',
+        input: 'password',
+        inputPlaceholder: 'กรอกรหัสผ่านคุณครู',
+        confirmButtonText: 'ยืนยันบันทึก',
+        confirmButtonColor: '#059669',
+        showCancelButton: true,
+        cancelButtonText: 'ยกเลิก'
+      });
+      if (!password) return; // กดยกเลิก หรือไม่ได้กรอก
+
       let stPhone = document.getElementById(studentInputId).value;
       let prPhone = document.getElementById(parentInputId).value;
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
-      callAPI('updateContactInfo', { rowNumber, studentPhone: stPhone, parentPhone: prPhone }).then(res => {
+      callAPI('updateContactInfo', { rowNumber, studentPhone: stPhone, parentPhone: prPhone, password: password }).then(res => {
         if (res.success) {
           MySwal.fire({ icon: 'success', title: 'สำเร็จ', text: res.message, timer: 1500, showConfirmButton: false }).then(() => {
             let currentCls = document.getElementById('contact-display-class').innerText;
