@@ -889,6 +889,8 @@
       const monthOptions = getRecentMonthsFirst().map(m => `<option value="${m}" ${m === res.month ? 'selected' : ''}>${m}</option>`).join('');
 
       const esc = (t) => (t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      // สำหรับฝัง string ไว้ใน JS ภายใน onclick (ต้อง escape เครื่องหมาย ' และ \ ก่อน แล้วค่อย escape HTML ทับอีกชั้น)
+      const escJs = (t) => (t || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
       let rows = res.classmates.map((s, idx) => {
         let statusHtml;
@@ -904,7 +906,7 @@
         if (s.inspected && !s.passed) {
           commentHtml = `<div class="mt-2.5 pt-2.5 border-t border-dashed border-purple-100 flex flex-col sm:flex-row gap-2">
             <input type="text" id="mc_${idx}" value="${esc(s.comment)}" maxlength="300" placeholder="📝 หมายเหตุ เช่น จะซื้อเข็มขัดใหม่ พร้อมตรวจศุกร์นี้" class="flex-grow p-2.5 border-2 border-purple-100 rounded-xl focus:outline-none focus:border-purple-400 bg-purple-50/40 text-sm font-medium transition">
-            <button onclick="saveMonitorNote(${idx}, '${esc(s.name)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition whitespace-nowrap flex-shrink-0">💾 บันทึกหมายเหตุ</button>
+            <button onclick="saveMonitorNote(${idx}, '${escJs(s.name)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition whitespace-nowrap flex-shrink-0">💾 บันทึกหมายเหตุ</button>
           </div>`;
         } else if (s.comment) {
           // เพื่อนที่แก้เรียบร้อยจนผ่านแล้ว แต่เคยมีหมายเหตุเก่า — โชว์จางๆ เป็นประวัติ
