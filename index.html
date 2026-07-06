@@ -526,6 +526,7 @@
     let globalConductRules = [];
     let currentAttDate = "";
     let currentMonitorId = "";
+    let currentMonitorMonth = "";
     let conductPasswordVerified = false;
 
     const ruleItems = ['การปักชื่อ','เลขประจำตัว','กระโปรง/กางเกง','เข็มตราโรงเรียน','จุดระดับชั้น','เข็มขัดตราโรงเรียน','ถุงเท้า','ผม','สีผม','เล็บ','โบว์','ชื่อชุดพละ','ชื่อชุดวิถีพุทธ','หนวดเครา'];
@@ -879,12 +880,15 @@
 
     function renderClassMonitorReport(res) {
       const container = document.getElementById('studentResultContainer');
+      currentMonitorMonth = res.month; // จำเดือนที่กำลังดู ไว้ใช้ตอนบันทึกความคิดเห็น
       document.getElementById('student-class-label').innerHTML = `👑 มุมมองหัวหน้าห้อง: <span class="font-black text-purple-600">${res.monitorName}</span>`;
       let passCount = res.classmates.filter(s => s.passed).length;
       let failCount = res.classmates.filter(s => s.inspected && !s.passed).length;
       let notYetCount = res.classmates.filter(s => !s.inspected).length;
 
       const monthOptions = getRecentMonthsFirst().map(m => `<option value="${m}" ${m === res.month ? 'selected' : ''}>${m}</option>`).join('');
+
+      const esc = (t) => (t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
       let rows = res.classmates.map((s, idx) => {
         let statusHtml;
@@ -895,9 +899,23 @@
         } else {
           statusHtml = `<span class="text-xs font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg">${s.brokenRules.join(', ')}</span>`;
         }
-        return `<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm">
-          <div class="font-bold text-gray-700 flex items-center gap-2"><span class="text-xs text-gray-400 w-5 flex-shrink-0">${idx + 1}.</span>${s.name}</div>
-          ${statusHtml}
+        // ช่องความคิดเห็น: เฉพาะเพื่อนที่ตรวจแล้ว "ไม่ผ่าน" (บันทึกว่าจะแก้เมื่อไหร่ พร้อมตรวจเมื่อไหร่)
+        let commentHtml = '';
+        if (s.inspected && !s.passed) {
+          commentHtml = `<div class="mt-2.5 pt-2.5 border-t border-dashed border-purple-100 flex flex-col sm:flex-row gap-2">
+            <input type="text" id="mc_${idx}" value="${esc(s.comment)}" maxlength="300" placeholder="📝 หมายเหตุ เช่น จะซื้อเข็มขัดใหม่ พร้อมตรวจศุกร์นี้" class="flex-grow p-2.5 border-2 border-purple-100 rounded-xl focus:outline-none focus:border-purple-400 bg-purple-50/40 text-sm font-medium transition">
+            <button onclick="saveMonitorNote(${idx}, '${esc(s.name)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition whitespace-nowrap flex-shrink-0">💾 บันทึกหมายเหตุ</button>
+          </div>`;
+        } else if (s.comment) {
+          // เพื่อนที่แก้เรียบร้อยจนผ่านแล้ว แต่เคยมีหมายเหตุเก่า — โชว์จางๆ เป็นประวัติ
+          commentHtml = `<div class="mt-2 text-[11px] text-gray-400 font-medium">📝 หมายเหตุเดิม: ${esc(s.comment)}</div>`;
+        }
+        return `<div class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="font-bold text-gray-700 flex items-center gap-2"><span class="text-xs text-gray-400 w-5 flex-shrink-0">${idx + 1}.</span>${s.name}</div>
+            ${statusHtml}
+          </div>
+          ${commentHtml}
         </div>`;
       }).join('');
 
@@ -914,7 +932,22 @@
             <div class="bg-gray-50 border border-gray-100 rounded-2xl p-3 text-center"><div class="font-black text-2xl text-gray-500">${notYetCount}</div><div class="text-[11px] text-gray-400 font-bold uppercase">ยังไม่ตรวจ</div></div>
           </div>
           <div class="space-y-2.5">${rows}</div>
+          <p class="text-[11px] text-gray-400 font-medium mt-4">📝 หมายเหตุใช้บันทึกว่าเพื่อนจะแก้ไข/พร้อมตรวจเมื่อไหร่ — เห็นเฉพาะหัวหน้าห้องและคุณครู</p>
         </div>`;
+    }
+
+    // บันทึกหมายเหตุของหัวหน้าห้องถึงเพื่อนที่ยังไม่เรียบร้อย
+    function saveMonitorNote(idx, targetName) {
+      const input = document.getElementById('mc_' + idx);
+      const comment = input ? input.value.trim() : '';
+      MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      callAPI('saveMonitorComment', { studentId: currentMonitorId, month: currentMonitorMonth, targetName: targetName, comment: comment }).then(res => {
+        if (res.success) {
+          MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: res.message, showConfirmButton: false, timer: 2000, timerProgressBar: true });
+        } else {
+          MySwal.fire('ผิดพลาด', res.message, 'error');
+        }
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
     }
 
     function renderStudentResult(result, conductData, studentName) {
