@@ -141,7 +141,7 @@
         </div>
         <!-- Mobile image -->
         <div class="block lg:hidden absolute top-0 left-0 w-full h-[360px] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);">
-          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[95%_15%] opacity-95">
+          <img src="https://i.postimg.cc/qMfJYMCW/65C1B3BC-5E29-46BC-9807-952D35305ED7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_15%] opacity-95">
         </div>
         <!-- Mobile quote -->
         <div class="absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
@@ -152,7 +152,7 @@
         </div>
         <!-- Desktop image -->
         <div class="hidden lg:block absolute top-0 right-0 h-full w-[65%] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);">
-          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[100%_top] opacity-95">
+          <img src="https://i.postimg.cc/ZRBcWLjB/1D501BE3-0F91-4478-81B0-1096FF699430.png" alt="Students Desktop" class="w-full h-full object-cover object-[90%_top] opacity-95">
         </div>
         <!-- Desktop quote -->
         <div class="absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10 bg-white/25 backdrop-blur-sm p-5 rounded-3xl border border-white/30 shadow-lg">
@@ -191,6 +191,16 @@
               <div class="text-sm text-blue-100 font-medium relative z-10 mt-1 opacity-90">(บันทึก/ดูสถิติ)</div>
             </button>
           </div>
+
+          <!-- ปุ่มบันทึกมาสายด่วน -->
+          <button id="btn-quick-late" onclick="quickMarkLate()" class="btn-pastel nav-card w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white p-5 rounded-3xl shadow-lg border border-amber-400 flex justify-between items-center group relative overflow-hidden mb-4">
+            <div class="absolute right-[-10px] bottom-[-20px] opacity-20 transform group-hover:scale-110 transition duration-500"><svg class="w-28 h-28" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg></div>
+            <div class="relative z-10 text-left">
+              <div class="font-extrabold text-lg text-white flex items-center gap-2">⏰ บันทึกมาสายด่วน</div>
+              <div class="text-xs text-amber-100 mt-1 font-medium">เลือกห้อง+ชื่อ+เวลา บันทึกไว ไม่ต้องเปิดทั้งห้อง</div>
+            </div>
+            <svg class="w-6 h-6 text-amber-100 relative z-10 transform group-hover:translate-x-2 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
 
           <!-- ปุ่มบันทึกพฤติกรรม + สมุดโทรศัพท์ -->
           <div class="grid grid-cols-1 gap-4 mt-2">
@@ -317,7 +327,7 @@
       </div>
       <div id="students-container" class="space-y-5"></div>
       <div class="mt-8 text-center no-print sticky bottom-6 z-20">
-        <button onclick="saveData()" class="btn-pastel bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-extrabold py-4 px-12 rounded-full shadow-2xl text-xl border-4 border-white/80 backdrop-blur-md">💾 บันทึกข้อมูลแต่งกาย</button>
+        <button id="btn-save-inspection" onclick="saveData()" class="btn-pastel bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-extrabold py-4 px-12 rounded-full shadow-2xl text-xl border-4 border-white/80 backdrop-blur-md">💾 บันทึกข้อมูลแต่งกาย</button>
       </div>
     </div>
 
@@ -327,7 +337,7 @@
         <button onclick="goHome(true)" class="text-purple-600 font-bold flex items-center gap-1 hover:text-purple-800 bg-purple-50 px-4 py-2 rounded-xl transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
         <div class="flex items-center gap-2">
           <button onclick="showComparisonView()" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> เปรียบเทียบรายเดือน</button>
-          <button onclick="exportDisciplineReportList()" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> ส่งออกเพื่อพิมพ์รายงาน</button>
+          <button id="btn-export-discipline" onclick="exportDisciplineReportList()" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> ส่งออกเพื่อพิมพ์รายงาน</button>
         </div>
       </div>
       <div class="glass-card rounded-3xl p-8 mb-6 border-l-8 border-purple-500 shadow-md text-center md:text-left">
@@ -379,7 +389,7 @@
       </div>
       <div id="attendance-students-container" class="space-y-4"></div>
       <div class="mt-8 text-center no-print sticky bottom-6 z-20">
-        <button onclick="saveAttendanceData()" class="btn-pastel bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-extrabold py-4 px-12 rounded-full shadow-2xl text-xl border-4 border-white/80 backdrop-blur-md">💾 บันทึกการเช็คชื่อ</button>
+        <button id="btn-save-attendance" onclick="saveAttendanceData()" class="btn-pastel bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-extrabold py-4 px-12 rounded-full shadow-2xl text-xl border-4 border-white/80 backdrop-blur-md">💾 บันทึกการเช็คชื่อ</button>
       </div>
     </div>
 
@@ -390,8 +400,8 @@
         <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> พิมพ์รายงาน</button>
       </div>
       <div class="glass-card rounded-3xl p-8 mb-6 border-l-8 border-cyan-500 shadow-md text-center md:text-left">
-        <h2 class="text-2xl font-extrabold text-gray-800 mb-2">📊 สถิติการขาดเรียน (เฉพาะผู้ที่ขาดเรียน)</h2>
-        <p class="text-gray-500 font-medium">แสดงสรุปจำนวนวันที่ขาดรวม และการขาดติดต่อกันจนถึงปัจจุบัน</p>
+        <h2 class="text-2xl font-extrabold text-gray-800 mb-2">📊 สถิติการขาดเรียน/มาสาย</h2>
+        <p class="text-gray-500 font-medium">แสดงสรุปจำนวนวันที่ขาด การขาดติดต่อกัน และจำนวนครั้ง+เวลาที่มาสาย</p>
       </div>
       <div id="absence-stats-container" class="space-y-6"></div>
     </div>
@@ -428,7 +438,7 @@
           <textarea id="conduct-description" rows="3" placeholder="รายละเอียดเพิ่มเติม เช่น เหตุการณ์ บุคคลที่เกี่ยวข้อง หรือบริบทอื่นๆ" class="w-full p-4 bg-black/30 border border-rose-800/40 rounded-xl text-white focus:border-rose-400 outline-none font-medium transition resize-none"></textarea>
         </div>
         <div class="mt-10 text-center relative z-10 pt-8 border-t border-red-900/30">
-          <button onclick="saveConductData()" class="btn-pastel bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-extrabold py-4 px-12 rounded-xl shadow-2xl text-xl border border-red-500/50 w-full md:w-auto">⚠ บันทึกและสร้างเอกสารราชการ</button>
+          <button id="btn-save-conduct" onclick="saveConductData()" class="btn-pastel bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-extrabold py-4 px-12 rounded-xl shadow-2xl text-xl border border-red-500/50 w-full md:w-auto">⚠ บันทึกและสร้างเอกสารราชการ</button>
         </div>
       </div>
     </div>
@@ -507,6 +517,20 @@
         throw new Error('เครือข่ายผิดพลาด (HTTP ' + res.status + ')');
       }
       return res.json();
+    }
+
+    // ป้องกันกดปุ่มบันทึกซ้ำระหว่างรอผลลัพธ์จากเซิร์ฟเวอร์ (ดับเบิลคลิก/กดรัวตอนเน็ตช้า)
+    // ปิดปุ่มจริง (disabled) ทันทีที่กด ไม่ใช่แค่โชว์ป๊อปอัพโหลด เพราะป๊อปอัพอาจขึ้นช้ากว่าคลิกที่สอง 1 จังหวะ
+    function lockButton(btn) {
+      if (!btn || btn.disabled) return false; // false = ปุ่มถูกล็อกอยู่แล้ว ไม่ควรทำงานต่อ (กันดับเบิลคลิก)
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      return true;
+    }
+    function unlockButton(btn) {
+      if (!btn) return;
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
     }
 
     const MySwal = Swal.mixin({
@@ -700,6 +724,8 @@
     }
 
     function saveData() {
+      const btn = document.getElementById('btn-save-inspection');
+      if (!lockButton(btn)) return; // ปุ่มถูกล็อกอยู่แล้ว (กำลังบันทึกรอบก่อนหน้าอยู่) ไม่ทำซ้ำ
       let dataToSave = [];
       currentStudents.forEach((student, sIndex) => {
         let studentResult = { name: student.name, results: {} };
@@ -710,7 +736,8 @@
       callAPI('saveInspections', { month: currentMonth, className: currentClass, dataArray: dataToSave }).then(res => {
         if (res.success) { MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! 🎉', text: res.message, confirmButtonColor: '#ec4899', timer: 2500, showConfirmButton: false }).then(() => goHome()); }
         else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
-      });
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     // ==================== ส่วนฝ่ายปกครอง (แต่งกาย) ====================
@@ -801,10 +828,13 @@
 
     function exportDisciplineReportList() {
       if (!currentDiscStartMonth || !currentDiscEndMonth) { MySwal.fire('ข้อผิดพลาด', 'ไม่พบข้อมูลเดือนที่เลือก', 'error'); return; }
+      const btn = document.getElementById('btn-export-discipline');
+      if (!lockButton(btn)) return;
       MySwal.fire({ title: 'กำลังสร้างหนังสือราชการ...', html: 'กรุณารอสักครู่ ระบบกำลังสร้างไฟล์เอกสาร', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       callAPI('exportMonthlyDisciplineReportDoc', { startMonth: currentDiscStartMonth, endMonth: currentDiscEndMonth }).then(res => {
         if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` }); } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
-      });
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     // ==================== ส่วนนักเรียน ====================
@@ -906,7 +936,7 @@
         if (s.inspected && !s.passed) {
           commentHtml = `<div class="mt-2.5 pt-2.5 border-t border-dashed border-purple-100 flex flex-col sm:flex-row gap-2">
             <input type="text" id="mc_${idx}" value="${esc(s.comment)}" maxlength="300" placeholder="📝 หมายเหตุ เช่น จะซื้อเข็มขัดใหม่ พร้อมตรวจศุกร์นี้" class="flex-grow p-2.5 border-2 border-purple-100 rounded-xl focus:outline-none focus:border-purple-400 bg-purple-50/40 text-sm font-medium transition">
-            <button onclick="saveMonitorNote(${idx}, '${escJs(s.name)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition whitespace-nowrap flex-shrink-0">💾 บันทึกหมายเหตุ</button>
+            <button id="btn-mc-save-${idx}" onclick="saveMonitorNote(${idx}, '${escJs(s.name)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition whitespace-nowrap flex-shrink-0">💾 บันทึกหมายเหตุ</button>
           </div>`;
         } else if (s.comment) {
           // เพื่อนที่แก้เรียบร้อยจนผ่านแล้ว แต่เคยมีหมายเหตุเก่า — โชว์จางๆ เป็นประวัติ
@@ -940,6 +970,8 @@
 
     // บันทึกหมายเหตุของหัวหน้าห้องถึงเพื่อนที่ยังไม่เรียบร้อย
     function saveMonitorNote(idx, targetName) {
+      const btn = document.getElementById('btn-mc-save-' + idx);
+      if (!lockButton(btn)) return;
       const input = document.getElementById('mc_' + idx);
       const comment = input ? input.value.trim() : '';
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
@@ -949,7 +981,8 @@
         } else {
           MySwal.fire('ผิดพลาด', res.message, 'error');
         }
-      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     function renderStudentResult(result, conductData, studentName) {
@@ -1075,6 +1108,59 @@
       container.innerHTML += monthlyHtml;
     }
 
+    // ==================== บันทึกมาสายด่วน (หน้าแรก) ====================
+    async function quickMarkLate() {
+      const btn = document.getElementById('btn-quick-late');
+      if (!lockButton(btn)) return;
+      const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูผู้สอน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#f97316', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
+      unlockButton(btn); // ปลดล็อกทันทีที่โมดัลแรกปิด ขั้นตอนถัดไปมีป๊อปอัพของตัวเองกันซ้ำอยู่แล้ว
+      if (password === '1150') { showQuickLateForm(); }
+      else if (password) { MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error'); }
+    }
+
+    async function showQuickLateForm() {
+      let classOptions = ALL_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
+      let now = new Date();
+      let defaultTime = now.toTimeString().slice(0, 5);
+      const { value: formValues } = await MySwal.fire({
+        title: '⏰ บันทึกมาสายด่วน',
+        html: `<div class="text-left ml-6 mt-4 text-sm text-gray-600 font-bold">ห้องเรียน:</div><select id="ql-class" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;" onchange="quickLateLoadNames()"><option value="" disabled selected>-- เลือกห้องเรียน --</option>${classOptions}</select><div class="text-left ml-6 text-sm text-gray-600 font-bold">ชื่อนักเรียน:</div><select id="ql-name" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องก่อน --</option></select><div class="text-left ml-6 text-sm text-gray-600 font-bold">เวลาที่มาถึง:</div><input id="ql-time" type="time" value="${defaultTime}" class="swal2-input" style="display:flex;width:85%;margin:5px auto 10px auto;font-size:16px;border-radius:12px;padding:12px;">`,
+        confirmButtonText: '⏰ บันทึกมาสาย', confirmButtonColor: '#f97316', showCancelButton: true, cancelButtonText: 'ยกเลิก',
+        preConfirm: () => {
+          const cls = document.getElementById('ql-class').value;
+          const name = document.getElementById('ql-name').value;
+          const time = document.getElementById('ql-time').value;
+          if (!cls || !name || !time) { Swal.showValidationMessage('กรุณาเลือกห้อง ชื่อ และเวลาให้ครบถ้วน'); return false; }
+          return { cls, name, time };
+        }
+      });
+      if (formValues) { saveQuickLate(formValues.cls, formValues.name, formValues.time); }
+    }
+
+    function quickLateLoadNames() {
+      const cls = document.getElementById('ql-class').value;
+      const nameSelect = document.getElementById('ql-name');
+      if (!nameSelect) return;
+      nameSelect.innerHTML = '<option value="" disabled selected>-- กำลังโหลดรายชื่อ... --</option>';
+      callAPI('getStudentsByClass', { className: cls }).then(students => {
+        const target = document.getElementById('ql-name');
+        if (!target) return; // ปิดหน้าต่างไปแล้วก่อนโหลดเสร็จ
+        target.innerHTML = '<option value="" disabled selected>-- เลือกชื่อนักเรียน --</option>' + students.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+      });
+    }
+
+    function saveQuickLate(className, name, time) {
+      const todayStr = new Date().toISOString().split('T')[0];
+      MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      callAPI('saveAttendance', { dateStr: todayStr, className: className, dataArray: [{ name: name, status: 'มาสาย', arrivalTime: time }] }).then(res => {
+        if (res.success) {
+          MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! ⏰', html: `<strong>${name}</strong> (${className})<br>มาสาย เวลา ${time} น.`, confirmButtonColor: '#f97316', timer: 2500, showConfirmButton: false });
+        } else {
+          MySwal.fire('ผิดพลาด', res.message, 'error');
+        }
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
+    }
+
     // ==================== ส่วนเช็คชื่อ ====================
     async function loginAttendance() {
       const { value: role } = await MySwal.fire({
@@ -1134,26 +1220,52 @@
       const container = document.getElementById('attendance-students-container'); container.innerHTML = ''; container.dataset.date = dateStr;
       if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-blue-600 font-extrabold text-xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
       currentStudents.forEach((student, sIndex) => {
-        let card = document.createElement('div'); card.className = "bg-white/95 rounded-3xl p-5 md:p-6 mb-5 shadow-sm border border-blue-100 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-md transition";
-        let savedVal = student.status || 'มาเรียน'; let radName = `att_${sIndex}`;
-        card.innerHTML = `<div class="font-extrabold text-xl text-gray-800 flex items-center gap-3"><span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center text-base shadow-inner">${sIndex+1}</span> ${student.name}</div>
+        let card = document.createElement('div'); card.className = "bg-white/95 rounded-3xl p-5 md:p-6 mb-5 shadow-sm border border-blue-100 hover:shadow-md transition";
+        let savedVal = student.status || 'มาเรียน'; let savedTime = student.arrivalTime || ''; let radName = `att_${sIndex}`;
+        card.innerHTML = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="font-extrabold text-xl text-gray-800 flex items-center gap-3"><span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center text-base shadow-inner">${sIndex+1}</span> ${student.name}</div>
           <div class="flex flex-wrap gap-2 text-sm font-bold">
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-green-50 transition has-[:checked]:bg-green-100 has-[:checked]:border-green-400 has-[:checked]:text-green-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="มาเรียน" class="hidden" ${savedVal==='มาเรียน'?'checked':''}> มาเรียน</label>
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-red-50 transition has-[:checked]:bg-red-100 has-[:checked]:border-red-400 has-[:checked]:text-red-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="ขาดเรียน" class="hidden" ${savedVal==='ขาดเรียน'?'checked':''}> ขาดเรียน</label>
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-yellow-50 transition has-[:checked]:bg-yellow-100 has-[:checked]:border-yellow-400 has-[:checked]:text-yellow-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="ลา/ป่วย" class="hidden" ${savedVal==='ลา/ป่วย'?'checked':''}> ลา/ป่วย</label>
-          </div>`;
+            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-green-50 transition has-[:checked]:bg-green-100 has-[:checked]:border-green-400 has-[:checked]:text-green-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="มาเรียน" class="hidden" ${savedVal==='มาเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาเรียน</label>
+            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-orange-50 transition has-[:checked]:bg-orange-100 has-[:checked]:border-orange-400 has-[:checked]:text-orange-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="มาสาย" class="hidden" ${savedVal==='มาสาย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาสาย</label>
+            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-red-50 transition has-[:checked]:bg-red-100 has-[:checked]:border-red-400 has-[:checked]:text-red-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="ขาดเรียน" class="hidden" ${savedVal==='ขาดเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ขาดเรียน</label>
+            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-yellow-50 transition has-[:checked]:bg-yellow-100 has-[:checked]:border-yellow-400 has-[:checked]:text-yellow-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="ลา/ป่วย" class="hidden" ${savedVal==='ลา/ป่วย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ลา/ป่วย</label>
+          </div>
+        </div>
+        <div id="late_time_wrap_${sIndex}" class="${savedVal==='มาสาย' ? '' : 'hidden'} mt-3 pt-3 border-t border-dashed border-orange-100 flex items-center gap-2">
+          <span class="text-xs font-bold text-orange-600 whitespace-nowrap">⏰ เวลาที่มาถึง</span>
+          <input type="time" id="late_time_${sIndex}" value="${savedTime}" class="p-2 border-2 border-orange-200 rounded-xl focus:outline-none focus:border-orange-400 bg-orange-50/50 text-sm font-bold">
+        </div>`;
         container.appendChild(card);
       });
     }
 
+    // แสดง/ซ่อนช่องกรอกเวลา ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "มาสาย" ถึงจะโชว์)
+    function toggleLateTimeInput(idx) {
+      const selected = document.querySelector(`input[name="att_${idx}"]:checked`);
+      const wrap = document.getElementById('late_time_wrap_' + idx);
+      if (wrap) wrap.classList.toggle('hidden', !(selected && selected.value === 'มาสาย'));
+    }
+
     function saveAttendanceData() {
+      const btn = document.getElementById('btn-save-attendance');
+      if (!lockButton(btn)) return;
       let dataToSave = []; const dateStr = document.getElementById('attendance-students-container').dataset.date;
-      currentStudents.forEach((student, sIndex) => { let selected = document.querySelector(`input[name="att_${sIndex}"]:checked`); dataToSave.push({ name: student.name, status: selected ? selected.value : 'มาเรียน' }); });
+      currentStudents.forEach((student, sIndex) => {
+        let selected = document.querySelector(`input[name="att_${sIndex}"]:checked`);
+        let status = selected ? selected.value : 'มาเรียน';
+        let arrivalTime = '';
+        if (status === 'มาสาย') {
+          let timeInput = document.getElementById('late_time_' + sIndex);
+          arrivalTime = timeInput ? timeInput.value : '';
+        }
+        dataToSave.push({ name: student.name, status: status, arrivalTime: arrivalTime });
+      });
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       callAPI('saveAttendance', { dateStr, className: currentClass, dataArray: dataToSave }).then(res => {
         if (res.success) { MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', text: `ห้อง ${currentClass}`, showConfirmButton: false, timer: 3000, timerProgressBar: true }); }
         else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
-      });
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     function loadAbsenceReport() {
@@ -1164,14 +1276,23 @@
 
     function renderAbsenceReport(reportData) {
       const container = document.getElementById('absence-stats-container'); container.innerHTML = '';
-      if (reportData.length === 0) { container.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl text-green-600 font-extrabold text-2xl shadow">🎉 ไม่มีนักเรียนคนใดขาดเรียนเลยครับ</div>`; return; }
+      if (reportData.length === 0) { container.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl text-green-600 font-extrabold text-2xl shadow">🎉 ไม่มีนักเรียนคนใดขาดเรียนหรือมาสายเลยครับ</div>`; return; }
       let grouped = {}; reportData.forEach(item => { if (!grouped[item.className]) grouped[item.className] = []; grouped[item.className].push(item); });
       let html = '';
       for (const [className, students] of Object.entries(grouped)) {
         html += `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 shadow-md border-t-4 border-cyan-500"><h3 class="text-2xl font-extrabold text-cyan-700 mb-5 border-b border-cyan-100 pb-3">ชั้น ${className}</h3><div class="space-y-4">`;
         students.forEach((st, idx) => {
           let badgeConsecutive = st.consecutiveAbsence > 0 ? `<span class="bg-red-500 text-white text-[11px] px-2.5 py-1 rounded-md ml-2 font-bold animate-pulse shadow-sm">ขาดติดต่อกัน ${st.consecutiveAbsence} วัน</span>` : '';
-          html += `<div class="bg-white p-5 rounded-2xl border border-gray-100 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-sm hover:shadow-md transition"><div class="font-extrabold text-gray-800 flex items-center flex-wrap text-lg"><span class="bg-cyan-100 text-cyan-700 w-8 h-8 flex items-center justify-center rounded-full text-sm mr-3 shadow-inner">${idx+1}</span>${st.name} ${badgeConsecutive}</div><div class="flex gap-3 text-sm justify-between bg-gray-50/50 p-2 rounded-xl border border-gray-50"><div class="text-center px-4 py-2 bg-white rounded-lg border border-red-100 shadow-sm"><div class="text-red-400 text-[10px] font-bold uppercase tracking-wider mb-1">ขาดเรียน</div><div class="font-black text-red-600 text-xl">${st.totalAbsence} <span class="text-xs font-semibold text-red-400">วัน</span></div></div><div class="text-center px-4 py-2 bg-white rounded-lg border border-yellow-100 shadow-sm"><div class="text-yellow-500 text-[10px] font-bold uppercase tracking-wider mb-1">ลา/ป่วย</div><div class="font-black text-yellow-600 text-xl">${st.totalLeave} <span class="text-xs font-semibold text-yellow-400">วัน</span></div></div><div class="text-center px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm flex flex-col justify-center"><div class="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-1">ขาดล่าสุด</div><div class="font-bold text-gray-700">${st.lastAbsenceDate || '-'}</div></div></div></div>`;
+          let lateInfo = st.totalLate > 0 ? `<div class="text-[11px] text-orange-500 font-semibold mt-1">⏰ สายล่าสุด ${st.lastLateDate} เวลา ${st.lastLateTime || '-'} น. (สาย ${st.lastLateMinutes} นาที)</div>` : '';
+          html += `<div class="bg-white p-5 rounded-2xl border border-gray-100 flex flex-col md:flex-row justify-between md:items-start gap-4 shadow-sm hover:shadow-md transition">
+            <div class="flex-shrink-0"><div class="font-extrabold text-gray-800 flex items-center flex-wrap text-lg"><span class="bg-cyan-100 text-cyan-700 w-8 h-8 flex items-center justify-center rounded-full text-sm mr-3 shadow-inner">${idx+1}</span>${st.name} ${badgeConsecutive}</div>${lateInfo}</div>
+            <div class="flex flex-wrap gap-3 text-sm justify-start md:justify-end bg-gray-50/50 p-2 rounded-xl border border-gray-50">
+              <div class="text-center px-4 py-2 bg-white rounded-lg border border-red-100 shadow-sm"><div class="text-red-400 text-[10px] font-bold uppercase tracking-wider mb-1">ขาดเรียน</div><div class="font-black text-red-600 text-xl">${st.totalAbsence} <span class="text-xs font-semibold text-red-400">วัน</span></div></div>
+              <div class="text-center px-4 py-2 bg-white rounded-lg border border-yellow-100 shadow-sm"><div class="text-yellow-500 text-[10px] font-bold uppercase tracking-wider mb-1">ลา/ป่วย</div><div class="font-black text-yellow-600 text-xl">${st.totalLeave} <span class="text-xs font-semibold text-yellow-400">วัน</span></div></div>
+              <div class="text-center px-4 py-2 bg-white rounded-lg border border-orange-100 shadow-sm"><div class="text-orange-500 text-[10px] font-bold uppercase tracking-wider mb-1">มาสาย</div><div class="font-black text-orange-600 text-xl">${st.totalLate} <span class="text-xs font-semibold text-orange-400">ครั้ง</span></div></div>
+              <div class="text-center px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm flex flex-col justify-center"><div class="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-1">ขาดล่าสุด</div><div class="font-bold text-gray-700">${st.lastAbsenceDate || '-'}</div></div>
+            </div>
+          </div>`;
         });
         html += `</div></div>`;
       }
@@ -1332,11 +1453,13 @@
     }
 
     function saveConductData() {
+      const btn = document.getElementById('btn-save-conduct');
+      if (!lockButton(btn)) return;
       let ruleIdx = document.getElementById('conduct-rule').value;
       let points = document.getElementById('conduct-points').value;
       let dStr = document.getElementById('conduct-date').value;
       let tStr = document.getElementById('conduct-time').value;
-      if (!ruleIdx || !points || !dStr || !tStr) { MySwal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบทุกช่อง', 'warning'); return; }
+      if (!ruleIdx || !points || !dStr || !tStr) { unlockButton(btn); MySwal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบทุกช่อง', 'warning'); return; }
       let dateObj = new Date(dStr);
       const thMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
       let monthStr = thMonths[dateObj.getMonth()];
@@ -1348,7 +1471,8 @@
         if (res.success) {
           MySwal.fire({ icon: 'success', title: 'ดำเนินการสำเร็จ!', html: `บันทึกข้อมูลและสร้างหนังสือราชการเรียบร้อยแล้ว<br><br><div class="flex flex-col gap-2 mt-2"><a href="${res.docxUrl}" class="bg-blue-600 text-white p-4 rounded-xl shadow-md font-bold text-sm hover:bg-blue-700 transition">ดาวน์โหลดไฟล์ Word</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-800 p-4 rounded-xl shadow-sm border border-gray-300 font-bold text-sm hover:bg-gray-200 transition">เปิดดู Google Docs</a></div>` }).then(() => loadConductOverview());
         } else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
-      });
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     // ==================== ส่วนสมุดโทรศัพท์ ====================
@@ -1385,13 +1509,15 @@
               <input type="tel" id="pp_${st.row}" value="${prPhone}" placeholder="เบอร์ผู้ปกครอง" class="w-full sm:w-36 border-2 border-white bg-white p-2.5 rounded-xl text-sm font-bold outline-none focus:border-emerald-400 shadow-sm transition">
               ${prPhone ? `<a href="tel:${prPhone}" class="bg-emerald-100 text-emerald-600 p-2.5 rounded-xl hover:bg-emerald-200 transition shadow-sm flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>` : `<div class="w-10 h-10"></div>`}
             </div>
-            <button onclick="saveSingleContact(${st.row}, 'sp_${st.row}', 'pp_${st.row}')" class="bg-gray-800 text-white px-5 py-3 rounded-xl text-sm font-extrabold shadow-md hover:bg-black hover:shadow-lg transition w-full sm:w-auto flex-shrink-0">บันทึก</button>
+            <button id="btn-contact-save-${st.row}" onclick="saveSingleContact(${st.row}, 'sp_${st.row}', 'pp_${st.row}')" class="bg-gray-800 text-white px-5 py-3 rounded-xl text-sm font-extrabold shadow-md hover:bg-black hover:shadow-lg transition w-full sm:w-auto flex-shrink-0">บันทึก</button>
           </div>`;
         container.appendChild(card);
       });
     }
 
     async function saveSingleContact(rowNumber, studentInputId, parentInputId) {
+      const btn = document.getElementById('btn-contact-save-' + rowNumber);
+      if (!lockButton(btn)) return;
       // ป้องกันนักเรียนแก้ไข/ลบเบอร์โทรศัพท์เล่น — ต้องกรอกรหัสผ่านคุณครูก่อนบันทึกทุกครั้ง
       const { value: password } = await MySwal.fire({
         title: '🔒 ยืนยันตัวตนก่อนบันทึก',
@@ -1403,7 +1529,7 @@
         showCancelButton: true,
         cancelButtonText: 'ยกเลิก'
       });
-      if (!password) return; // กดยกเลิก หรือไม่ได้กรอก
+      if (!password) { unlockButton(btn); return; } // กดยกเลิก หรือไม่ได้กรอก
 
       let stPhone = document.getElementById(studentInputId).value;
       let prPhone = document.getElementById(parentInputId).value;
@@ -1416,7 +1542,8 @@
             callAPI('getContactsByClass', { className: currentCls }).then(students => { MySwal.close(); renderContactCards(students); });
           });
         } else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
-      });
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     // ==================== ส่วนเปรียบเทียบรายเดือน ====================
