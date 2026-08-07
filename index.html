@@ -39,6 +39,12 @@
       border: 1px solid rgba(255,255,255,0.8);
       transform: translateZ(0);
     }
+    /* การ์ดเรียบ ไม่มี backdrop-filter (เปลืองเครื่องกว่า box-shadow ธรรมดามาก โดยเฉพาะตอน scroll)
+       ใช้กับหน้าที่ต้องเรนเดอร์ซ้ำบ่อย/มีรายการเยอะ เช่น หน้าเช็คชื่อ ให้ลื่นขึ้นบนมือถือรุ่นกลาง-ล่าง */
+    .card-flat {
+      background: rgba(255,255,255,0.98);
+      border: 1px solid rgba(0,0,0,0.07);
+    }
     .glass-dark {
       background: linear-gradient(160deg, rgba(43,18,32,0.96) 0%, rgba(24,12,20,0.97) 100%);
       backdrop-filter: blur(16px);
@@ -141,7 +147,7 @@
         </div>
         <!-- Mobile image -->
         <div class="block lg:hidden absolute top-0 left-0 w-full h-[360px] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);">
-          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[90%_20%] opacity-95">
+          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_20%] opacity-95">
         </div>
         <!-- Mobile quote -->
         <div class="absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
@@ -152,7 +158,7 @@
         </div>
         <!-- Desktop image -->
         <div class="hidden lg:block absolute top-0 right-0 h-full w-[65%] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);">
-          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[100%_top] opacity-95">
+          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[50%_top] opacity-95">
         </div>
         <!-- Desktop quote -->
         <div class="absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10 bg-white/25 backdrop-blur-sm p-5 rounded-3xl border border-white/30 shadow-lg">
@@ -380,18 +386,18 @@
 
     <!-- 5. หน้าสำหรับเช็คชื่อ -->
     <div id="view-attendance-input" class="hidden">
-      <div class="flex justify-between items-center mb-4 no-print glass-card p-3 rounded-2xl">
+      <div class="flex justify-between items-center mb-4 no-print card-flat p-3 rounded-2xl">
         <button onclick="goHome(true)" class="text-blue-600 font-bold flex items-center gap-1 hover:text-blue-800 bg-blue-50 px-4 py-2 rounded-xl transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
       </div>
-      <div class="glass-card rounded-3xl p-6 mb-5 border-l-8 border-blue-500 text-center md:text-left shadow-md">
+      <div class="card-flat rounded-2xl p-5 mb-4 border-l-8 border-blue-500 text-center md:text-left shadow-sm">
         <h2 class="text-xl font-bold text-gray-700">📅 เช็คชื่อห้อง: <span id="att-display-class" class="text-blue-600 text-2xl font-black"></span> | วันที่: <span id="att-display-date" class="text-blue-600 text-xl font-black"></span></h2>
       </div>
-      <div class="overflow-x-auto whitespace-nowrap mb-5 pb-2 no-scrollbar no-print">
+      <div class="overflow-x-auto whitespace-nowrap mb-4 pb-2 no-scrollbar no-print">
         <div id="attendance-class-tabs" class="flex gap-2 inline-flex px-1"></div>
       </div>
-      <div id="attendance-students-container" class="space-y-4"></div>
-      <div class="mt-8 text-center no-print sticky bottom-6 z-20">
-        <button id="btn-save-attendance" onclick="saveAttendanceData()" class="btn-pastel bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-extrabold py-4 px-12 rounded-full shadow-2xl text-xl border-4 border-white/80 backdrop-blur-md">💾 บันทึกการเช็คชื่อ</button>
+      <div id="attendance-students-container" class="space-y-3"></div>
+      <div class="mt-6 text-center no-print sticky bottom-6 z-20">
+        <button id="btn-save-attendance" onclick="saveAttendanceData()" class="btn-pastel bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-extrabold py-4 px-12 rounded-full shadow-lg text-xl border-4 border-white">💾 บันทึกการเช็คชื่อ</button>
       </div>
     </div>
 
@@ -1204,44 +1210,52 @@
     }
 
     function renderAttendanceTabs() {
-      const container = document.getElementById('attendance-class-tabs'); container.innerHTML = '';
-      ALL_CLASSES.forEach(cls => {
+      const container = document.getElementById('attendance-class-tabs');
+      container.innerHTML = ALL_CLASSES.map(cls => {
         const isActive = cls === currentClass;
-        const btnClass = isActive ? 'bg-blue-500 text-white shadow-md border-blue-600 ring-2 ring-blue-200 scale-105' : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50 shadow-sm';
-        container.innerHTML += `<button onclick="switchAttendanceClass('${cls}')" class="px-5 py-2.5 rounded-xl text-sm font-bold border transition-all whitespace-nowrap focus:outline-none ${btnClass}">${cls}</button>`;
-      });
+        const btnClass = isActive ? 'bg-blue-500 text-white border-blue-600 ring-2 ring-blue-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50';
+        return `<button onclick="switchAttendanceClass('${cls}')" class="px-5 py-2.5 rounded-xl text-sm font-bold border whitespace-nowrap focus:outline-none ${btnClass}">${cls}</button>`;
+      }).join('');
       const activeBtn = container.querySelector('.bg-blue-500');
       if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
     function switchAttendanceClass(cls) { currentClass = cls; document.getElementById('att-display-class').innerText = currentClass; renderAttendanceTabs(); loadAttendanceData(currentClass); }
 
+    let attendanceLoadToken = 0; // กันปัญหาสลับห้องเร็วๆ แล้วผลลัพธ์ห้องเก่ามาถึงทีหลังทับห้องใหม่ (เห็นรายชื่อผิดห้อง)
     function loadAttendanceData(cls) {
       document.getElementById('attendance-students-container').innerHTML = cardSkeletonRows(3, 1);
-      callAPI('getStudentsForAttendance', { className: cls, dateStr: currentAttDate }).then(students => { currentStudents = students; renderAttendanceCards(currentAttDate); });
+      const myToken = ++attendanceLoadToken;
+      callAPI('getStudentsForAttendance', { className: cls, dateStr: currentAttDate }).then(students => {
+        if (myToken !== attendanceLoadToken) return; // มีการสลับห้อง/คำขอใหม่กว่านี้แล้ว ทิ้งผลลัพธ์เก่านี้ไป
+        currentStudents = students;
+        renderAttendanceCards(currentAttDate);
+      });
     }
 
     function renderAttendanceCards(dateStr) {
-      const container = document.getElementById('attendance-students-container'); container.innerHTML = ''; container.dataset.date = dateStr;
-      if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-blue-600 font-extrabold text-xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
-      currentStudents.forEach((student, sIndex) => {
-        let card = document.createElement('div'); card.className = "bg-white/95 rounded-3xl p-5 md:p-6 mb-5 shadow-sm border border-blue-100 hover:shadow-md transition";
+      const container = document.getElementById('attendance-students-container'); container.dataset.date = dateStr;
+      if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 card-flat rounded-2xl text-blue-600 font-extrabold text-xl">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
+      // สร้าง HTML ทั้งหมดเป็นสตริงเดียวก่อน แล้วค่อยเขียนลง DOM ครั้งเดียว (เร็วกว่าสร้างทีละการ์ดแล้ว appendChild วนลูปมาก)
+      const cardsHtml = currentStudents.map((student, sIndex) => {
         let savedVal = student.status || 'มาเรียน'; let savedTime = student.arrivalTime || ''; let radName = `att_${sIndex}`;
-        card.innerHTML = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div class="font-extrabold text-xl text-gray-800 flex items-center gap-3"><span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center text-base shadow-inner">${sIndex+1}</span> ${student.name}</div>
-          <div class="flex flex-wrap gap-2 text-sm font-bold">
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-green-50 transition has-[:checked]:bg-green-100 has-[:checked]:border-green-400 has-[:checked]:text-green-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="มาเรียน" class="hidden" ${savedVal==='มาเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาเรียน</label>
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-orange-50 transition has-[:checked]:bg-orange-100 has-[:checked]:border-orange-400 has-[:checked]:text-orange-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="มาสาย" class="hidden" ${savedVal==='มาสาย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาสาย</label>
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-red-50 transition has-[:checked]:bg-red-100 has-[:checked]:border-red-400 has-[:checked]:text-red-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="ขาดเรียน" class="hidden" ${savedVal==='ขาดเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ขาดเรียน</label>
-            <label class="flex-1 min-w-[80px] flex items-center justify-center gap-1.5 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-yellow-50 transition has-[:checked]:bg-yellow-100 has-[:checked]:border-yellow-400 has-[:checked]:text-yellow-800 text-gray-500 shadow-sm"><input type="radio" name="${radName}" value="ลา/ป่วย" class="hidden" ${savedVal==='ลา/ป่วย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ลา/ป่วย</label>
+        return `<div class="bg-white rounded-2xl p-3.5 md:p-4 border border-gray-200">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="font-bold text-gray-800 flex items-center gap-2.5"><span class="bg-blue-50 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0">${sIndex+1}</span> ${student.name}</div>
+            <div class="flex flex-wrap gap-1.5 text-sm font-bold">
+              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-green-100 has-[:checked]:border-green-400 has-[:checked]:text-green-800 text-gray-500"><input type="radio" name="${radName}" value="มาเรียน" class="hidden" ${savedVal==='มาเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาเรียน</label>
+              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-orange-100 has-[:checked]:border-orange-400 has-[:checked]:text-orange-800 text-gray-500"><input type="radio" name="${radName}" value="มาสาย" class="hidden" ${savedVal==='มาสาย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาสาย</label>
+              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-red-100 has-[:checked]:border-red-400 has-[:checked]:text-red-800 text-gray-500"><input type="radio" name="${radName}" value="ขาดเรียน" class="hidden" ${savedVal==='ขาดเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ขาดเรียน</label>
+              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-yellow-100 has-[:checked]:border-yellow-400 has-[:checked]:text-yellow-800 text-gray-500"><input type="radio" name="${radName}" value="ลา/ป่วย" class="hidden" ${savedVal==='ลา/ป่วย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ลา/ป่วย</label>
+            </div>
           </div>
-        </div>
-        <div id="late_time_wrap_${sIndex}" class="${savedVal==='มาสาย' ? '' : 'hidden'} mt-3 pt-3 border-t border-dashed border-orange-100 flex items-center gap-2">
-          <span class="text-xs font-bold text-orange-600 whitespace-nowrap">⏰ เวลาที่มาถึง</span>
-          <input type="time" id="late_time_${sIndex}" value="${savedTime}" class="p-2 border-2 border-orange-200 rounded-xl focus:outline-none focus:border-orange-400 bg-orange-50/50 text-sm font-bold">
+          <div id="late_time_wrap_${sIndex}" class="${savedVal==='มาสาย' ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-dashed border-orange-200 flex items-center gap-2">
+            <span class="text-xs font-bold text-orange-600 whitespace-nowrap">⏰ เวลาที่มาถึง</span>
+            <input type="time" id="late_time_${sIndex}" value="${savedTime}" class="p-1.5 border border-orange-200 rounded-lg focus:outline-none focus:border-orange-400 bg-orange-50/50 text-sm font-bold">
+          </div>
         </div>`;
-        container.appendChild(card);
-      });
+      }).join('');
+      container.innerHTML = cardsHtml;
     }
 
     // แสดง/ซ่อนช่องกรอกเวลา ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "มาสาย" ถึงจะโชว์)
