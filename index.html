@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="bingbot" content="noindex, nofollow">
-  <title>ระบบฝ่ายปกครองม.ปลาย</title>
+  <title>ระบบฝ่ายปกครอง ม.ปลาย</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
@@ -128,7 +128,7 @@
       <a href="javascript:void(0);" onclick="goHome(true)" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
         <img src="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-sm p-0.5 border border-gray-100">
         <div class="text-left">
-          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครองม.ปลาย</h1>
+          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย</h1>
           <p class="text-xs text-gray-500 font-medium">โรงเรียนธนาคารออมสิน</p>
         </div>
       </a>
@@ -267,7 +267,7 @@
       </div>
 
       <!-- Stats + Activities -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="glass-card rounded-3xl shadow-sm hover:shadow-xl border-t-4 border-pink-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative">
           <div class="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50/50 to-white pointer-events-none"></div>
           <div class="relative z-10 p-6">
@@ -305,20 +305,6 @@
               ดูรายละเอียดกฎระเบียบ
               <svg class="w-5 h-5 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </button>
-          </div>
-        </div>
-        <div class="glass-card rounded-3xl shadow-sm hover:shadow-xl border-t-4 border-purple-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative">
-          <div class="absolute inset-0 bg-gradient-to-br from-purple-50 via-indigo-50/50 to-white pointer-events-none"></div>
-          <div class="relative z-10 p-6">
-            <h3 class="font-extrabold text-gray-800 flex items-center gap-2.5 mb-5 text-lg">
-              <span class="w-9 h-9 bg-gradient-to-br from-purple-500 to-indigo-500 text-white rounded-xl flex items-center justify-center shadow-md flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></span>
-              กิจกรรมล่าสุด
-            </h3>
-            <div id="activities-container" class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
-              <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-3/4 rounded mb-2"></div><div class="skeleton h-3 w-1/2 rounded"></div></div></div>
-              <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-2/3 rounded mb-2"></div><div class="skeleton h-3 w-1/3 rounded"></div></div></div>
-              <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-3/4 rounded mb-2"></div><div class="skeleton h-3 w-1/2 rounded"></div></div></div>
-            </div>
           </div>
         </div>
       </div>
@@ -560,6 +546,10 @@
     let currentMonitorId = "";
     let currentMonitorMonth = "";
     let conductPasswordVerified = false;
+    // เก็บรหัสผ่านที่ยืนยันแล้วไว้ชั่วคราว เพื่อแนบไปกับคำขอบันทึก/อ่านข้อมูลที่ต้องยืนยันสิทธิ์
+    // (ฝั่งเซิร์ฟเวอร์ตรวจซ้ำอีกชั้นเสมอ ไม่ได้เชื่อหน้าเว็บอย่างเดียว)
+    let currentTeacherAuth = "";
+    let currentDisciplineAuth = "";
 
     const ruleItems = ['การปักชื่อ','เลขประจำตัว','กระโปรง/กางเกง','เข็มตราโรงเรียน','จุดระดับชั้น','เข็มขัดตราโรงเรียน','ถุงเท้า','ผม','สีผม','เล็บ','โบว์','ชื่อชุดพละ','ชื่อชุดวิถีพุทธ','หนวดเครา'];
     const ALL_CLASSES = ['ม.4/1','ม.4/2','ม.4/3','ม.4/4','ม.5/1','ม.5/2','ม.5/3','ม.5/4','ม.6/1','ม.6/2','ม.6/3','ม.6/4'];
@@ -602,10 +592,6 @@
         <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
         <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
         <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>`;
-      document.getElementById('activities-container').innerHTML = `
-        <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-3/4 rounded mb-2"></div><div class="skeleton h-3 w-1/2 rounded"></div></div></div>
-        <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-2/3 rounded mb-2"></div><div class="skeleton h-3 w-1/3 rounded"></div></div></div>
-        <div class="flex items-start gap-4"><div class="skeleton w-10 h-10 rounded-full flex-shrink-0"></div><div class="flex-grow"><div class="skeleton h-4 w-3/4 rounded mb-2"></div><div class="skeleton h-3 w-1/2 rounded"></div></div></div>`;
     }
 
     // ─── Skeleton การ์ดกลาง ใช้ร่วมกันได้ทุกหน้าที่ต้องโหลดรายชื่อ/รายงาน ───
@@ -650,20 +636,6 @@
             <div class="text-[11px] text-gray-500 font-bold uppercase tracking-wide">ขาดเรียนวันนี้</div>
           </div>`;
         document.getElementById('stats-container').innerHTML = statsHtml;
-        let actsContainer = document.getElementById('activities-container');
-        if (stats.activities.length === 0) {
-          actsContainer.innerHTML = `<div class="text-center text-gray-400 py-6 text-sm font-medium border-2 border-dashed border-gray-100 rounded-2xl">ยังไม่มีกิจกรรมวันนี้</div>`;
-        } else {
-          let actsHtml = '';
-          stats.activities.slice(0, 3).forEach(act => {
-            let icon = '', bgClass = '', textClass = '';
-            if (act.type === 'inspect') { icon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`; bgClass = 'bg-pink-50 border border-pink-100'; textClass = 'text-pink-500'; }
-            else if (act.type === 'attendance') { icon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path></svg>`; bgClass = 'bg-blue-50 border border-blue-100'; textClass = 'text-blue-500'; }
-            else { icon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77-1.333.192 3 1.732 3z"></path></svg>`; bgClass = 'bg-red-50 border border-red-100'; textClass = 'text-red-500'; }
-            actsHtml += `<div class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-2xl transition"><div class="${bgClass} ${textClass} w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">${icon}</div><div class="flex-grow"><div class="text-sm font-bold text-gray-800">${act.title}</div><div class="text-xs text-gray-500 font-medium">${act.sub}</div></div><div class="text-[11px] font-bold text-gray-400 bg-white border border-gray-100 px-3 py-1.5 rounded-lg shadow-sm whitespace-nowrap">${act.timeStr}</div></div>`;
-          });
-          actsContainer.innerHTML = actsHtml;
-        }
       }).catch(()=>showToast && showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
     }
 
@@ -676,14 +648,14 @@
           html += `<div class="p-4 border border-gray-100 bg-gray-50/50 rounded-2xl flex justify-between items-center gap-3 hover:shadow-md transition"><div class="text-gray-700 font-medium leading-relaxed"><span class="font-black text-gray-400 mr-1">${idx+1}.</span> ${r.rule}</div><div class="flex-shrink-0"><span class="${badgeClass} border px-3 py-1.5 rounded-lg font-bold text-sm shadow-sm">-${r.points}</span></div></div>`;
         });
         html += `</div><style>.custom-scrollbar::-webkit-scrollbar{width:6px;}.custom-scrollbar::-webkit-scrollbar-track{background:#f1f1f1;border-radius:10px;}.custom-scrollbar::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px;}</style>`;
-        MySwal.fire({ title: 'เกณฑ์การตัดคะแนนความประพฤติ', html: html, confirmButtonText: 'รับทราบ', confirmButtonColor: '#ec4899', width: '700px' });
+        MySwal.fire({ title: 'เกณฑ์การตัดคะแนนความประพฤติ', html: html, confirmButtonText: 'รับทราบ', confirmButtonColor: '#ec4899', width: 'min(700px, 92vw)' });
       });
     }
 
     // ==================== ส่วนครู ====================
     async function loginTeacher() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูผู้สอน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#ec4899', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '1150') { selectClassAndMonth(); } else if (password) { MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error'); }
+      if (password === '1150') { currentTeacherAuth = password; selectClassAndMonth(); } else if (password) { MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error'); }
     }
 
     async function selectClassAndMonth() {
@@ -741,7 +713,7 @@
         dataToSave.push(studentResult);
       });
       MySwal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('saveInspections', { month: currentMonth, className: currentClass, dataArray: dataToSave }).then(res => {
+      callAPI('saveInspections', { month: currentMonth, className: currentClass, dataArray: dataToSave, password: currentTeacherAuth }).then(res => {
         if (res.success) { MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! 🎉', text: res.message, confirmButtonColor: '#ec4899', timer: 2500, showConfirmButton: false }).then(() => goHome()); }
         else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
@@ -751,7 +723,7 @@
     // ==================== ส่วนฝ่ายปกครอง (แต่งกาย) ====================
     async function loginDiscipline() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#9333ea', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '7846') showDisciplineMonthSelector();
+      if (password === '7846') { currentDisciplineAuth = password; showDisciplineMonthSelector(); }
       else if (password) MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
     }
 
@@ -773,7 +745,14 @@
       let label = startMonth === endMonth ? startMonth : `ตั้งแต่ ${startMonth} ถึง ${endMonth}`;
       document.getElementById('discipline-month-label').innerText = label;
       document.getElementById('discipline-report-container').innerHTML = cardSkeletonRows(3);
-      callAPI('getDisciplineReport', { startMonth, endMonth }).then(reportData => { renderDisciplineReport(reportData, startMonth, endMonth); });
+      callAPI('getDisciplineReport', { startMonth, endMonth, password: currentDisciplineAuth }).then(reportData => {
+        if (reportData && reportData.error) {
+          document.getElementById('discipline-report-container').innerHTML = '';
+          MySwal.fire('ผิดพลาด', reportData.error, 'error');
+          return;
+        }
+        renderDisciplineReport(reportData, startMonth, endMonth);
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
     }
 
     function renderDisciplineReport(reportData, startMonth, endMonth) {
@@ -839,7 +818,7 @@
       const btn = document.getElementById('btn-export-discipline');
       if (!lockButton(btn)) return;
       MySwal.fire({ title: 'กำลังสร้างหนังสือราชการ...', html: 'กรุณารอสักครู่ ระบบกำลังสร้างไฟล์เอกสาร', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('exportMonthlyDisciplineReportDoc', { startMonth: currentDiscStartMonth, endMonth: currentDiscEndMonth }).then(res => {
+      callAPI('exportMonthlyDisciplineReportDoc', { startMonth: currentDiscStartMonth, endMonth: currentDiscEndMonth, password: currentDisciplineAuth }).then(res => {
         if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` }); } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
         .finally(() => unlockButton(btn));
@@ -1122,6 +1101,7 @@
       if (!lockButton(btn)) return;
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูผู้สอน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#f97316', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
       if (password === '1150') {
+        currentTeacherAuth = password;
         await showQuickLateForm(); // รอจนจบขั้นตอนทั้งหมด (เลือกห้อง/ชื่อ/เวลา + บันทึกจริง) ก่อนปลดล็อกปุ่ม
       } else if (password) {
         MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
@@ -1163,7 +1143,7 @@
     function saveQuickLate(className, name, time) {
       const todayStr = new Date().toISOString().split('T')[0];
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      return callAPI('saveAttendance', { dateStr: todayStr, className: className, dataArray: [{ name: name, status: 'มาสาย', arrivalTime: time }] }).then(res => {
+      return callAPI('saveAttendance', { dateStr: todayStr, className: className, dataArray: [{ name: name, status: 'มาสาย', arrivalTime: time }], password: currentTeacherAuth }).then(res => {
         if (res.success) {
           return MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! ⏰', html: `<strong>${name}</strong> (${className})<br>มาสาย เวลา ${time} น.`, confirmButtonColor: '#f97316', timer: 2500, showConfirmButton: false });
         } else {
@@ -1183,8 +1163,8 @@
       });
       if (role) {
         const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: role === 'teacher' ? '#3b82f6' : '#0891b2', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-        if (role === 'teacher' && password === '1150') selectAttendanceClassDate();
-        else if (role === 'discipline' && password === '7846') loadAbsenceReport();
+        if (role === 'teacher' && password === '1150') { currentTeacherAuth = password; selectAttendanceClassDate(); }
+        else if (role === 'discipline' && password === '7846') { currentDisciplineAuth = password; loadAbsenceReport(); }
         else if (password) MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
       }
     }
@@ -1280,7 +1260,7 @@
         dataToSave.push({ name: student.name, status: status, arrivalTime: arrivalTime });
       });
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('saveAttendance', { dateStr, className: currentClass, dataArray: dataToSave }).then(res => {
+      callAPI('saveAttendance', { dateStr, className: currentClass, dataArray: dataToSave, password: currentTeacherAuth }).then(res => {
         if (res.success) { MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', text: `ห้อง ${currentClass}`, showConfirmButton: false, timer: 3000, timerProgressBar: true }); }
         else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
@@ -1290,7 +1270,14 @@
     function loadAbsenceReport() {
       showView('view-absence-stats');
       document.getElementById('absence-stats-container').innerHTML = cardSkeletonRows(3);
-      callAPI('getAbsenceReport').then(reportData => { renderAbsenceReport(reportData); });
+      callAPI('getAbsenceReport', { password: currentDisciplineAuth }).then(reportData => {
+        if (reportData && reportData.error) {
+          document.getElementById('absence-stats-container').innerHTML = '';
+          MySwal.fire('ผิดพลาด', reportData.error, 'error');
+          return;
+        }
+        renderAbsenceReport(reportData);
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
     }
 
     function renderAbsenceReport(reportData) {
@@ -1323,6 +1310,7 @@
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#b91c1c', showCancelButton: true, cancelButtonText: 'ยกเลิก', backdrop: `rgba(0,0,0,0.8)` });
       if (password === '7846') {
         conductPasswordVerified = true;
+        currentDisciplineAuth = password;
         loadConductOverview();
       } else if (password) { MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error'); }
     }
@@ -1342,7 +1330,7 @@
         <div class="skeleton-dark h-5 w-44 rounded mb-4"></div>
         <div class="space-y-2"><div class="skeleton-dark h-14 rounded-xl"></div><div class="skeleton-dark h-14 rounded-xl"></div><div class="skeleton-dark h-14 rounded-xl"></div></div>
       </div>`;
-      callAPI('getConductOverview').then(res => {
+      callAPI('getConductOverview', { password: currentDisciplineAuth }).then(res => {
         if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; }
         renderConductOverview(res);
       });
@@ -1484,7 +1472,7 @@
       let monthStr = thMonths[dateObj.getMonth()];
       let ruleDesc = globalConductRules[ruleIdx].rule;
       let description = document.getElementById('conduct-description').value.trim();
-      let payload = { name: document.getElementById('conduct-student-name').value, className: document.getElementById('conduct-student-class').value, dateStr: dStr, timeStr: tStr, month: monthStr, rule: ruleDesc, points: points, description: description };
+      let payload = { name: document.getElementById('conduct-student-name').value, className: document.getElementById('conduct-student-class').value, dateStr: dStr, timeStr: tStr, month: monthStr, rule: ruleDesc, points: points, description: description, password: currentDisciplineAuth };
       MySwal.fire({ title: 'กำลังบันทึกและสร้างเอกสาร...', html: 'อาจใช้เวลา 10-15 วินาที กรุณารอสักครู่', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
       callAPI('saveConductAndGenerateDoc', { data: payload }).then(res => {
         if (res.success) {
