@@ -502,15 +502,28 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzt6xOsUgXzljdVKP9shOrzK6jl1diU6PTzNudWUVgbAJy_GKxKhZEd58LHVw2YmNU5gA/exec';
 
     async function callAPI(action, payload = {}) {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action, ...payload })
-      });
-      if (!res.ok) {
-        throw new Error('เครือข่ายผิดพลาด (HTTP ' + res.status + ')');
+      // จำกัดเวลารอสูงสุด 25 วินาที — กันปัญหาค้างโหลดตลอดไปแบบไม่รู้จบ (ไม่ว่าจะติดที่เน็ต/เซิร์ฟเวอร์/deploy คนละ URL)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action, ...payload }),
+          signal: controller.signal
+        });
+        if (!res.ok) {
+          throw new Error('เครือข่ายผิดพลาด (HTTP ' + res.status + ')');
+        }
+        return await res.json();
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          throw new Error('เชื่อมต่อเซิร์ฟเวอร์นานเกินไป กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
+        }
+        throw err;
+      } finally {
+        clearTimeout(timeoutId);
       }
-      return res.json();
     }
 
     // ป้องกันกดปุ่มบันทึกซ้ำระหว่างรอผลลัพธ์จากเซิร์ฟเวอร์ (ดับเบิลคลิก/กดรัวตอนเน็ตช้า)
@@ -636,7 +649,9 @@
             <div class="text-[11px] text-gray-500 font-bold uppercase tracking-wide">ขาดเรียนวันนี้</div>
           </div>`;
         document.getElementById('stats-container').innerHTML = statsHtml;
-      }).catch(()=>showToast && showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
+      }).catch(() => {
+        document.getElementById('stats-container').innerHTML = `<div class="col-span-2 text-center text-red-400 text-sm font-medium py-6 border-2 border-dashed border-red-100 rounded-2xl">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองรีเฟรชหน้าใหม่</div>`;
+      });
     }
 
     function showRulesPopup() {
@@ -649,6 +664,8 @@
         });
         html += `</div><style>.custom-scrollbar::-webkit-scrollbar{width:6px;}.custom-scrollbar::-webkit-scrollbar-track{background:#f1f1f1;border-radius:10px;}.custom-scrollbar::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px;}</style>`;
         MySwal.fire({ title: 'เกณฑ์การตัดคะแนนความประพฤติ', html: html, confirmButtonText: 'รับทราบ', confirmButtonColor: '#ec4899', width: 'min(700px, 92vw)' });
+      }).catch(() => {
+        MySwal.fire({ icon: 'error', title: 'โหลดข้อมูลไม่สำเร็จ', text: 'กรุณาตรวจสอบอินเทอร์เน็ต หรือลองใหม่อีกครั้ง', confirmButtonColor: '#ec4899' });
       });
     }
 
@@ -675,16 +692,19 @@
     function loadStudents() {
       showView('view-teacher');
       document.getElementById('students-container').innerHTML = cardSkeletonRows(3);
-      callAPI('getStudentsForInspection', { className: currentClass, month: currentMonth }).then(students => { currentStudents = students; renderStudentCards(); });
+      callAPI('getStudentsForInspection', { className: currentClass, month: currentMonth }).then(students => { currentStudents = students; renderStudentCards(); }).catch(() => {
+        document.getElementById('students-container').innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-red-500 font-bold text-lg shadow">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
+      });
     }
 
     function renderStudentCards() {
-      const container = document.getElementById('students-container'); container.innerHTML = '';
+      const container = document.getElementById('students-container');
       if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-pink-600 font-bold text-xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
-      currentStudents.forEach((student, sIndex) => {
-        let card = document.createElement('div'); card.className = "glass-card rounded-3xl p-5 md:p-8 mb-6 shadow-md border border-gray-100 hover:shadow-lg transition";
-        let headerHtml = `<div class="font-extrabold text-xl md:text-2xl text-gray-800 mb-5 border-b border-pink-100 pb-4 flex items-center gap-3"><span class="bg-gradient-to-br from-pink-400 to-pink-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-base shadow-sm">${sIndex+1}</span> ${student.name}</div>`;
-        let rulesHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
+      // สร้าง HTML ทั้งหมดเป็นสตริงเดียวก่อน แล้วค่อยเขียนลง DOM ครั้งเดียว
+      // (การ์ดนี้มี 14 กฎ × 3 ตัวเลือก = 42 ช่องต่อคน เดิมสร้างทีละคนแล้วแปะทีละคน ช้ากว่ามาก)
+      const cardsHtml = currentStudents.map((student, sIndex) => {
+        let headerHtml = `<div class="font-bold text-xl text-gray-800 mb-4 border-b border-pink-100 pb-3 flex items-center gap-3"><span class="bg-pink-100 text-pink-600 w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0">${sIndex+1}</span> ${student.name}</div>`;
+        let rulesHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
         ruleItems.forEach((rule, rIndex) => {
           // ── ค่า default เมื่อยังไม่มีข้อมูลบันทึก ──
           let savedVal;
@@ -696,11 +716,12 @@
             if (rule === 'หนวดเครา' && student.name.startsWith('นางสาว')) savedVal = 'ไม่ต้องใส่';
           }
           let radName = `st_${sIndex}_rule_${rIndex}`;
-          rulesHtml += `<div class="bg-gray-50/80 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-pink-200 transition shadow-sm"><div class="text-sm font-bold text-gray-700 mb-3">${rule}</div><div class="flex gap-2 text-sm font-bold bg-white p-1 rounded-xl border border-gray-100"><label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer py-2 rounded-lg hover:bg-green-50 transition has-[:checked]:bg-green-100 has-[:checked]:text-green-700 has-[:checked]:border has-[:checked]:border-green-200 text-gray-500 border border-transparent"><input type="radio" name="${radName}" value="ผ่าน" class="hidden" ${savedVal === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label><label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer py-2 rounded-lg hover:bg-red-50 transition has-[:checked]:bg-red-100 has-[:checked]:text-red-700 has-[:checked]:border has-[:checked]:border-red-200 text-gray-500 border border-transparent"><input type="radio" name="${radName}" value="ไม่ผ่าน" class="hidden" ${savedVal === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label><label class="flex-1 flex items-center justify-center gap-1.5 cursor-pointer py-2 rounded-lg hover:bg-gray-100 transition has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 has-[:checked]:border has-[:checked]:border-gray-300 text-gray-500 border border-transparent"><input type="radio" name="${radName}" value="ไม่ต้องใส่" class="hidden" ${savedVal === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label></div></div>`;
+          rulesHtml += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-200"><div class="text-sm font-bold text-gray-700 mb-2">${rule}</div><div class="flex gap-1.5 text-sm font-bold bg-white p-1 rounded-lg border border-gray-100"><label class="flex-1 flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ผ่าน" class="hidden" ${savedVal === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label><label class="flex-1 flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ผ่าน" class="hidden" ${savedVal === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label><label class="flex-1 flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 text-gray-500"><input type="radio" name="${radName}" value="ไม่ต้องใส่" class="hidden" ${savedVal === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label></div></div>`;
         });
         rulesHtml += `</div>`;
-        card.innerHTML = headerHtml + rulesHtml; container.appendChild(card);
-      });
+        return `<div class="bg-white rounded-2xl p-4 md:p-6 mb-4 border border-gray-200">${headerHtml}${rulesHtml}</div>`;
+      }).join('');
+      container.innerHTML = cardsHtml;
     }
 
     function saveData() {
@@ -1137,6 +1158,9 @@
         const target = document.getElementById('ql-name');
         if (!target) return; // ปิดหน้าต่างไปแล้วก่อนโหลดเสร็จ
         target.innerHTML = '<option value="" disabled selected>-- เลือกชื่อนักเรียน --</option>' + students.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+      }).catch(() => {
+        const target = document.getElementById('ql-name');
+        if (target) target.innerHTML = '<option value="" disabled selected>-- โหลดไม่สำเร็จ ลองเลือกห้องใหม่อีกครั้ง --</option>';
       });
     }
 
@@ -1210,6 +1234,9 @@
         if (myToken !== attendanceLoadToken) return; // มีการสลับห้อง/คำขอใหม่กว่านี้แล้ว ทิ้งผลลัพธ์เก่านี้ไป
         currentStudents = students;
         renderAttendanceCards(currentAttDate);
+      }).catch(() => {
+        if (myToken !== attendanceLoadToken) return;
+        document.getElementById('attendance-students-container').innerHTML = `<div class="text-center p-12 card-flat rounded-2xl text-red-500 font-bold text-lg">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
       });
     }
 
@@ -1333,6 +1360,8 @@
       callAPI('getConductOverview', { password: currentDisciplineAuth }).then(res => {
         if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; }
         renderConductOverview(res);
+      }).catch(() => {
+        document.getElementById('conduct-overview-container').innerHTML = `<div class="glass-dark rounded-3xl p-12 text-center text-red-300 font-bold text-lg border border-red-900/40">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
       });
     }
 
@@ -1434,6 +1463,8 @@
         let nameOptions = students.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
         const { value: selectedName } = await MySwal.fire({ title: `เลือกชื่อนักเรียน (${selectedClass})`, html: `<select id="swal-cond-name" class="swal2-select w-4/5 mx-auto">${nameOptions}</select>`, confirmButtonText: 'ทำรายการต่อ', confirmButtonColor: '#b91c1c', backdrop: `rgba(0,0,0,0.8)`, preConfirm: () => document.getElementById('swal-cond-name').value });
         if (selectedName) showConductForm(selectedName, selectedClass);
+      }).catch(() => {
+        MySwal.fire({ icon: 'error', title: 'โหลดรายชื่อไม่สำเร็จ', text: 'กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#b91c1c' });
       });
     }
 
@@ -1449,8 +1480,11 @@
       callAPI('getConductRules').then(rules => {
         MySwal.close(); globalConductRules = rules;
         let ruleSelect = document.getElementById('conduct-rule');
-        ruleSelect.innerHTML = '<option value="">-- กรุณาเลือกความผิด --</option>';
-        rules.forEach((r, idx) => { let opt = document.createElement('option'); opt.value = idx; opt.textContent = `${idx+1}. ${r.rule} (-${r.points} คะแนน)`; ruleSelect.appendChild(opt); });
+        const escOpt = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        ruleSelect.innerHTML = '<option value="">-- กรุณาเลือกความผิด --</option>' +
+          rules.map((r, idx) => `<option value="${idx}">${escOpt(`${idx+1}. ${r.rule} (-${r.points} คะแนน)`)}</option>`).join('');
+      }).catch(() => {
+        MySwal.fire({ icon: 'error', title: 'โหลดเกณฑ์คะแนนไม่สำเร็จ', text: 'กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#b91c1c' });
       });
     }
 
@@ -1492,34 +1526,35 @@
         showView('view-contact');
         document.getElementById('contact-display-class').innerText = selectedClass;
         document.getElementById('contact-students-container').innerHTML = cardSkeletonRows(3, 1);
-        callAPI('getContactsByClass', { className: selectedClass }).then(students => { renderContactCards(students); });
+        callAPI('getContactsByClass', { className: selectedClass }).then(students => { renderContactCards(students); }).catch(() => {
+          document.getElementById('contact-students-container').innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-red-500 font-bold text-lg shadow">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
+        });
       }
     }
 
     function renderContactCards(students) {
-      const container = document.getElementById('contact-students-container'); container.innerHTML = '';
+      const container = document.getElementById('contact-students-container');
       if (students.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-emerald-600 font-extrabold text-2xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
-      students.forEach((st, sIndex) => {
-        let card = document.createElement('div');
-        card.className = "bg-white/95 rounded-3xl p-6 mb-5 shadow-sm border-l-8 border-emerald-500 flex flex-col md:flex-row justify-between md:items-center gap-5 hover:shadow-md transition";
+      const cardsHtml = students.map((st, sIndex) => {
         let stPhone = st.studentPhone.trim(); let prPhone = st.parentPhone.trim();
-        card.innerHTML = `
-          <div class="font-extrabold text-xl text-gray-800 flex items-center gap-3 w-full md:w-1/3">
-            <span class="bg-emerald-100 text-emerald-700 w-10 h-10 flex items-center justify-center rounded-full text-base font-bold flex-shrink-0 shadow-inner">${sIndex+1}</span>${st.name}
+        return `<div class="bg-white rounded-2xl p-5 mb-3 border border-gray-200 border-l-4 border-l-emerald-500 flex flex-col md:flex-row justify-between md:items-center gap-4">
+          <div class="font-bold text-lg text-gray-800 flex items-center gap-3 w-full md:w-1/3">
+            <span class="bg-emerald-100 text-emerald-700 w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold flex-shrink-0">${sIndex+1}</span>${st.name}
           </div>
-          <div class="flex flex-col sm:flex-row gap-4 w-full md:w-2/3 justify-end items-center">
-            <div class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-2 rounded-2xl border border-gray-100">
-              <input type="tel" id="sp_${st.row}" value="${stPhone}" placeholder="เบอร์นักเรียน" class="w-full sm:w-36 border-2 border-white bg-white p-2.5 rounded-xl text-sm font-bold outline-none focus:border-emerald-400 shadow-sm transition">
-              ${stPhone ? `<a href="tel:${stPhone}" class="bg-green-100 text-green-600 p-2.5 rounded-xl hover:bg-green-200 transition shadow-sm flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>` : `<div class="w-10 h-10"></div>`}
+          <div class="flex flex-col sm:flex-row gap-3 w-full md:w-2/3 justify-end items-center">
+            <div class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-2 rounded-xl border border-gray-100">
+              <input type="tel" id="sp_${st.row}" value="${stPhone}" placeholder="เบอร์นักเรียน" class="w-full sm:w-36 border border-gray-200 bg-white p-2.5 rounded-lg text-sm font-bold outline-none focus:border-emerald-400">
+              ${stPhone ? `<a href="tel:${stPhone}" class="bg-green-100 text-green-600 p-2.5 rounded-lg flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>` : `<div class="w-10 h-10"></div>`}
             </div>
-            <div class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-2 rounded-2xl border border-gray-100">
-              <input type="tel" id="pp_${st.row}" value="${prPhone}" placeholder="เบอร์ผู้ปกครอง" class="w-full sm:w-36 border-2 border-white bg-white p-2.5 rounded-xl text-sm font-bold outline-none focus:border-emerald-400 shadow-sm transition">
-              ${prPhone ? `<a href="tel:${prPhone}" class="bg-emerald-100 text-emerald-600 p-2.5 rounded-xl hover:bg-emerald-200 transition shadow-sm flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>` : `<div class="w-10 h-10"></div>`}
+            <div class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-2 rounded-xl border border-gray-100">
+              <input type="tel" id="pp_${st.row}" value="${prPhone}" placeholder="เบอร์ผู้ปกครอง" class="w-full sm:w-36 border border-gray-200 bg-white p-2.5 rounded-lg text-sm font-bold outline-none focus:border-emerald-400">
+              ${prPhone ? `<a href="tel:${prPhone}" class="bg-emerald-100 text-emerald-600 p-2.5 rounded-lg flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></a>` : `<div class="w-10 h-10"></div>`}
             </div>
-            <button id="btn-contact-save-${st.row}" onclick="saveSingleContact(${st.row}, 'sp_${st.row}', 'pp_${st.row}')" class="bg-gray-800 text-white px-5 py-3 rounded-xl text-sm font-extrabold shadow-md hover:bg-black hover:shadow-lg transition w-full sm:w-auto flex-shrink-0">บันทึก</button>
-          </div>`;
-        container.appendChild(card);
-      });
+            <button id="btn-contact-save-${st.row}" onclick="saveSingleContact(${st.row}, 'sp_${st.row}', 'pp_${st.row}')" class="bg-gray-800 text-white px-5 py-3 rounded-xl text-sm font-extrabold shadow-sm hover:bg-black transition w-full sm:w-auto flex-shrink-0">บันทึก</button>
+          </div>
+        </div>`;
+      }).join('');
+      container.innerHTML = cardsHtml;
     }
 
     async function saveSingleContact(rowNumber, studentInputId, parentInputId) {
@@ -1546,7 +1581,9 @@
           MySwal.fire({ icon: 'success', title: 'สำเร็จ', text: res.message, timer: 1500, showConfirmButton: false }).then(() => {
             let currentCls = document.getElementById('contact-display-class').innerText;
             MySwal.fire({ title: 'อัปเดตหน้าจอ...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
-            callAPI('getContactsByClass', { className: currentCls }).then(students => { MySwal.close(); renderContactCards(students); });
+            callAPI('getContactsByClass', { className: currentCls }).then(students => { MySwal.close(); renderContactCards(students); }).catch(() => {
+              MySwal.fire({ icon: 'warning', title: 'บันทึกสำเร็จ แต่รีเฟรชหน้าจอไม่สำเร็จ', text: 'กรุณากดรีเฟรชหน้าเว็บเพื่อดูข้อมูลล่าสุด', confirmButtonColor: '#059669' });
+            });
           });
         } else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
@@ -1573,7 +1610,9 @@
           <div class="skeleton h-48 rounded-3xl"></div><div class="skeleton h-48 rounded-3xl"></div><div class="skeleton h-48 rounded-3xl"></div>
         </div>
       </div>`;
-      callAPI('getComparisonData', { monthA: form.monthA, monthB: form.monthB }).then(res => { if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; } renderComparison(res); });
+      callAPI('getComparisonData', { monthA: form.monthA, monthB: form.monthB }).then(res => { if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; } renderComparison(res); }).catch(() => {
+        document.getElementById('comparison-content').innerHTML = `<div class="glass-card p-12 text-center rounded-3xl text-red-500 font-bold text-lg shadow">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
+      });
     }
 
     function renderComparison(res) {
