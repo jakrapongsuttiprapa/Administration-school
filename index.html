@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="bingbot" content="noindex, nofollow">
-  <title>ระบบฝ่ายปกครอง ม.ปลาย</title>
+  <title>ระบบฝ่ายปกครองม.ปลาย</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
@@ -128,7 +128,7 @@
       <a href="javascript:void(0);" onclick="goHome(true)" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
         <img src="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-sm p-0.5 border border-gray-100">
         <div class="text-left">
-          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย 🇬🇧 </h1>
+          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย 🇬🇧</h1>
           <p class="text-xs text-gray-500 font-medium">โรงเรียนธนาคารออมสิน</p>
         </div>
       </a>
@@ -1395,6 +1395,33 @@
       });
     }
 
+    // ลบรายการบันทึกพฤติกรรม — ยืนยันก่อนลบเสมอ เพราะกดพลาดแล้วกู้คืนไม่ได้
+    let deletingConductRecord = false; // กันกดลบซ้ำระหว่างรอผลลัพธ์รอบก่อนหน้า (ไม่มีปุ่มให้ล็อกโดยตรงเพราะเป็นปุ่มในลิสต์)
+    async function deleteConductRecordConfirm(timestamp, name, rule) {
+      if (deletingConductRecord) return;
+      const result = await MySwal.fire({
+        icon: 'warning',
+        title: 'ยืนยันลบรายการนี้?',
+        html: `<div class="text-left"><strong>${name}</strong><br>${rule}</div><div class="text-sm text-gray-500 mt-3">ลบแล้วไม่สามารถกู้คืนได้ คะแนนที่ถูกตัดของนักเรียนจะกลับคืนทันที</div>`,
+        showCancelButton: true,
+        confirmButtonText: 'ลบรายการนี้',
+        confirmButtonColor: '#dc2626',
+        cancelButtonText: 'ยกเลิก'
+      });
+      if (!result.isConfirmed) return;
+      deletingConductRecord = true;
+      MySwal.fire({ title: 'กำลังลบ...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
+      callAPI('deleteConductRecord', { timestamp: timestamp, password: currentDisciplineAuth }).then(res => {
+        if (res.success) {
+          MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'ลบรายการเรียบร้อยแล้ว', showConfirmButton: false, timer: 2000, timerProgressBar: true });
+          loadConductOverview(); // โหลดใหม่ให้คะแนน/รายการอัปเดตตาม
+        } else {
+          MySwal.fire('ผิดพลาด', res.message, 'error');
+        }
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => { deletingConductRecord = false; });
+    }
+
     function renderConductOverview(res) {
       const { summary, byClass, recentRecords } = res;
       const container = document.getElementById('conduct-overview-container');
@@ -1430,12 +1457,16 @@
       // Recent records
       let recentHtml = '';
       if (recentRecords.length > 0) {
+        const escJs = (t) => (t || '').toString().replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         let rows = recentRecords.map(r => {
           let pts = parseInt(r.points) || 0;
           let badge = pts >= 40 ? 'bg-red-900 text-red-300 border-red-700' : 'bg-orange-900/50 text-orange-300 border-orange-700';
           return `<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition">
             <div class="flex-grow"><div class="text-sm font-bold text-white">${r.name} <span class="text-gray-400 font-medium">(${r.className})</span></div><div class="text-xs text-gray-400 mt-0.5">${r.rule}</div><div class="text-xs text-gray-500 mt-0.5">${r.date} ${r.time ? '| ' + r.time : ''}</div></div>
-            <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg border ${badge} whitespace-nowrap self-start sm:self-center">-${pts} คะแนน</span>
+            <div class="flex items-center gap-2 self-start sm:self-center flex-shrink-0">
+              <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg border ${badge} whitespace-nowrap">-${pts} คะแนน</span>
+              ${r.timestamp ? `<button onclick="deleteConductRecordConfirm(${r.timestamp}, '${escJs(r.name)}', '${escJs(r.rule)}')" class="text-red-400 hover:text-white hover:bg-red-700 p-2 rounded-lg transition flex-shrink-0" title="ลบรายการนี้"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>` : ''}
+            </div>
           </div>`;
         }).join('');
         recentHtml = `<div class="glass-dark rounded-3xl p-6 mb-6 border border-red-900/50 shadow-xl text-white">
