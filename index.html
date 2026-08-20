@@ -128,7 +128,7 @@
       <a href="javascript:void(0);" onclick="goHome(true)" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
         <img src="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-sm p-0.5 border border-gray-100">
         <div class="text-left">
-          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย 🇬🇧</h1>
+          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย</h1>
           <p class="text-xs text-gray-500 font-medium">โรงเรียนธนาคารออมสิน</p>
         </div>
       </a>
@@ -170,7 +170,7 @@
         <!-- เนื้อหาฝั่งซ้าย -->
         <div class="relative z-20 w-full lg:w-[60%] mt-[270px] sm:mt-[290px] lg:mt-0">
           <div class="text-center lg:text-left mb-6 lg:mb-8">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2 drop-shadow-sm">สวัสดีนักเรียนม.ปลาย</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2 drop-shadow-sm">สวัสดีนักเรียน ม.ปลาย</h2>
             <p class="text-gray-500 text-sm md:text-base font-medium bg-white/50 lg:bg-transparent inline-block lg:block px-3 py-1 rounded-lg">ภาคเรียนที่ 1 ปีการศึกษา 2569</p>
           </div>
 
@@ -1299,7 +1299,17 @@
     function toggleLateTimeInput(idx) {
       const selected = document.querySelector(`input[name="att_${idx}"]:checked`);
       const wrap = document.getElementById('late_time_wrap_' + idx);
-      if (wrap) wrap.classList.toggle('hidden', !(selected && selected.value === 'มาสาย'));
+      const isLate = selected && selected.value === 'มาสาย';
+      if (wrap) wrap.classList.toggle('hidden', !isLate);
+      // เติมเวลาปัจจุบันให้อัตโนมัติตอนเพิ่งเลือก "มาสาย" ถ้าช่องเวลายังว่างอยู่
+      // (กันลืมกรอกเวลาแล้วบันทึกไปทั้งที่ไม่มีเวลาจริงอยู่ในนั้นเลย)
+      if (isLate) {
+        const timeInput = document.getElementById('late_time_' + idx);
+        if (timeInput && !timeInput.value) {
+          const now = new Date();
+          timeInput.value = now.toTimeString().slice(0, 5);
+        }
+      }
     }
 
     function saveAttendanceData() {
