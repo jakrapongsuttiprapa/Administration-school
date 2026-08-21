@@ -128,7 +128,7 @@
       <a href="javascript:void(0);" onclick="goHome(true)" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
         <img src="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-sm p-0.5 border border-gray-100">
         <div class="text-left">
-          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครองม.ปลาย</h1>
+          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง 🍁 ม.ปลาย</h1>
           <p class="text-xs text-gray-500 font-medium">โรงเรียนธนาคารออมสิน</p>
         </div>
       </a>
@@ -147,7 +147,7 @@
         </div>
         <!-- Mobile image -->
         <div class="block lg:hidden absolute top-0 left-0 w-full h-[360px] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);">
-          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[97%_20%] opacity-95">
+          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_20%] opacity-95">
         </div>
         <!-- Mobile quote -->
         <div class="absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
@@ -158,7 +158,7 @@
         </div>
         <!-- Desktop image -->
         <div class="hidden lg:block absolute top-0 right-0 h-full w-[65%] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);">
-          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[100%_top] opacity-95">
+          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[50%_top] opacity-95">
         </div>
         <!-- Desktop quote -->
         <div class="absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10 bg-white/25 backdrop-blur-sm p-5 rounded-3xl border border-white/30 shadow-lg">
@@ -170,7 +170,7 @@
         <!-- เนื้อหาฝั่งซ้าย -->
         <div class="relative z-20 w-full lg:w-[60%] mt-[270px] sm:mt-[290px] lg:mt-0">
           <div class="text-center lg:text-left mb-6 lg:mb-8">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2 drop-shadow-sm">สวัสดีนักเรียน 🍁 ม.ปลาย</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2 drop-shadow-sm">สวัสดีนักเรียนม.ปลาย</h2>
             <p class="text-gray-500 text-sm md:text-base font-medium bg-white/50 lg:bg-transparent inline-block lg:block px-3 py-1 rounded-lg">ภาคเรียนที่ 1 ปีการศึกษา 2569</p>
           </div>
 
@@ -875,26 +875,48 @@
         let savedNote = student.verifyNote || '';
         let radName = `verify_${sIndex}`;
         let disabledAttr = student.inspected ? '' : 'disabled';
+
+        // ตารางแก้ไขผลตรวจรายข้อ — โผล่เฉพาะตอนเลือก "ไม่ตรงกัน" ตั้งต้นด้วยค่าที่ครูตรวจไว้เดิม
+        // บันทึกแล้วจะทับผลเดิมของครูไปเลยตามที่ขอ
+        let ruleGridHtml = '';
+        if (student.inspected) {
+          ruleGridHtml = ruleItems.map((rule, rIndex) => {
+            let val = student.results[rule] || 'ยังไม่ตรวจ';
+            let rName = `verify_rule_${sIndex}_${rIndex}`;
+            return `<div class="bg-gray-50 p-2 rounded-lg border border-gray-200">
+              <div class="text-xs font-bold text-gray-700 mb-1.5">${rule}</div>
+              <div class="grid grid-cols-2 gap-1 text-xs font-bold bg-white p-1 rounded-md border border-gray-100">
+                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${rName}" value="ผ่าน" class="hidden" ${val === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label>
+                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${rName}" value="ไม่ผ่าน" class="hidden" ${val === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label>
+                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-amber-100 has-[:checked]:text-amber-700 text-gray-500"><input type="radio" name="${rName}" value="ยังไม่ตรวจ" class="hidden" ${val === 'ยังไม่ตรวจ' ? 'checked' : ''}> ยังไม่ตรวจ</label>
+                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 text-gray-500"><input type="radio" name="${rName}" value="ไม่ต้องใส่" class="hidden" ${val === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label>
+              </div>
+            </div>`;
+          }).join('');
+        }
+
         return `<div class="bg-white rounded-2xl p-4 border border-gray-200 ${!student.inspected ? 'opacity-60' : ''}">
           <div class="font-bold text-gray-800 mb-2">${sIndex + 1}. ${student.name}</div>
           <div class="flex flex-wrap gap-1 mb-3">${summaryHtml}</div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 text-sm font-bold bg-gray-50 p-1 rounded-lg border border-gray-100">
-            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-700 text-gray-400"><input type="radio" name="${radName}" value="ยังไม่ตรวจสอบ" class="hidden" ${savedStatus === 'ยังไม่ตรวจสอบ' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyNote(${sIndex})"> ยังไม่ตรวจสอบ</label>
-            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ตรงกัน" class="hidden" ${savedStatus === 'ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyNote(${sIndex})"> ✅ ตรงกัน</label>
-            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ตรงกัน" class="hidden" ${savedStatus === 'ไม่ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyNote(${sIndex})"> ⚠️ ไม่ตรงกัน</label>
+            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-700 text-gray-400"><input type="radio" name="${radName}" value="ยังไม่ตรวจสอบ" class="hidden" ${savedStatus === 'ยังไม่ตรวจสอบ' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ยังไม่ตรวจสอบ</label>
+            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ตรงกัน" class="hidden" ${savedStatus === 'ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ✅ ตรงกัน</label>
+            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ตรงกัน" class="hidden" ${savedStatus === 'ไม่ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ⚠️ ไม่ตรงกัน</label>
           </div>
-          <div id="verify_note_wrap_${sIndex}" class="${savedStatus === 'ไม่ตรงกัน' ? '' : 'hidden'} mt-2.5">
-            <input type="text" id="verify_note_${sIndex}" value="${esc(savedNote)}" maxlength="300" placeholder="ระบุเหตุผล เช่น ครูบอกผ่านแต่ทรงผมยาวเกินจริง" class="w-full p-2.5 border-2 border-red-100 rounded-xl focus:outline-none focus:border-red-400 bg-red-50/40 text-sm font-medium">
+          <div id="verify_detail_wrap_${sIndex}" class="${savedStatus === 'ไม่ตรงกัน' ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-dashed border-red-200">
+            <div class="text-xs font-bold text-gray-500 mb-2">แก้ไขผลตรวจแต่ละข้อ (บันทึกแล้วจะทับผลเดิมของครูทันที):</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">${ruleGridHtml}</div>
+            <input type="text" id="verify_note_${sIndex}" value="${esc(savedNote)}" maxlength="300" placeholder="📝 หมายเหตุ (ถ้ามี) เช่น ครูบอกผ่านแต่ทรงผมยาวเกินจริง" class="w-full p-2.5 border-2 border-red-100 rounded-xl focus:outline-none focus:border-red-400 bg-red-50/40 text-sm font-medium">
           </div>
         </div>`;
       }).join('');
       container.innerHTML = cardsHtml;
     }
 
-    // แสดง/ซ่อนช่องหมายเหตุ ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "ไม่ตรงกัน" ถึงจะโชว์)
-    function toggleVerifyNote(idx) {
+    // แสดง/ซ่อนตารางแก้ไขผลตรวจ+ช่องหมายเหตุ ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "ไม่ตรงกัน" ถึงจะโชว์)
+    function toggleVerifyDetail(idx) {
       const selected = document.querySelector(`input[name="verify_${idx}"]:checked`);
-      const wrap = document.getElementById('verify_note_wrap_' + idx);
+      const wrap = document.getElementById('verify_detail_wrap_' + idx);
       if (wrap) wrap.classList.toggle('hidden', !(selected && selected.value === 'ไม่ตรงกัน'));
     }
 
@@ -908,7 +930,17 @@
         if (status === 'ยังไม่ตรวจสอบ') return; // ยังไม่ได้ตรวจสอบจริง ไม่ต้องบันทึกอะไร
         if (!student.inspected) return; // ครูยังไม่ได้ตรวจคนนี้ ข้ามไป (ปุ่มถูก disable ไว้แล้ว แต่กันเผื่อไว้อีกชั้น)
         let noteInput = document.getElementById('verify_note_' + sIndex);
-        dataToSave.push({ name: student.name, verifyStatus: status, verifyNote: status === 'ไม่ตรงกัน' && noteInput ? noteInput.value.trim() : '' });
+        let entry = { name: student.name, verifyStatus: status, verifyNote: status === 'ไม่ตรงกัน' && noteInput ? noteInput.value.trim() : '' };
+        // ถ้าเลือก "ไม่ตรงกัน" ให้เก็บผลตรวจที่แก้ไขแล้วรายข้อไปด้วย เพื่อบันทึกทับผลเดิมของครู
+        if (status === 'ไม่ตรงกัน') {
+          let correctedResults = {};
+          ruleItems.forEach((rule, rIndex) => {
+            let ruleSelected = document.querySelector(`input[name="verify_rule_${sIndex}_${rIndex}"]:checked`);
+            correctedResults[rule] = ruleSelected ? ruleSelected.value : (student.results[rule] || 'ยังไม่ตรวจ');
+          });
+          entry.correctedResults = correctedResults;
+        }
+        dataToSave.push(entry);
       });
       if (dataToSave.length === 0) {
         unlockButton(btn);
@@ -1102,8 +1134,8 @@
       currentMonitorMonth = res.month; // จำเดือนที่กำลังดู ไว้ใช้ตอนบันทึกความคิดเห็น
       document.getElementById('student-class-label').innerHTML = `👑 มุมมองหัวหน้าห้อง: <span class="font-black text-purple-600">${res.monitorName}</span>`;
       let passCount = res.classmates.filter(s => s.passed).length;
-      let failCount = res.classmates.filter(s => s.inspected && !s.passed).length;
-      let notYetCount = res.classmates.filter(s => !s.inspected).length;
+      let failCount = res.classmates.filter(s => s.inspected && s.brokenRules.length > 0).length;
+      let notYetCount = res.classmates.filter(s => !s.inspected || (s.brokenRules.length === 0 && s.pendingRules.length > 0)).length;
 
       const monthOptions = getRecentMonthsFirst().map(m => `<option value="${m}" ${m === res.month ? 'selected' : ''}>${m}</option>`).join('');
 
@@ -1118,11 +1150,14 @@
         } else if (s.passed) {
           statusHtml = `<span class="text-xs font-bold text-green-600 bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg whitespace-nowrap">ผ่าน ✅</span>`;
         } else {
-          statusHtml = `<span class="text-xs font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg">${s.brokenRules.join(', ')}</span>`;
+          let parts = [];
+          if (s.brokenRules.length > 0) parts.push(`<span class="text-xs font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg">${s.brokenRules.join(', ')}</span>`);
+          if (s.pendingRules.length > 0) parts.push(`<span class="text-xs font-bold text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg whitespace-nowrap">ยังไม่ตรวจ: ${s.pendingRules.join(', ')}</span>`);
+          statusHtml = `<div class="flex flex-wrap gap-1.5 justify-end">${parts.join('')}</div>`;
         }
         // ช่องความคิดเห็น: เฉพาะเพื่อนที่ตรวจแล้ว "ไม่ผ่าน" (บันทึกว่าจะแก้เมื่อไหร่ พร้อมตรวจเมื่อไหร่)
         let commentHtml = '';
-        if (s.inspected && !s.passed) {
+        if (s.inspected && s.brokenRules.length > 0) {
           commentHtml = `<div class="mt-2.5 pt-2.5 border-t border-dashed border-purple-100 flex flex-col sm:flex-row gap-2">
             <input type="text" id="mc_${idx}" value="${esc(s.comment)}" maxlength="300" placeholder="📝 หมายเหตุ เช่น จะซื้อเข็มขัดใหม่ พร้อมตรวจศุกร์นี้" class="flex-grow p-2.5 border-2 border-purple-100 rounded-xl focus:outline-none focus:border-purple-400 bg-purple-50/40 text-sm font-medium transition">
             <button id="btn-mc-save-${idx}" onclick="saveMonitorNote(${idx}, '${escJs(s.name)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition whitespace-nowrap flex-shrink-0">💾 บันทึกหมายเหตุ</button>
