@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="bingbot" content="noindex, nofollow">
-  <title>ระบบฝ่ายปกครอง ⛑️ ม.ปลาย</title>
+  <title>ระบบฝ่ายปกครอง ม.ปลาย</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
@@ -128,7 +128,7 @@
       <a href="javascript:void(0);" onclick="goHome(true)" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
         <img src="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-sm p-0.5 border border-gray-100">
         <div class="text-left">
-          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ⛑️ ม.ปลาย</h1>
+          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย</h1>
           <p class="text-xs text-gray-500 font-medium">โรงเรียนธนาคารออมสิน</p>
         </div>
       </a>
@@ -270,21 +270,31 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="glass-card rounded-3xl shadow-sm hover:shadow-xl border-t-4 border-pink-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative">
           <div class="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50/50 to-white pointer-events-none"></div>
-          <div class="relative z-10 p-6">
-            <div class="flex justify-between items-center mb-5">
-              <h3 class="font-extrabold text-gray-800 flex items-center gap-2.5 text-lg">
-                <span class="w-9 h-9 bg-gradient-to-br from-pink-400 to-rose-500 text-white rounded-xl flex items-center justify-center shadow-md flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></span>
-                ภาพรวม<span id="stat-month-label">เดือนนี้</span>
-              </h3>
-              <span class="text-[11px] text-pink-600 bg-pink-100/80 px-2.5 py-1 rounded-full font-bold" id="stat-date-label">กำลังโหลด...</span>
+          <div class="relative z-10 p-6 md:p-7">
+            <div class="flex justify-between items-start mb-1">
+              <div>
+                <p class="text-[10px] font-bold text-pink-400 uppercase tracking-[0.15em] mb-1 flex items-center gap-1.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>ภาพรวมการแต่งกาย</p>
+                <h3 class="font-black text-gray-800 text-2xl leading-tight">เดือน<span id="stat-month-label">นี้</span></h3>
+              </div>
+              <span class="text-[10px] text-pink-500 bg-pink-100/70 px-2.5 py-1 rounded-full font-bold whitespace-nowrap mt-1 flex-shrink-0" id="stat-date-label">กำลังโหลด...</span>
             </div>
-            <div id="stats-container" class="grid grid-cols-2 gap-4">
-              <div class="bg-white/70 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
-              <div class="bg-white/70 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
-              <div class="bg-white/70 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
-              <div class="bg-white/70 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-5 mt-6">
+              <div class="relative w-28 h-28 flex-shrink-0">
+                <div id="stat-ring" class="w-28 h-28 rounded-full transition-all duration-700 ease-out" style="background: conic-gradient(#f3f4f6 0% 100%);"></div>
+                <div class="absolute inset-[8px] bg-white rounded-full flex flex-col items-center justify-center shadow-inner">
+                  <span id="stat-pct" class="text-2xl font-black text-gray-300">–</span>
+                  <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wide">ผ่านเกณฑ์</span>
+                </div>
+              </div>
+              <div id="stats-container" class="grid grid-cols-2 gap-2.5 flex-grow w-full">
+                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+              </div>
             </div>
-            <div class="text-[11px] text-gray-400 mt-5 text-center font-medium">* ข้อมูลดึงตรงจากฐานข้อมูล Real-time</div>
+            <div class="text-[10px] text-gray-400 mt-5 text-center font-medium flex items-center justify-center gap-1.5"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> ข้อมูล Real-time จากฐานข้อมูล</div>
           </div>
         </div>
         <div class="glass-card rounded-3xl shadow-sm hover:shadow-xl border-t-4 border-amber-400 flex flex-col justify-between transform transition duration-300 hover:-translate-y-1 overflow-hidden relative">
@@ -357,9 +367,17 @@
       <div class="flex justify-between items-center mb-4 no-print card-flat p-3 rounded-2xl">
         <button onclick="goHome(true)" class="text-cyan-700 font-bold flex items-center gap-1 hover:text-cyan-900 bg-cyan-50 px-4 py-2 rounded-xl transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
       </div>
-      <div class="card-flat rounded-2xl p-6 mb-5 border-l-8 border-cyan-500 text-center md:text-left shadow-sm">
-        <h2 class="text-xl font-bold text-gray-700">🔍 ตรวจสอบซ้ำ: ห้อง <span id="verify-display-class" class="text-cyan-700 text-2xl font-black"></span> | เดือน <span id="verify-display-month" class="text-cyan-700 text-xl font-black"></span></h2>
-        <p class="text-sm text-gray-500 mt-1 font-medium">ดูผลตรวจของครูประจำชั้น แล้วยืนยันว่าตรงกัน หรือแจ้งไม่ตรงพร้อมหมายเหตุ</p>
+      <div class="card-flat rounded-2xl p-6 mb-5 border-l-8 border-cyan-500 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 text-center md:text-left">
+          <div>
+            <h2 class="text-xl font-bold text-gray-700">🔍 ตรวจสอบซ้ำ: ห้อง <span id="verify-display-class" class="text-cyan-700 text-2xl font-black"></span> | เดือน <span id="verify-display-month" class="text-cyan-700 text-xl font-black"></span></h2>
+            <p class="text-sm text-gray-500 mt-1 font-medium">ดูผลตรวจของครูประจำชั้น แล้วยืนยันว่าตรงกัน หรือแจ้งไม่ตรงพร้อมหมายเหตุ</p>
+          </div>
+          <div class="flex gap-2 justify-center md:justify-end flex-shrink-0">
+            <select id="verify-switch-class" onchange="switchVerifyClassMonth()" class="p-2.5 border-2 border-cyan-200 rounded-xl focus:outline-none focus:border-cyan-500 bg-white text-sm font-bold shadow-sm"></select>
+            <select id="verify-switch-month" onchange="switchVerifyClassMonth()" class="p-2.5 border-2 border-cyan-200 rounded-xl focus:outline-none focus:border-cyan-500 bg-white text-sm font-bold shadow-sm"></select>
+          </div>
+        </div>
       </div>
       <div id="verify-students-container" class="space-y-3"></div>
       <div class="mt-6 text-center no-print sticky bottom-6 z-20">
@@ -630,10 +648,14 @@
 
     function resetStatsSkeleton() {
       document.getElementById('stats-container').innerHTML = `
-        <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
-        <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
-        <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>
-        <div class="bg-gray-50 border border-gray-100 p-5 rounded-2xl text-center"><div class="skeleton h-8 w-8 mx-auto rounded-full mb-3"></div><div class="skeleton h-8 w-16 mx-auto rounded mb-2"></div><div class="skeleton h-3 w-20 mx-auto rounded"></div></div>`;
+        <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+        <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+        <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
+        <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>`;
+      const ring = document.getElementById('stat-ring');
+      if (ring) ring.style.background = 'conic-gradient(#f3f4f6 0% 100%)';
+      const pct = document.getElementById('stat-pct');
+      if (pct) { pct.innerText = '–'; pct.className = 'text-2xl font-black text-gray-300'; }
     }
 
     // ─── Skeleton การ์ดกลาง ใช้ร่วมกันได้ทุกหน้าที่ต้องโหลดรายชื่อ/รายงาน ───
@@ -657,26 +679,39 @@
       callAPI('getDashboardStats').then(stats => {
         document.getElementById('stat-month-label').innerText = "เดือน" + stats.displayMonth;
         document.getElementById('stat-date-label').innerText = "อัปเดตล่าสุด: " + stats.todayDisplay;
+
+        // วงแหวนสรุปอัตราผ่านเกณฑ์ — เรื่องที่ครูอยากรู้จริงๆ คือ "ผ่านกี่ % " ไม่ใช่แค่ตัวเลขดิบแยกกัน 4 ตัว
+        const totalChecked = stats.passedToday + stats.failedToday;
+        const pct = totalChecked > 0 ? Math.round((stats.passedToday / totalChecked) * 100) : null;
+        const ring = document.getElementById('stat-ring');
+        const pctLabel = document.getElementById('stat-pct');
+        if (pct === null) {
+          ring.style.background = 'conic-gradient(#f3f4f6 0% 100%)';
+          pctLabel.innerText = '–';
+          pctLabel.className = 'text-2xl font-black text-gray-300';
+        } else {
+          const ringColor = pct >= 80 ? '#ec4899' : (pct >= 50 ? '#f59e0b' : '#f43f5e');
+          ring.style.background = `conic-gradient(${ringColor} 0% ${pct}%, #f3f4f6 ${pct}% 100%)`;
+          pctLabel.innerText = pct + '%';
+          pctLabel.className = 'text-2xl font-black text-gray-800';
+        }
+
         let statsHtml = `
-          <div class="bg-white border-2 border-pink-50 p-5 rounded-2xl text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md shadow-sm">
-            <div class="w-12 h-12 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>
-            <div class="font-black text-3xl text-gray-800 mb-1">${stats.totalStudents.toLocaleString()}</div>
-            <div class="text-[11px] text-gray-500 font-bold uppercase tracking-wide">นักเรียนทั้งหมด</div>
+          <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center">
+            <div class="font-black text-lg text-gray-800">${stats.totalStudents.toLocaleString()}</div>
+            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">นักเรียนทั้งหมด</div>
           </div>
-          <div class="bg-white border-2 border-green-50 p-5 rounded-2xl text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md shadow-sm">
-            <div class="w-12 h-12 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-            <div class="font-black text-3xl text-gray-800 mb-1">${stats.passedToday.toLocaleString()}</div>
-            <div class="text-[11px] text-gray-500 font-bold uppercase tracking-wide">แต่งกายผ่านเดือนนี้</div>
+          <div class="bg-white/70 border border-green-100 rounded-xl px-3 py-3 text-center">
+            <div class="font-black text-lg text-green-600">${stats.passedToday.toLocaleString()}</div>
+            <div class="text-[10px] text-green-400 font-bold uppercase tracking-wide">ผ่านเดือนนี้</div>
           </div>
-          <div class="bg-white border-2 border-orange-50 p-5 rounded-2xl text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md shadow-sm">
-            <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77-1.333.192 3 1.732 3z"></path></svg></div>
-            <div class="font-black text-3xl text-gray-800 mb-1">${stats.failedToday.toLocaleString()}</div>
-            <div class="text-[11px] text-gray-500 font-bold uppercase tracking-wide">แต่งกายไม่ผ่านเดือนนี้</div>
+          <div class="bg-white/70 border border-rose-100 rounded-xl px-3 py-3 text-center">
+            <div class="font-black text-lg text-rose-600">${stats.failedToday.toLocaleString()}</div>
+            <div class="text-[10px] text-rose-400 font-bold uppercase tracking-wide">ไม่ผ่านเดือนนี้</div>
           </div>
-          <div class="bg-white border-2 border-blue-50 p-5 rounded-2xl text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md shadow-sm">
-            <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg></div>
-            <div class="font-black text-3xl text-gray-800 mb-1">${stats.absentToday.toLocaleString()}</div>
-            <div class="text-[11px] text-gray-500 font-bold uppercase tracking-wide">ขาดเรียนวันนี้</div>
+          <div class="bg-white/70 border border-sky-100 rounded-xl px-3 py-3 text-center">
+            <div class="font-black text-lg text-sky-600">${stats.absentToday.toLocaleString()}</div>
+            <div class="text-[10px] text-sky-400 font-bold uppercase tracking-wide">ขาดเรียนวันนี้</div>
           </div>`;
         document.getElementById('stats-container').innerHTML = statsHtml;
       }).catch(() => {
@@ -834,7 +869,7 @@
       }
       MySwal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       callAPI('saveInspections', { month: currentMonth, className: currentClass, dataArray: dataToSave, password: currentTeacherAuth }).then(res => {
-        if (res.success) { MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! 🎉', text: res.message, confirmButtonColor: '#ec4899', timer: 2500, showConfirmButton: false }).then(() => goHome()); }
+        if (res.success) { MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', text: `ห้อง ${currentClass}`, showConfirmButton: false, timer: 3000, timerProgressBar: true }); }
         else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
         .finally(() => unlockButton(btn));
@@ -896,6 +931,9 @@
 
     function loadVerificationData(className, month) {
       showView('view-verify-inspection');
+      // เติมตัวเลือกในดรอปดาวน์สลับห้อง/เดือนให้ตรงกับที่กำลังดูอยู่
+      document.getElementById('verify-switch-class').innerHTML = ALL_CLASSES.map(c => `<option value="${c}" ${c === className ? 'selected' : ''}>${c}</option>`).join('');
+      document.getElementById('verify-switch-month').innerHTML = getRecentMonthsFirst().map(m => `<option value="${m}" ${m === month ? 'selected' : ''}>${m}</option>`).join('');
       document.getElementById('verify-students-container').innerHTML = cardSkeletonRows(3, 1);
       callAPI('getInspectionsForVerification', { className, month, password: currentDisciplineAuth }).then(res => {
         if (res.error) { MySwal.fire('ผิดพลาด', res.error, 'error'); return; }
@@ -904,6 +942,15 @@
       }).catch(() => {
         document.getElementById('verify-students-container').innerHTML = `<div class="text-center p-12 card-flat rounded-2xl text-red-500 font-bold text-lg">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
       });
+    }
+
+    // สลับห้อง/เดือนจากดรอปดาวน์ด่วน โดยไม่ต้องออกไปเข้าเมนูใหม่ทั้งหมด
+    function switchVerifyClassMonth() {
+      currentVerifyClass = document.getElementById('verify-switch-class').value;
+      currentVerifyMonth = document.getElementById('verify-switch-month').value;
+      document.getElementById('verify-display-class').innerText = currentVerifyClass;
+      document.getElementById('verify-display-month').innerText = currentVerifyMonth;
+      loadVerificationData(currentVerifyClass, currentVerifyMonth);
     }
 
     function renderVerificationCards(students) {
@@ -1000,7 +1047,7 @@
       }
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
       callAPI('saveInspectionVerification', { className: currentVerifyClass, month: currentVerifyMonth, dataArray: dataToSave, password: currentDisciplineAuth }).then(res => {
-        if (res.success) { MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! 🎉', text: res.message, confirmButtonColor: '#0891b2', timer: 2500, showConfirmButton: false }).then(() => goHome()); }
+        if (res.success) { MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', text: `ห้อง ${currentVerifyClass}`, showConfirmButton: false, timer: 3000, timerProgressBar: true }); }
         else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
         .finally(() => unlockButton(btn));
