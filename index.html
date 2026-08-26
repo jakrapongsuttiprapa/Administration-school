@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="bingbot" content="noindex, nofollow">
-  <title>ระบบฝ่ายปกครอง ม.ปลาย</title>
+  <title>ระบบฝ่ายปกครองม.ปลาย</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
   <link rel="apple-touch-icon" sizes="152x152" href="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png">
@@ -128,7 +128,7 @@
       <a href="javascript:void(0);" onclick="goHome(true)" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
         <img src="https://i.postimg.cc/gkSkRmVf/0349A1D2-CE9F-4F6A-AA7A-79D86926DA4B.png" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-sm p-0.5 border border-gray-100">
         <div class="text-left">
-          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครอง ม.ปลาย</h1>
+          <h1 class="text-lg md:text-xl font-extrabold text-pink-700 leading-tight">ระบบฝ่ายปกครองม.ปลาย</h1>
           <p class="text-xs text-gray-500 font-medium">โรงเรียนธนาคารออมสิน</p>
         </div>
       </a>
@@ -760,7 +760,14 @@
       document.getElementById('teacher-switch-class').innerHTML = ALL_CLASSES.map(c => `<option value="${c}" ${c === currentClass ? 'selected' : ''}>${c}</option>`).join('');
       document.getElementById('teacher-switch-month').innerHTML = getRecentMonthsFirst().map(m => `<option value="${m}" ${m === currentMonth ? 'selected' : ''}>${m}</option>`).join('');
       document.getElementById('students-container').innerHTML = cardSkeletonRows(3);
-      callAPI('getStudentsForInspection', { className: currentClass, month: currentMonth }).then(students => { currentStudents = students; renderStudentCards(); }).catch(() => {
+      callAPI('getStudentsForInspection', { className: currentClass, month: currentMonth, password: currentTeacherAuth }).then(students => {
+        if (students && students.error) {
+          document.getElementById('students-container').innerHTML = '';
+          MySwal.fire('ผิดพลาด', students.error, 'error');
+          return;
+        }
+        currentStudents = students; renderStudentCards();
+      }).catch(() => {
         document.getElementById('students-container').innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-red-500 font-bold text-lg shadow">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>`;
       });
     }
@@ -803,12 +810,22 @@
     function renderStudentCards() {
       const container = document.getElementById('students-container');
       if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-pink-600 font-bold text-xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; document.getElementById('teacher-stat-pass').innerText = '0'; document.getElementById('teacher-stat-fail').innerText = '0'; document.getElementById('teacher-stat-pending').innerText = '0'; return; }
+      const esc = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       // สร้าง HTML ทั้งหมดเป็นสตริงเดียวก่อน แล้วค่อยเขียนลง DOM ครั้งเดียว
       // (การ์ดนี้มี 14 กฎ × 4 ตัวเลือก = 56 ช่องต่อคน เดิมสร้างทีละคนแล้วแปะทีละคน ช้ากว่ามาก)
       const cardsHtml = currentStudents.map((student, sIndex) => {
         let headerHtml = `<div class="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-pink-100 pb-3">
           <div class="font-bold text-lg text-gray-800 flex items-center gap-2.5 min-w-0"><span class="bg-pink-100 text-pink-600 w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0">${sIndex+1}</span> ${student.name}</div>
           <button type="button" onclick="markAllPass(${sIndex})" class="text-xs font-bold bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded-lg border border-green-200 transition flex-shrink-0 whitespace-nowrap">✅ ผ่านทั้งหมด</button>
+        </div>`;
+        let monitorCommentHtml = student.monitorComment ? `<div class="mb-3 -mt-1 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${esc(student.monitorComment)}</span></div>` : '';
+        let sum = student.summary || { absent: 0, late: 0, leave: 0, conductScore: 100, conductIncidents: 0 };
+        let scoreColor = sum.conductScore >= 80 ? 'green' : (sum.conductScore >= 60 ? 'amber' : 'red');
+        let summaryHtml = `<div class="flex flex-wrap gap-1.5 mb-3 text-xs">
+          <span class="bg-red-50 text-red-600 border border-red-200 px-2.5 py-1 rounded-lg font-bold">ขาด ${sum.absent}</span>
+          <span class="bg-orange-50 text-orange-600 border border-orange-200 px-2.5 py-1 rounded-lg font-bold">สาย ${sum.late}</span>
+          <span class="bg-yellow-50 text-yellow-600 border border-yellow-200 px-2.5 py-1 rounded-lg font-bold">ลา ${sum.leave}</span>
+          <span class="bg-${scoreColor}-50 text-${scoreColor}-700 border border-${scoreColor}-200 px-2.5 py-1 rounded-lg font-bold">⭐ พฤติกรรม ${sum.conductScore} คะแนน</span>
         </div>`;
         let rulesHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
         ruleItems.forEach((rule, rIndex) => {
@@ -826,7 +843,7 @@
           rulesHtml += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-200"><div class="text-sm font-bold text-gray-700 mb-2">${rule}</div><div class="grid grid-cols-2 gap-1.5 text-sm font-bold bg-white p-1 rounded-lg border border-gray-100"><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ผ่าน" class="hidden" ${savedVal === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ผ่าน" class="hidden" ${savedVal === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-amber-100 has-[:checked]:text-amber-700 text-gray-500"><input type="radio" name="${radName}" value="ยังไม่ตรวจ" class="hidden" ${savedVal === 'ยังไม่ตรวจ' ? 'checked' : ''}> ยังไม่ตรวจ</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 text-gray-500"><input type="radio" name="${radName}" value="ไม่ต้องใส่" class="hidden" ${savedVal === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label></div></div>`;
         });
         rulesHtml += `</div>`;
-        return `<div class="bg-white rounded-2xl p-4 md:p-6 mb-4 border border-gray-200">${headerHtml}${rulesHtml}</div>`;
+        return `<div class="bg-white rounded-2xl p-4 md:p-6 mb-4 border border-gray-200">${headerHtml}${monitorCommentHtml}${summaryHtml}${rulesHtml}</div>`;
       }).join('');
       container.innerHTML = cardsHtml;
       recomputeTeacherStats();
@@ -993,9 +1010,12 @@
           }).join('');
         }
 
+        let monitorCommentHtml = student.monitorComment ? `<div class="mb-2 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${esc(student.monitorComment)}</span></div>` : '';
+
         return `<div class="bg-white rounded-2xl p-4 border border-gray-200 ${!student.inspected ? 'opacity-60' : ''}">
           <div class="font-bold text-gray-800 mb-2">${sIndex + 1}. ${student.name}</div>
           <div class="flex flex-wrap gap-1 mb-3">${summaryHtml}</div>
+          ${monitorCommentHtml}
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 text-sm font-bold bg-gray-50 p-1 rounded-lg border border-gray-100">
             <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-700 text-gray-400"><input type="radio" name="${radName}" value="ยังไม่ตรวจสอบ" class="hidden" ${savedStatus === 'ยังไม่ตรวจสอบ' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ยังไม่ตรวจสอบ</label>
             <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ตรงกัน" class="hidden" ${savedStatus === 'ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ✅ ตรงกัน</label>
@@ -1177,7 +1197,7 @@
           return;
         }
         document.getElementById('student-class-label').innerHTML = `สวัสดี <span class="font-black text-pink-600">${res.studentName}</span> ห้อง <span class="font-black text-pink-600">${res.studentClass}</span>`;
-        renderStudentResult(res.inspectResult, res.conductResult, res.studentName);
+        renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary);
       }).catch(() => {
         document.getElementById('studentResultContainer').innerHTML = '';
         MySwal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#ec4899' });
@@ -1264,11 +1284,20 @@
           // เพื่อนที่แก้เรียบร้อยจนผ่านแล้ว แต่เคยมีหมายเหตุเก่า — โชว์จางๆ เป็นประวัติ
           commentHtml = `<div class="mt-2 text-[11px] text-gray-400 font-medium">📝 หมายเหตุเดิม: ${esc(s.comment)}</div>`;
         }
+        let sum = s.summary || { absent: 0, late: 0, leave: 0, conductScore: 100, conductIncidents: 0 };
+        let scoreColor = sum.conductScore >= 80 ? 'green' : (sum.conductScore >= 60 ? 'amber' : 'red');
+        let summaryHtml = `<div class="flex flex-wrap gap-1.5 mt-2 text-[11px]">
+          <span class="bg-red-50 text-red-600 border border-red-200 px-2 py-0.5 rounded-md font-bold">ขาด ${sum.absent}</span>
+          <span class="bg-orange-50 text-orange-600 border border-orange-200 px-2 py-0.5 rounded-md font-bold">สาย ${sum.late}</span>
+          <span class="bg-yellow-50 text-yellow-600 border border-yellow-200 px-2 py-0.5 rounded-md font-bold">ลา ${sum.leave}</span>
+          <span class="bg-${scoreColor}-50 text-${scoreColor}-700 border border-${scoreColor}-200 px-2 py-0.5 rounded-md font-bold">⭐ พฤติกรรม ${sum.conductScore}</span>
+        </div>`;
         return `<div class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div class="font-bold text-gray-700 flex items-center gap-2"><span class="text-xs text-gray-400 w-5 flex-shrink-0">${idx + 1}.</span>${s.name}</div>
             ${statusHtml}
           </div>
+          ${summaryHtml}
           ${commentHtml}
         </div>`;
       }).join('');
@@ -1307,7 +1336,7 @@
         .finally(() => unlockButton(btn));
     }
 
-    function renderStudentResult(result, conductData, studentName) {
+    function renderStudentResult(result, conductData, studentName, attendanceSummary) {
       const container = document.getElementById('studentResultContainer'); container.innerHTML = '';
       const records = result.records.map(rec => { let cleanRec = { brokenRules: rec.brokenRules }; for (let key in rec) { if (key !== 'brokenRules') cleanRec[key.trim()] = rec[key]; } return cleanRec; });
       // เรียงประวัติให้เดือนล่าสุดอยู่บนสุด (เดือนที่ตรวจไปแล้วจะไหลลงด้านล่าง)
@@ -1366,6 +1395,22 @@
         </div>`;
 
       container.innerHTML += conductCard;
+
+      // --- สรุปการมาเรียน (ขาด/สาย/ลา) ---
+      let att = attendanceSummary || { absent: 0, late: 0, leave: 0 };
+      let attendanceCard = `
+        <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-sky-400 shadow-md">
+          <h3 class="font-extrabold text-gray-800 text-xl mb-5 flex items-center gap-2">
+            <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            สถิติการมาเรียน
+          </h3>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-red-600">${att.absent}</div><div class="text-xs text-red-400 font-bold mt-1">ขาดเรียน</div></div>
+            <div class="bg-orange-50 border border-orange-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-orange-600">${att.late}</div><div class="text-xs text-orange-400 font-bold mt-1">มาสาย</div></div>
+            <div class="bg-yellow-50 border border-yellow-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-yellow-600">${att.leave}</div><div class="text-xs text-yellow-400 font-bold mt-1">ลา/ป่วย</div></div>
+          </div>
+        </div>`;
+      container.innerHTML += attendanceCard;
 
       // --- คำเตือนสำหรับเรื่องที่ทำผิดซ้ำๆ (โทนให้กำลังใจ ไม่ตำหนิ) ---
       let repeatedUniformIssues = Object.entries(overallBroken).filter(([rule, count]) => count >= 2).sort((a, b) => b[1] - a[1]);
