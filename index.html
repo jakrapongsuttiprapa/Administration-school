@@ -1093,16 +1093,23 @@
       if (reportData.length === 0) { container.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl text-green-600 font-extrabold text-2xl shadow">🎉 ยอดเยี่ยมมาก!<br><span class="text-gray-500 text-sm font-medium mt-3 block">ไม่มีนักเรียนที่ผิดระเบียบในช่วงเวลาที่เลือก</span></div>`; return; }
 
       const thMonthsOrder = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      const esc = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-      // จัดกลุ่มข้อมูล: ห้อง -> นักเรียน -> สรุปจำนวนครั้ง / รายการที่ผิด / เดือนที่พบ ของนักเรียนคนนั้นทั้งหมด
+      // จัดกลุ่มข้อมูล: ห้อง -> นักเรียน -> สรุปจำนวนครั้งที่ผิดจริง / ข้อที่ยังไม่ตรวจ / เดือนที่ไม่ได้ตรวจเลย / หมายเหตุหัวหน้าห้อง
       let classMap = {};
       reportData.forEach(item => {
         if (!classMap[item.className]) classMap[item.className] = {};
-        if (!classMap[item.className][item.name]) classMap[item.className][item.name] = { count: 0, months: [], ruleCounts: {} };
+        if (!classMap[item.className][item.name]) classMap[item.className][item.name] = { count: 0, months: [], ruleCounts: {}, pendingRuleCounts: {}, notInspectedMonths: [], comments: [] };
         let agg = classMap[item.className][item.name];
-        agg.count += 1;
-        agg.months.push(item.month);
-        (item.brokenRules || []).forEach(rule => { agg.ruleCounts[rule] = (agg.ruleCounts[rule] || 0) + 1; });
+        if (item.notInspected) {
+          agg.notInspectedMonths.push(item.month);
+        } else {
+          agg.count += 1;
+          agg.months.push(item.month);
+          (item.brokenRules || []).forEach(rule => { agg.ruleCounts[rule] = (agg.ruleCounts[rule] || 0) + 1; });
+          (item.pendingRules || []).forEach(rule => { agg.pendingRuleCounts[rule] = (agg.pendingRuleCounts[rule] || 0) + 1; });
+        }
+        if (item.monitorComment && agg.comments.indexOf(item.monitorComment) === -1) agg.comments.push(item.monitorComment);
       });
 
       // สรุปภาพรวมทั้งโรงเรียนไว้ด้านบนสุด ให้เห็นภาพรวมเร็วๆ ก่อนลงรายละเอียด
@@ -1130,15 +1137,21 @@
           let sortedMonths = [...new Set(agg.months)].sort((a, b) => thMonthsOrder.indexOf(b) - thMonthsOrder.indexOf(a));
           let sev = agg.count >= 4 ? { badge: 'bg-red-600 text-white', card: 'border-red-300 bg-red-50/40', label: 'ผิดซ้ำหลายครั้ง' }
                   : agg.count >= 2 ? { badge: 'bg-orange-500 text-white', card: 'border-orange-200 bg-orange-50/40', label: 'ผิดซ้ำ' }
-                  : { badge: 'bg-amber-400 text-white', card: 'border-amber-100', label: 'พบ 1 ครั้ง' };
+                  : agg.count === 1 ? { badge: 'bg-amber-400 text-white', card: 'border-amber-100', label: 'พบ 1 ครั้ง' }
+                  : { badge: 'bg-gray-400 text-white', card: 'border-gray-200', label: 'รอตรวจ' }; // ไม่มีข้อไม่ผ่านจริงเลย แต่มีปัญหาอื่น (ยังไม่ตรวจ/ไม่ได้ตรวจเลย)
           let ruleChips = Object.entries(agg.ruleCounts).sort((a, b) => b[1] - a[1]).map(([rule, c]) => `<span class="inline-flex items-center gap-1 bg-white border border-red-100 text-red-600 text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">${rule}${c > 1 ? ` <span class="text-red-400">×${c}</span>` : ''}</span>`).join('');
+          let pendingChips = Object.entries(agg.pendingRuleCounts).sort((a, b) => b[1] - a[1]).map(([rule, c]) => `<span class="inline-flex items-center gap-1 bg-white border border-amber-200 text-amber-600 text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">${rule} (ยังไม่ตรวจ)${c > 1 ? ` <span class="text-amber-400">×${c}</span>` : ''}</span>`).join('');
+          let notInspectedHtml = agg.notInspectedMonths.length > 0 ? `<div class="mb-2"><span class="inline-flex items-center gap-1 bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold px-3 py-1.5 rounded-lg">📋 ไม่ได้ตรวจเลย: ${[...new Set(agg.notInspectedMonths)].join(', ')}</span></div>` : '';
+          let commentHtml = agg.comments.length > 0 ? `<div class="mt-2.5 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${agg.comments.map(c => esc(c)).join(' • ')}</span></div>` : '';
           html += `<div class="bg-white p-4 md:p-5 rounded-2xl border ${sev.card} shadow-sm hover:shadow-md transition">
             <div class="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-3">
               <div class="font-bold text-gray-800 flex items-center gap-3 text-lg"><span class="bg-purple-100 text-purple-600 w-8 h-8 flex items-center justify-center rounded-full text-sm font-extrabold flex-shrink-0">${idx + 1}</span>${studentName}</div>
-              <span class="${sev.badge} text-xs font-extrabold px-3 py-1.5 rounded-full whitespace-nowrap shadow-sm self-start md:self-center">⚠ ${sev.label} (${agg.count} ครั้ง)</span>
+              <span class="${sev.badge} text-xs font-extrabold px-3 py-1.5 rounded-full whitespace-nowrap shadow-sm self-start md:self-center">${agg.count > 0 ? `⚠ ${sev.label} (${agg.count} ครั้ง)` : `⏳ ${sev.label}`}</span>
             </div>
-            <div class="flex flex-wrap gap-2 mb-3">${ruleChips}</div>
-            <div class="text-[11px] text-gray-400 font-medium">เดือนที่พบ: ${sortedMonths.join(' • ')}</div>
+            ${notInspectedHtml}
+            <div class="flex flex-wrap gap-2 mb-3">${ruleChips}${pendingChips}</div>
+            ${sortedMonths.length > 0 ? `<div class="text-[11px] text-gray-400 font-medium">เดือนที่พบ: ${sortedMonths.join(' • ')}</div>` : ''}
+            ${commentHtml}
           </div>`;
         });
         html += `</div></div>`;
