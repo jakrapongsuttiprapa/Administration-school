@@ -27,7 +27,7 @@
     .bg-fixed-layer {
       position: fixed; top: 0; left: 0;
       width: 100vw; height: 100vh;
-      background-image: url('https://i.postimg.cc/C13gX8yZ/Chat-GPT-Image-Aug-20-2026-06-33-38-PM.png');
+      background-image: url('https://i.postimg.cc/2yyjg5Y9/Chat-GPT-Image-May-24-2026-at-06-54-06-PM.png');
       background-size: cover; background-position: center;
       z-index: -2; transform: translateZ(0);
     }
@@ -63,6 +63,10 @@
       body { background: white; }
       .bg-fixed-layer { display: none; }
       .glass-card { box-shadow: none; border: 1px solid #ddd; background: white; backdrop-filter: none; }
+      /* การ์ดที่มีแอนิเมชันตอนเข้าหน้าเริ่มต้นที่ opacity:0 — บังคับให้ทึบเต็มตอนพิมพ์
+         กันกรณีเบราว์เซอร์สแนปชอตหน้าไปพิมพ์ก่อนแอนิเมชันจะจบ แล้วได้กระดาษเปล่า */
+      .rise { opacity: 1 !important; animation: none !important; }
+      .elev, .elev-hi { box-shadow: none !important; }
     }
     .skeleton {
       background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
@@ -108,6 +112,59 @@
         radial-gradient(100% 85% at 100% 100%, rgba(244,114,182,0.08) 0%, transparent 52%);
     }
     .nav-card--light::after { background: linear-gradient(115deg, transparent 0%, rgba(236,72,153,0.12) 50%, transparent 100%); }
+
+    /* ===== ระบบการเคลื่อนไหวตอนเข้าหน้า =====
+       ใช้แค่ transform + opacity (การ์ดจอประมวลผลได้เอง ไม่กินซีพียู) และหน่วงเวลาไล่ทีละใบ
+       ใส่เฉพาะหน้าที่เรนเดอร์ครั้งเดียว (หน้าแรก/รายงาน) ไม่ใส่หน้าตรวจ-เช็คชื่อที่มีการ์ดเป็นร้อยใบ */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.985); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+    .rise { opacity: 0; animation: riseIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: var(--d, 0s); }
+
+    /* ตัวหนังสือไล่เฉดสำหรับหัวข้อใหญ่ */
+    .text-gradient {
+      background: linear-gradient(115deg, #db2777 0%, #e11d48 45%, #f59e0b 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .text-gradient-violet {
+      background: linear-gradient(115deg, #7c3aed 0%, #c026d3 55%, #db2777 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+
+    /* ชั้นความลึกแบบซ้อนหลายเงา ให้ดูมีมิติกว่าเงาชั้นเดียว */
+    .elev {
+      box-shadow:
+        0 1px 2px rgba(190, 24, 93, 0.06),
+        0 4px 12px rgba(190, 24, 93, 0.07),
+        0 16px 40px -12px rgba(190, 24, 93, 0.16);
+    }
+    .elev-hi {
+      box-shadow:
+        0 1px 2px rgba(190, 24, 93, 0.07),
+        0 8px 20px rgba(190, 24, 93, 0.10),
+        0 28px 60px -18px rgba(190, 24, 93, 0.24);
+    }
+
+    /* เส้นเรืองแสงบางๆ ด้านบนการ์ด แทนขอบสีทึบแบบเดิม */
+    .hairline-top { position: relative; }
+    .hairline-top::before {
+      content: ''; position: absolute; top: 0; left: 12%; right: 12%; height: 2px; border-radius: 2px;
+      background: linear-gradient(90deg, transparent, rgba(236,72,153,0.75), transparent);
+    }
+
+    /* ตัวเลขนับขึ้น — ใช้ตัวเลขความกว้างเท่ากัน ไม่ให้เลขกระตุกซ้าย-ขวาตอนนับ */
+    .tabular { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+
+    /* เคารพการตั้งค่าผู้ใช้ที่ขอลดการเคลื่อนไหว (เมาง่าย/เวียนหัว) และช่วยเครื่องรุ่นเก่าไปในตัว */
+    @media (prefers-reduced-motion: reduce) {
+      .rise { animation: none; opacity: 1; }
+      .nav-card::after { transition: none; }
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
     /* การ์ดวิชาการ (badge NEW ล้นขอบ) ใส่เฉพาะแสงมุม ไม่มีแสงกวาด */
     .nav-card-pattern::before {
       content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0;
@@ -141,7 +198,7 @@
     <div id="view-home" class="flex flex-col space-y-6 mt-2 md:mt-6">
 
       <!-- Hero Banner -->
-      <div class="glass-card p-6 md:p-10 rounded-[2.5rem] border-t-4 border-pink-500 shadow-xl relative overflow-hidden w-full min-h-[420px] flex items-center">
+      <div class="rise glass-card elev-hi p-6 md:p-10 rounded-[2.5rem] border-t-4 border-pink-500 relative overflow-hidden w-full min-h-[420px] flex items-center" style="--d:0.04s">
         <div class="absolute right-0 top-0 opacity-[0.03] w-64 h-64 pointer-events-none -mt-10 -mr-10 z-0">
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"></path></svg>
         </div>
@@ -268,7 +325,7 @@
 
       <!-- Stats + Activities -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card rounded-3xl shadow-sm hover:shadow-xl border-t-4 border-pink-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative">
+        <div class="rise glass-card elev hover:elev-hi rounded-3xl border-t-4 border-pink-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative" style="--d:0.14s">
           <div class="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50/50 to-white pointer-events-none"></div>
           <div class="relative z-10 p-6 md:p-7">
             <div class="flex justify-between items-start mb-1">
@@ -297,7 +354,7 @@
             <div class="text-[10px] text-gray-400 mt-5 text-center font-medium flex items-center justify-center gap-1.5"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> ข้อมูล Real-time จากฐานข้อมูล</div>
           </div>
         </div>
-        <div class="glass-card rounded-3xl shadow-sm hover:shadow-xl border-t-4 border-amber-400 flex flex-col justify-between transform transition duration-300 hover:-translate-y-1 overflow-hidden relative">
+        <div class="rise glass-card elev hover:elev-hi rounded-3xl border-t-4 border-amber-400 flex flex-col justify-between transform transition duration-300 hover:-translate-y-1 overflow-hidden relative" style="--d:0.21s">
           <div class="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/60 to-rose-50/40 pointer-events-none"></div>
           <div class="absolute right-[-20px] top-[-20px] text-amber-200/50 transform rotate-12 pointer-events-none"><svg class="w-40 h-40" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001z" clip-rule="evenodd"></path></svg></div>
           <div class="relative z-10 p-6 md:p-8 flex flex-col items-center text-center">
@@ -616,6 +673,25 @@
 
     // เรียงเดือนใหม่: เดือนปัจจุบัน "ล่าสุด" จะขึ้นก่อนเสมอ แล้วไล่ย้อนกลับ (เดือนที่ผ่าน/ตรวจไปแล้วจะอยู่ถัดลงมา)
     // ส่วนเดือนที่ยังไม่มาถึงในปีนี้ จะต่อท้ายไว้ล่างสุด เพราะยังไม่มีการตรวจ
+    // วันที่ตามเวลาเครื่องผู้ใช้ (ไม่ใช่ UTC)
+    // toISOString() แปลงเป็น UTC ก่อนเสมอ — ไทยเป็น UTC+7 ทำให้ช่วงเที่ยงคืนถึง 07:00 น.
+    // ได้วันที่ของ "เมื่อวาน" แทนที่จะเป็นวันนี้ (ครูที่มาเช็คเช้ามากจะบันทึกผิดวัน)
+    function localDateStr(d) {
+      d = d || new Date();
+      const p = n => String(n).padStart(2, '0');
+      return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+    }
+
+    // แปลง "2026-09-02" เป็น "2 ก.ย. 2569" (พ.ศ.) ให้อ่านง่ายแบบไทย
+    function formatThaiDate(isoStr) {
+      const thMonthsShort = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+      const parts = (isoStr || '').split('-');
+      if (parts.length !== 3) return isoStr || '';
+      const y = parseInt(parts[0]), m = parseInt(parts[1]), d = parseInt(parts[2]);
+      if (!y || !m || !d) return isoStr;
+      return d + ' ' + (thMonthsShort[m - 1] || '') + ' ' + (y + 543);
+    }
+
     function getRecentMonthsFirst() {
       const thMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
       const currentIdx = new Date().getMonth();
@@ -675,8 +751,33 @@
       return html;
     }
 
+    // นับตัวเลขไต่ขึ้นจาก 0 ไปถึงค่าจริง ให้ตัวเลขดูมีชีวิตตอนโหลดเสร็จ
+    // ใช้ requestAnimationFrame (ลื่นกว่า setInterval และหยุดเองเมื่อผู้ใช้สลับแท็บ ไม่กินแบตทิ้ง)
+    function animateCount(el, target, suffix) {
+      if (!el) return;
+      suffix = suffix || '';
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || target === 0) { el.innerText = target.toLocaleString() + suffix; return; }
+      const duration = 900;
+      const start = performance.now();
+      function step(now) {
+        let p = Math.min((now - start) / duration, 1);
+        p = 1 - Math.pow(1 - p, 3); // ease-out ชะลอตอนใกล้ถึงค่าจริง ดูเป็นธรรมชาติกว่าไต่เท่ากันตลอด
+        el.innerText = Math.round(target * p).toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // ตัวนับรุ่นของการโหลดหน้าแรก — กันผลลัพธ์เก่าที่ตอบกลับช้ามาเขียนทับข้อมูลใหม่
+    // (ครูกด "กลับหน้าแรก" ซ้ำๆ ตอนเน็ตช้า คำขอเก่าอาจตอบทีหลังคำขอใหม่ได้)
+    // ใช้แนวเดียวกับ attendanceLoadToken ที่เคยแก้ปัญหาแบบนี้ในหน้าเช็คชื่อมาแล้ว
+    let dashboardLoadToken = 0;
+
     function loadDashboardStats() {
+      const myToken = ++dashboardLoadToken;
       callAPI('getDashboardStats').then(stats => {
+        if (myToken !== dashboardLoadToken) return; // มีการโหลดรอบใหม่แซงไปแล้ว ทิ้งผลรอบนี้
         document.getElementById('stat-month-label').innerText = "เดือน" + stats.displayMonth;
         document.getElementById('stat-date-label').innerText = "อัปเดตล่าสุด: " + stats.todayDisplay;
 
@@ -688,33 +789,50 @@
         if (pct === null) {
           ring.style.background = 'conic-gradient(#f3f4f6 0% 100%)';
           pctLabel.innerText = '–';
-          pctLabel.className = 'text-2xl font-black text-gray-300';
+          pctLabel.className = 'text-2xl font-black text-gray-300 tabular';
         } else {
           const ringColor = pct >= 80 ? '#ec4899' : (pct >= 50 ? '#f59e0b' : '#f43f5e');
-          ring.style.background = `conic-gradient(${ringColor} 0% ${pct}%, #f3f4f6 ${pct}% 100%)`;
-          pctLabel.innerText = pct + '%';
-          pctLabel.className = 'text-2xl font-black text-gray-800';
+          pctLabel.className = 'text-2xl font-black text-gray-800 tabular';
+          const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (reduce) {
+            ring.style.background = `conic-gradient(${ringColor} 0% ${pct}%, #f3f4f6 ${pct}% 100%)`;
+            pctLabel.innerText = pct + '%';
+          } else {
+            // กวาดวงแหวนจาก 0 ไปถึง % จริง พร้อมกับตัวเลขตรงกลางที่ไต่ขึ้นพร้อมกัน
+            // เช็ค token ทุกเฟรม ถ้ามีการโหลดรอบใหม่แซงมา ให้หยุดกลางคันทันที ไม่งั้นจะไปเขียนทับค่าใหม่
+            const start = performance.now();
+            const dur = 1100;
+            (function sweep(now) {
+              if (myToken !== dashboardLoadToken) return;
+              let p = Math.min((now - start) / dur, 1);
+              p = 1 - Math.pow(1 - p, 3);
+              const cur = pct * p;
+              ring.style.background = `conic-gradient(${ringColor} 0% ${cur}%, #f3f4f6 ${cur}% 100%)`;
+              pctLabel.innerText = Math.round(cur) + '%';
+              if (p < 1) requestAnimationFrame(sweep);
+            })(start);
+          }
         }
 
+        const cell = (val, tone, label, delay) => `
+          <div class="rise bg-white/70 border border-${tone}-100 rounded-xl px-3 py-3 text-center" style="--d:${delay}s">
+            <div class="font-black text-lg text-${tone}-600 tabular" data-count="${val}">0</div>
+            <div class="text-[10px] text-${tone}-400 font-bold uppercase tracking-wide">${label}</div>
+          </div>`;
         let statsHtml = `
-          <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center">
-            <div class="font-black text-lg text-gray-800">${stats.totalStudents.toLocaleString()}</div>
+          <div class="rise bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center" style="--d:0.05s">
+            <div class="font-black text-lg text-gray-800 tabular" data-count="${stats.totalStudents}">0</div>
             <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">นักเรียนทั้งหมด</div>
           </div>
-          <div class="bg-white/70 border border-green-100 rounded-xl px-3 py-3 text-center">
-            <div class="font-black text-lg text-green-600">${stats.passedToday.toLocaleString()}</div>
-            <div class="text-[10px] text-green-400 font-bold uppercase tracking-wide">ผ่านเดือนนี้</div>
-          </div>
-          <div class="bg-white/70 border border-rose-100 rounded-xl px-3 py-3 text-center">
-            <div class="font-black text-lg text-rose-600">${stats.failedToday.toLocaleString()}</div>
-            <div class="text-[10px] text-rose-400 font-bold uppercase tracking-wide">ไม่ผ่านเดือนนี้</div>
-          </div>
-          <div class="bg-white/70 border border-sky-100 rounded-xl px-3 py-3 text-center">
-            <div class="font-black text-lg text-sky-600">${stats.absentToday.toLocaleString()}</div>
-            <div class="text-[10px] text-sky-400 font-bold uppercase tracking-wide">ขาดเรียนวันนี้</div>
-          </div>`;
-        document.getElementById('stats-container').innerHTML = statsHtml;
+          ${cell(stats.passedToday, 'green', 'ผ่านเดือนนี้', 0.12)}
+          ${cell(stats.failedToday, 'rose', 'ไม่ผ่านเดือนนี้', 0.19)}
+          ${cell(stats.absentToday, 'sky', 'ขาดเรียนวันนี้', 0.26)}`;
+        const box = document.getElementById('stats-container');
+        box.innerHTML = statsHtml;
+        // เริ่มนับหลังแปะ DOM เสร็จแล้ว (ต้องมี element จริงก่อนถึงจะนับได้)
+        box.querySelectorAll('[data-count]').forEach(el => animateCount(el, parseInt(el.dataset.count) || 0));
       }).catch(() => {
+        if (myToken !== dashboardLoadToken) return; // คำขอเก่าที่ล้มเหลว ไม่ควรมาลบข้อมูลใหม่ที่โหลดสำเร็จแล้วทิ้ง
         document.getElementById('stats-container').innerHTML = `<div class="col-span-2 text-center text-red-400 text-sm font-medium py-6 border-2 border-dashed border-red-100 rounded-2xl">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองรีเฟรชหน้าใหม่</div>`;
       });
     }
@@ -1556,19 +1674,22 @@
       let classOptions = ALL_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
       let now = new Date();
       let defaultTime = now.toTimeString().slice(0, 5);
+      let todayStr = localDateStr(now);
       const { value: formValues } = await MySwal.fire({
         title: '⏰ บันทึกมาสายด่วน',
-        html: `<div class="text-left ml-6 mt-4 text-sm text-gray-600 font-bold">ห้องเรียน:</div><select id="ql-class" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;" onchange="quickLateLoadNames()"><option value="" disabled selected>-- เลือกห้องเรียน --</option>${classOptions}</select><div class="text-left ml-6 text-sm text-gray-600 font-bold">ชื่อนักเรียน:</div><select id="ql-name" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องก่อน --</option></select><div class="text-left ml-6 text-sm text-gray-600 font-bold">เวลาที่มาถึง:</div><input id="ql-time" type="time" value="${defaultTime}" class="swal2-input" style="display:flex;width:85%;margin:5px auto 10px auto;font-size:16px;border-radius:12px;padding:12px;">`,
+        html: `<div class="text-left ml-6 mt-4 text-sm text-gray-600 font-bold">วันที่มาสาย:</div><input id="ql-date" type="date" value="${todayStr}" max="${todayStr}" class="swal2-input" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;"><div class="text-left ml-6 text-sm text-gray-600 font-bold">ห้องเรียน:</div><select id="ql-class" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;" onchange="quickLateLoadNames()"><option value="" disabled selected>-- เลือกห้องเรียน --</option>${classOptions}</select><div class="text-left ml-6 text-sm text-gray-600 font-bold">ชื่อนักเรียน:</div><select id="ql-name" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องก่อน --</option></select><div class="text-left ml-6 text-sm text-gray-600 font-bold">เวลาที่มาถึง:</div><input id="ql-time" type="time" value="${defaultTime}" class="swal2-input" style="display:flex;width:85%;margin:5px auto 10px auto;font-size:16px;border-radius:12px;padding:12px;">`,
         confirmButtonText: '⏰ บันทึกมาสาย', confirmButtonColor: '#f97316', showCancelButton: true, cancelButtonText: 'ยกเลิก',
         preConfirm: () => {
+          const date = document.getElementById('ql-date').value;
           const cls = document.getElementById('ql-class').value;
           const name = document.getElementById('ql-name').value;
           const time = document.getElementById('ql-time').value;
-          if (!cls || !name || !time) { Swal.showValidationMessage('กรุณาเลือกห้อง ชื่อ และเวลาให้ครบถ้วน'); return false; }
-          return { cls, name, time };
+          if (!date || !cls || !name || !time) { Swal.showValidationMessage('กรุณาเลือกวันที่ ห้อง ชื่อ และเวลาให้ครบถ้วน'); return false; }
+          if (date > todayStr) { Swal.showValidationMessage('เลือกวันที่ล่วงหน้าไม่ได้ครับ'); return false; }
+          return { date, cls, name, time };
         }
       });
-      if (formValues) { await saveQuickLate(formValues.cls, formValues.name, formValues.time); }
+      if (formValues) { await saveQuickLate(formValues.cls, formValues.name, formValues.time, formValues.date); }
     }
 
     function quickLateLoadNames() {
@@ -1586,12 +1707,18 @@
       });
     }
 
-    function saveQuickLate(className, name, time) {
-      const todayStr = new Date().toISOString().split('T')[0];
+    function saveQuickLate(className, name, time, dateStr) {
+      const targetDate = dateStr || localDateStr(); // ถ้าไม่ได้ระบุมา ใช้วันนี้ตามเวลาเครื่อง (ไม่ใช่ UTC)
+      const isBackdated = targetDate !== localDateStr();
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      return callAPI('saveAttendance', { dateStr: todayStr, className: className, dataArray: [{ name: name, status: 'มาสาย', arrivalTime: time }], password: currentTeacherAuth }).then(res => {
+      return callAPI('saveAttendance', { dateStr: targetDate, className: className, dataArray: [{ name: name, status: 'มาสาย', arrivalTime: time }], password: currentTeacherAuth }).then(res => {
         if (res.success) {
-          return MySwal.fire({ icon: 'success', title: 'บันทึกสำเร็จ! ⏰', html: `<strong>${name}</strong> (${className})<br>มาสาย เวลา ${time} น.`, confirmButtonColor: '#f97316', timer: 2500, showConfirmButton: false });
+          // ถ้าเป็นการบันทึกย้อนหลัง เน้นวันที่ให้ชัด ครูจะได้เห็นทันทีว่าลงวันถูกไหม
+          return MySwal.fire({
+            icon: 'success', title: 'บันทึกสำเร็จ! ⏰',
+            html: `<strong>${name}</strong> (${className})<br>มาสาย เวลา ${time} น.<br><span class="${isBackdated ? 'text-orange-600 font-bold' : 'text-gray-500'}">วันที่ ${formatThaiDate(targetDate)}${isBackdated ? ' (ย้อนหลัง)' : ''}</span>`,
+            confirmButtonColor: '#f97316', timer: isBackdated ? 3500 : 2500, showConfirmButton: false
+          });
         } else {
           return MySwal.fire('ผิดพลาด', res.message, 'error');
         }
@@ -1617,7 +1744,7 @@
 
     async function selectAttendanceClassDate() {
       let classOptions = ALL_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
-      let today = new Date().toISOString().split('T')[0];
+      let today = localDateStr(); // ใช้วันที่ตามเวลาเครื่อง ไม่ใช่ UTC (ดูหมายเหตุที่ localDateStr)
       const { value: formValues } = await MySwal.fire({
         title: 'เลือกห้องและวันที่เช็คชื่อ',
         html: `<select id="swal-att-class" class="swal2-select mb-4" style="display:flex;width:85%;margin:15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องเรียนเริ่มต้น --</option>${classOptions}</select><input id="swal-att-date" type="date" value="${today}" class="swal2-input" style="display:flex;width:85%;margin:10px auto 20px auto;font-size:16px;border-radius:12px;padding:12px;">`,
@@ -1936,7 +2063,7 @@
       document.getElementById('conduct-student-name').value = studentName;
       document.getElementById('conduct-student-class').value = className;
       let now = new Date();
-      document.getElementById('conduct-date').value = now.toISOString().split('T')[0];
+      document.getElementById('conduct-date').value = localDateStr(now); // วันที่ตามเวลาเครื่อง ไม่ใช่ UTC
       document.getElementById('conduct-time').value = now.toTimeString().slice(0,5);
       document.getElementById('conduct-description').value = '';
       MySwal.fire({ title: 'กำลังโหลดเกณฑ์คะแนน...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
