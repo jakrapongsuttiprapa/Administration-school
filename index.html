@@ -58,10 +58,8 @@
     .btn-pastel:active { transform: scale(0.96) translateZ(0); box-shadow: none; }
     select { background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
     input[type="date"], input[type="time"], input[type="tel"] { background-image: none; }
-    .print-only { display: none; }
     @media print {
       .no-print { display: none !important; }
-      .print-only { display: block !important; }
       body { background: white; }
       .bg-fixed-layer { display: none; }
       .glass-card { box-shadow: none; border: 1px solid #ddd; background: white; backdrop-filter: none; }
@@ -492,7 +490,7 @@
     <div id="view-student-history" class="hidden">
       <div class="flex justify-between items-center mb-4 no-print glass-card p-3 rounded-2xl">
         <button onclick="goHome(true)" class="text-indigo-600 font-bold flex items-center gap-1 hover:text-indigo-800 bg-indigo-50 px-4 py-2 rounded-xl transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
-        <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> พิมพ์รายงาน</button>
+        <button id="btn-export-history" onclick="exportStudentHistoryReport()" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> ส่งออกเป็นรายงาน</button>
       </div>
       <div class="glass-card rounded-2xl px-5 py-3 mb-4 border-t-4 border-indigo-400 shadow-md sticky top-[70px] z-40 text-center no-print">
         <p class="text-gray-600 text-sm md:text-base font-medium" id="history-display-label">เลือกห้องและชื่อนักเรียนเพื่อดูประวัติทั้งหมด</p>
@@ -509,10 +507,6 @@
           <button onclick="searchStudentHistory()" class="btn-pastel bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-10 rounded-xl shadow-md whitespace-nowrap text-lg">🔎 ดูประวัติทั้งหมด</button>
         </div>
         <p class="text-xs text-gray-400 text-center mt-4 font-medium">รวมประวัติการแต่งกาย การทำผิดระเบียบ และคะแนนพฤติกรรมทุกเดือนที่มีบันทึกไว้</p>
-      </div>
-      <div class="print-only text-center mb-4">
-        <h2 class="text-xl font-extrabold text-gray-800">รายงานประวัตินักเรียนรายบุคคล</h2>
-        <p class="text-sm text-gray-500 mt-1" id="history-print-subtitle"></p>
       </div>
       <div id="studentHistoryContainer" class="space-y-6"></div>
     </div>
@@ -701,6 +695,8 @@
     let currentStudents = [];
     let currentDiscStartMonth = "";
     let currentDiscEndMonth = "";
+    let currentHistoryName = "";
+    let currentHistoryClass = "";
     let globalConductRules = [];
     let currentAttDate = "";
     let currentMonitorId = "";
@@ -1408,7 +1404,7 @@
     function showStudentHistoryView() {
       showView('view-student-history');
       document.getElementById('history-display-label').innerText = 'เลือกห้องและชื่อนักเรียนเพื่อดูประวัติทั้งหมด';
-      document.getElementById('history-print-subtitle').innerText = '';
+      currentHistoryName = ""; currentHistoryClass = "";
       document.getElementById('studentHistoryContainer').innerHTML = '';
       const classSelect = document.getElementById('historySearchClass');
       const nameSelect = document.getElementById('historySearchName');
@@ -1438,18 +1434,30 @@
       callAPI('getStudentFullHistory', { name: name, className: className, password: currentDisciplineAuth }).then(res => {
         if (!res.success) {
           document.getElementById('studentHistoryContainer').innerHTML = '';
-          document.getElementById('history-print-subtitle').innerText = '';
+          currentHistoryName = ""; currentHistoryClass = "";
           MySwal.fire({ icon: 'error', title: 'ไม่พบข้อมูล', text: res.error || res.message || 'ไม่พบข้อมูลนักเรียนคนนี้', confirmButtonColor: '#6366f1' });
           return;
         }
         document.getElementById('history-display-label').innerHTML = `ประวัติของ <span class="font-black text-indigo-600">${res.studentName}</span> ห้อง <span class="font-black text-indigo-600">${res.studentClass}</span>`;
-        document.getElementById('history-print-subtitle').innerText = `${res.studentName} — ห้อง ${res.studentClass}`;
+        currentHistoryName = res.studentName; currentHistoryClass = res.studentClass;
         renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary, 'studentHistoryContainer');
       }).catch(() => {
         document.getElementById('studentHistoryContainer').innerHTML = '';
-        document.getElementById('history-print-subtitle').innerText = '';
+        currentHistoryName = ""; currentHistoryClass = "";
         MySwal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#6366f1' });
       });
+    }
+
+    // ส่งออกประวัติของนักเรียนที่กำลังดูอยู่เป็นเอกสาร Google Docs (บันทึกข้อความทางการ)
+    function exportStudentHistoryReport() {
+      if (!currentHistoryName || !currentHistoryClass) { MySwal.fire('เดี๋ยวก่อน!', 'กรุณาค้นหาและเลือกดูประวัตินักเรียนก่อนครับ', 'warning'); return; }
+      const btn = document.getElementById('btn-export-history');
+      if (!lockButton(btn)) return;
+      MySwal.fire({ title: 'กำลังสร้างหนังสือราชการ...', html: 'กรุณารอสักครู่ ระบบกำลังสร้างไฟล์เอกสาร', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      callAPI('exportStudentHistoryDoc', { name: currentHistoryName, className: currentHistoryClass, password: currentDisciplineAuth }).then(res => {
+        if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` }); } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        .finally(() => unlockButton(btn));
     }
 
     function studentSearchLoadNames() {
