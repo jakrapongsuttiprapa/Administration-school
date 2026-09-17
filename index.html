@@ -14,10 +14,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ฝ่ายปกครอง">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700;800&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700;800&display=swap');
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Prompt', sans-serif;
@@ -122,6 +126,11 @@
     }
     .rise { opacity: 0; animation: riseIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: var(--d, 0s); }
 
+    /* ทรานซิชันตอนสลับหน้า (showView) — ต้องเร็วและนุ่มนวล เพราะเกิดขึ้นทุกครั้งที่นำทาง (บ่อยกว่า .rise มาก)
+       ต่างจาก .rise ที่เป็นเอฟเฟกต์ครั้งเดียวตอนเข้าหน้าแรก อันนี้ต้องไว ไม่งั้นจะรู้สึกหน่วงทุกครั้งที่กดเปลี่ยนหน้า */
+    @keyframes viewIn { from { opacity: 0; transform: translate3d(0, 8px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+    .view-enter { animation: viewIn 0.22s ease-out; }
+
     /* ตัวหนังสือไล่เฉดสำหรับหัวข้อใหญ่ */
     .text-gradient {
       background: linear-gradient(115deg, #db2777 0%, #e11d48 45%, #f59e0b 100%);
@@ -204,7 +213,7 @@
         </div>
         <!-- Mobile image -->
         <div class="block lg:hidden absolute top-0 left-0 w-full h-[360px] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);">
-          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[97%_20%] opacity-95">
+          <img src="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_20%] opacity-95">
         </div>
         <!-- Mobile quote -->
         <div class="absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
@@ -215,7 +224,7 @@
         </div>
         <!-- Desktop image -->
         <div class="hidden lg:block absolute top-0 right-0 h-full w-[65%] pointer-events-none z-0" style="-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);">
-          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[100%_top] opacity-95">
+          <img src="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[50%_top] opacity-95">
         </div>
         <!-- Desktop quote -->
         <div class="absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10 bg-white/25 backdrop-blur-sm p-5 rounded-3xl border border-white/30 shadow-lg">
@@ -452,7 +461,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 text-center md:text-left">
           <div>
             <h2 class="text-xl font-bold text-gray-700">🔍 ตรวจสอบซ้ำ: ห้อง <span id="verify-display-class" class="text-cyan-700 text-2xl font-black"></span> | เดือน <span id="verify-display-month" class="text-cyan-700 text-xl font-black"></span></h2>
-            <p class="text-sm text-gray-500 mt-1 font-medium">ดูผลตรวจของครูประจำชั้น แล้วยืนยันว่าตรงกัน หรือแจ้งไม่ตรงพร้อมหมายเหตุ</p>
+            <p class="text-sm text-gray-500 mt-1 font-medium">ตรวจแต่งกายได้ทุกข้อเหมือนครูประจำชั้น ไม่ต้องรอให้ครูตรวจก่อน</p>
           </div>
           <div class="flex gap-2 justify-center md:justify-end flex-shrink-0">
             <select id="verify-switch-class" onchange="switchVerifyClassMonth()" class="p-2.5 border-2 border-cyan-200 rounded-xl focus:outline-none focus:border-cyan-500 bg-white text-sm font-bold shadow-sm"></select>
@@ -528,7 +537,7 @@
       <button onclick="goHome(true)" class="text-slate-700 font-bold flex items-center gap-1 hover:text-slate-900 mb-4 no-print glass-card px-4 py-2 rounded-xl inline-flex shadow-sm transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
       <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-slate-600 shadow-md">
         <h2 class="text-2xl font-extrabold text-gray-800 mb-2 text-center">🔒 จัดการล็อครายการตรวจ</h2>
-        <p class="text-sm text-gray-500 text-center mb-6">ข้อที่ล็อกไว้ ครูประจำชั้นจะแก้ไขไม่ได้ ต้องให้ฝ่ายปกครองตรวจผ่านหน้า "ตรวจสอบซ้ำการแต่งกาย" เท่านั้น</p>
+        <p class="text-sm text-gray-500 text-center mb-6">ข้อที่ล็อกไว้ ครูประจำชั้นจะแก้ไขไม่ได้ ต้องให้ฝ่ายปกครองตรวจผ่านหน้า "ตรวจแต่งกาย (ฝ่ายปกครอง)" เท่านั้น</p>
         <div id="lockManagerList" class="space-y-2.5"></div>
       </div>
     </div>
@@ -668,6 +677,13 @@
       // จำกัดเวลารอสูงสุด 25 วินาที — กันปัญหาค้างโหลดตลอดไปแบบไม่รู้จบ (ไม่ว่าจะติดที่เน็ต/เซิร์ฟเวอร์/deploy คนละ URL)
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000);
+      // ถ้าผ่านไป 7 วินาทีแล้วยังไม่เสร็จ ปรับข้อความในกล่องโหลดที่เปิดอยู่ (ถ้ามี) ให้รู้ว่าระบบยังทำงานอยู่
+      // ไม่ใช่ค้าง แค่เน็ตช้ากว่าปกติ — ไม่ได้ยกเลิกคำขอเลย แค่ปรับความรู้สึกตอนรอเฉยๆ
+      const slowNoticeId = setTimeout(() => {
+        if (typeof Swal !== 'undefined' && Swal.isVisible && Swal.isVisible()) {
+          Swal.update({ title: 'เชื่อมต่อช้ากว่าปกติ...', html: 'สัญญาณอินเทอร์เน็ตอาจไม่เสถียร ระบบยังทำงานอยู่ กรุณารอสักครู่' });
+        }
+      }, 7000);
       try {
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -686,6 +702,7 @@
         throw err;
       } finally {
         clearTimeout(timeoutId);
+        clearTimeout(slowNoticeId);
       }
     }
 
@@ -767,7 +784,20 @@
 
     function showView(id) {
       ALL_VIEWS.forEach(v => document.getElementById(v).classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+      const target = document.getElementById(id);
+      target.classList.remove('hidden');
+      // รีเซ็ต scroll กลับขึ้นบนสุดทุกครั้งที่สลับหน้า — เดิมไม่มีจุดไหนทำเลยทั้งแอป
+      // ถ้าเลื่อนดูลึกๆ ในหน้ายาว (เช่น รายชื่อนักเรียน 40 คน) แล้วกดกลับหน้าแรก จะเห็นพื้นที่ว่างหรือ
+      // ส่วนล่างของหน้าใหม่แทนจุดเริ่มต้น ทำให้แอนิเมชันเฟดเข้าด้านล่างนี้มองไม่เห็นไปด้วย
+      // ใช้ property ตรงๆ (ไม่ใช่ scrollTo) เพื่อการันตีว่าเป็นการเลื่อนทันที ไม่สมูท แม้หน้าเว็บจะตั้ง
+      // scroll-behavior:smooth ไว้ระดับ html ก็ตาม (ไม่งั้นจะเลื่อนสมูทซ้อนไปกับเฟดเข้า ดูรกกว่าเดิม)
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      // ทรานซิชันเฟดเข้าเบาๆ ตอนสลับหน้า — ลบ class เดิมออกก่อนแล้วบังคับ reflow (void offsetWidth)
+      // ก่อนใส่กลับเข้าไปใหม่ ไม่งั้นถ้าเคยมี class นี้ค้างอยู่แล้ว (กลับมาหน้าเดิมซ้ำ) แอนิเมชันจะไม่เล่นซ้ำให้
+      target.classList.remove('view-enter');
+      void target.offsetWidth;
+      target.classList.add('view-enter');
     }
 
     function initDashboard() {
@@ -1092,7 +1122,7 @@
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: '📋 รายงานการทำผิดระเบียบ',
-          denyButtonText: '🔍 ตรวจสอบซ้ำการแต่งกาย',
+          denyButtonText: '🔍 ตรวจแต่งกาย (ฝ่ายปกครอง)',
           cancelButtonText: 'ยกเลิก',
           confirmButtonColor: '#9333ea',
           denyButtonColor: '#0891b2'
@@ -1165,67 +1195,44 @@
       if (students.length === 0) { container.innerHTML = `<div class="text-center p-12 card-flat rounded-2xl text-cyan-600 font-extrabold text-xl">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
       const esc = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       const cardsHtml = students.map((student, sIndex) => {
-        let summaryHtml;
-        if (!student.inspected) {
-          summaryHtml = `<span class="text-xs font-bold text-gray-400 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-lg">ครูยังไม่ได้ตรวจคนนี้เลย</span>`;
-        } else {
-          let issues = Object.entries(student.results).filter(([rule, val]) => val === 'ไม่ผ่าน' || val === 'ยังไม่ตรวจ');
-          if (issues.length === 0) {
-            summaryHtml = `<span class="text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg">✅ ผ่านครบทุกข้อ</span>`;
-          } else {
-            summaryHtml = issues.map(([rule, val]) => `<span class="text-xs font-bold ${val === 'ไม่ผ่าน' ? 'text-red-700 bg-red-50 border-red-200' : 'text-amber-700 bg-amber-50 border-amber-200'} border px-2.5 py-1 rounded-lg mr-1 mb-1 inline-block">${rule}${val === 'ยังไม่ตรวจ' ? ' (ยังไม่ตรวจ)' : ''}</span>`).join('');
-          }
-        }
-        let savedStatus = student.verifyStatus || 'ยังไม่ตรวจสอบ';
-        let savedNote = student.verifyNote || '';
-        let radName = `verify_${sIndex}`;
-        let disabledAttr = student.inspected ? '' : 'disabled';
-
-        // ตารางแก้ไขผลตรวจรายข้อ — โผล่เฉพาะตอนเลือก "ไม่ตรงกัน" ตั้งต้นด้วยค่าที่ครูตรวจไว้เดิม
-        // บันทึกแล้วจะทับผลเดิมของครูไปเลยตามที่ขอ
-        let ruleGridHtml = '';
-        if (student.inspected) {
-          ruleGridHtml = ruleItems.map((rule, rIndex) => {
-            let val = student.results[rule] || 'ยังไม่ตรวจ';
-            let rName = `verify_rule_${sIndex}_${rIndex}`;
-            return `<div class="bg-gray-50 p-2 rounded-lg border border-gray-200">
-              <div class="text-xs font-bold text-gray-700 mb-1.5">${rule}</div>
-              <div class="grid grid-cols-2 gap-1 text-xs font-bold bg-white p-1 rounded-md border border-gray-100">
-                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${rName}" value="ผ่าน" class="hidden" ${val === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label>
-                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${rName}" value="ไม่ผ่าน" class="hidden" ${val === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label>
-                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-amber-100 has-[:checked]:text-amber-700 text-gray-500"><input type="radio" name="${rName}" value="ยังไม่ตรวจ" class="hidden" ${val === 'ยังไม่ตรวจ' ? 'checked' : ''}> ยังไม่ตรวจ</label>
-                <label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 text-gray-500"><input type="radio" name="${rName}" value="ไม่ต้องใส่" class="hidden" ${val === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label>
-              </div>
-            </div>`;
-          }).join('');
-        }
-
-        let monitorCommentHtml = student.monitorComment ? `<div class="mb-2 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${esc(student.monitorComment)}</span></div>` : '';
-
-        return `<div class="bg-white rounded-2xl p-4 border border-gray-200 ${!student.inspected ? 'opacity-60' : ''}">
-          <div class="font-bold text-gray-800 mb-2">${sIndex + 1}. ${student.name}</div>
-          <div class="flex flex-wrap gap-1 mb-3">${summaryHtml}</div>
-          ${monitorCommentHtml}
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 text-sm font-bold bg-gray-50 p-1 rounded-lg border border-gray-100">
-            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-700 text-gray-400"><input type="radio" name="${radName}" value="ยังไม่ตรวจสอบ" class="hidden" ${savedStatus === 'ยังไม่ตรวจสอบ' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ยังไม่ตรวจสอบ</label>
-            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ตรงกัน" class="hidden" ${savedStatus === 'ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ✅ ตรงกัน</label>
-            <label class="flex items-center justify-center gap-1 cursor-pointer py-2 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ตรงกัน" class="hidden" ${savedStatus === 'ไม่ตรงกัน' ? 'checked' : ''} ${disabledAttr} onchange="toggleVerifyDetail(${sIndex})"> ⚠️ ไม่ตรงกัน</label>
-          </div>
-          <div id="verify_detail_wrap_${sIndex}" class="${savedStatus === 'ไม่ตรงกัน' ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-dashed border-red-200">
-            <div class="text-xs font-bold text-gray-500 mb-2">แก้ไขผลตรวจแต่ละข้อ (บันทึกแล้วจะทับผลเดิมของครูทันที):</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">${ruleGridHtml}</div>
-            <input type="text" id="verify_note_${sIndex}" value="${esc(savedNote)}" maxlength="300" placeholder="📝 หมายเหตุ (ถ้ามี) เช่น ครูบอกผ่านแต่ทรงผมยาวเกินจริง" class="w-full p-2.5 border-2 border-red-100 rounded-xl focus:outline-none focus:border-red-400 bg-red-50/40 text-sm font-medium">
-          </div>
+        let headerHtml = `<div class="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-cyan-100 pb-3">
+          <div class="font-bold text-lg text-gray-800 flex items-center gap-2.5 min-w-0"><span class="bg-cyan-100 text-cyan-600 w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0">${sIndex + 1}</span> ${student.name}</div>
+          <button type="button" onclick="markAllPassVerify(${sIndex})" class="text-xs font-bold bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded-lg border border-green-200 transition flex-shrink-0 whitespace-nowrap">✅ ผ่านทั้งหมด</button>
         </div>`;
+
+        let monitorCommentHtml = student.monitorComment ? `<div class="mb-3 -mt-1 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${esc(student.monitorComment)}</span></div>` : '';
+
+        let sum = student.summary || { absent: 0, late: 0, leave: 0, conductScore: 100, conductIncidents: 0 };
+        let scoreColor = sum.conductScore >= 80 ? 'green' : (sum.conductScore >= 60 ? 'amber' : 'red');
+        let summaryStatsHtml = `<div class="flex flex-wrap gap-1.5 mb-3 text-xs">
+          <span class="bg-red-50 text-red-600 border border-red-200 px-2.5 py-1 rounded-lg font-bold">ขาด ${sum.absent}</span>
+          <span class="bg-orange-50 text-orange-600 border border-orange-200 px-2.5 py-1 rounded-lg font-bold">สาย ${sum.late}</span>
+          <span class="bg-yellow-50 text-yellow-600 border border-yellow-200 px-2.5 py-1 rounded-lg font-bold">ลา ${sum.leave}</span>
+          <span class="bg-${scoreColor}-50 text-${scoreColor}-700 border border-${scoreColor}-200 px-2.5 py-1 rounded-lg font-bold">⭐ พฤติกรรม ${sum.conductScore} คะแนน</span>
+        </div>`;
+
+        // ฝ่ายปกครองตรวจได้ทุกข้อโดยตรง ไม่มีการล็อกหรือรอครูตรวจก่อนเลย (ต่างจากหน้าครูที่ข้อล็อกจะถูกปิดไว้)
+        let rulesHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
+        ruleItems.forEach((rule, rIndex) => {
+          let val = (student.results && student.results[rule]) || 'ยังไม่ตรวจ';
+          let radName = `verify_rule_${sIndex}_${rIndex}`;
+          rulesHtml += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-200"><div class="text-sm font-bold text-gray-700 mb-2">${rule}</div><div class="grid grid-cols-2 gap-1.5 text-sm font-bold bg-white p-1 rounded-lg border border-gray-100"><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ผ่าน" class="hidden" ${val === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ผ่าน" class="hidden" ${val === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-amber-100 has-[:checked]:text-amber-700 text-gray-500"><input type="radio" name="${radName}" value="ยังไม่ตรวจ" class="hidden" ${val === 'ยังไม่ตรวจ' ? 'checked' : ''}> ยังไม่ตรวจ</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 text-gray-500"><input type="radio" name="${radName}" value="ไม่ต้องใส่" class="hidden" ${val === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label></div></div>`;
+        });
+        rulesHtml += `</div>`;
+
+        return `<div class="bg-white rounded-2xl p-4 md:p-6 mb-4 border border-gray-200">${headerHtml}${monitorCommentHtml}${summaryStatsHtml}${rulesHtml}</div>`;
       }).join('');
       container.innerHTML = cardsHtml;
     }
 
-    // แสดง/ซ่อนตารางแก้ไขผลตรวจ+ช่องหมายเหตุ ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "ไม่ตรงกัน" ถึงจะโชว์)
-    function toggleVerifyDetail(idx) {
-      const selected = document.querySelector(`input[name="verify_${idx}"]:checked`);
-      const wrap = document.getElementById('verify_detail_wrap_' + idx);
-      if (wrap) wrap.classList.toggle('hidden', !(selected && selected.value === 'ไม่ตรงกัน'));
+    // ปุ่ม "ผ่านทั้งหมด" — เหมือนหน้าครูทุกอย่าง ตั้งทุกข้อเป็นผ่านยกเว้นข้อที่เป็น "ไม่ต้องใส่" อยู่แล้ว
+    function markAllPassVerify(sIndex) {
+      ruleItems.forEach((rule, rIndex) => {
+        const notApplicable = document.querySelector(`input[name="verify_rule_${sIndex}_${rIndex}"][value="ไม่ต้องใส่"]`);
+        if (notApplicable && notApplicable.checked) return;
+        const passRadio = document.querySelector(`input[name="verify_rule_${sIndex}_${rIndex}"][value="ผ่าน"]`);
+        if (passRadio) passRadio.checked = true;
+      });
     }
 
     function saveVerificationData() {
@@ -1233,26 +1240,21 @@
       if (!lockButton(btn)) return;
       let dataToSave = [];
       currentVerifyStudents.forEach((student, sIndex) => {
-        let selected = document.querySelector(`input[name="verify_${sIndex}"]:checked`);
-        let status = selected ? selected.value : 'ยังไม่ตรวจสอบ';
-        if (status === 'ยังไม่ตรวจสอบ') return; // ยังไม่ได้ตรวจสอบจริง ไม่ต้องบันทึกอะไร
-        if (!student.inspected) return; // ครูยังไม่ได้ตรวจคนนี้ ข้ามไป (ปุ่มถูก disable ไว้แล้ว แต่กันเผื่อไว้อีกชั้น)
-        let noteInput = document.getElementById('verify_note_' + sIndex);
-        let entry = { name: student.name, verifyStatus: status, verifyNote: status === 'ไม่ตรงกัน' && noteInput ? noteInput.value.trim() : '' };
-        // ถ้าเลือก "ไม่ตรงกัน" ให้เก็บผลตรวจที่แก้ไขแล้วรายข้อไปด้วย เพื่อบันทึกทับผลเดิมของครู
-        if (status === 'ไม่ตรงกัน') {
-          let correctedResults = {};
-          ruleItems.forEach((rule, rIndex) => {
-            let ruleSelected = document.querySelector(`input[name="verify_rule_${sIndex}_${rIndex}"]:checked`);
-            correctedResults[rule] = ruleSelected ? ruleSelected.value : (student.results[rule] || 'ยังไม่ตรวจ');
-          });
-          entry.correctedResults = correctedResults;
-        }
-        dataToSave.push(entry);
+        let studentResult = { name: student.name, results: {} };
+        let stillAllPending = true;
+        ruleItems.forEach((rule, rIndex) => {
+          let selected = document.querySelector(`input[name="verify_rule_${sIndex}_${rIndex}"]:checked`);
+          let val = selected ? selected.value : 'ยังไม่ตรวจ';
+          studentResult.results[rule] = val;
+          if (val !== 'ยังไม่ตรวจ') stillAllPending = false;
+        });
+        // ข้ามคนที่ไม่เคยมีประวัติมาก่อน และฝ่ายปกครองไม่ได้แตะข้อไหนเลยสักข้อ (กันบันทึกข้อมูลขยะเหมือนหน้าครู)
+        if (stillAllPending && !student.inspected) return;
+        dataToSave.push(studentResult);
       });
       if (dataToSave.length === 0) {
         unlockButton(btn);
-        MySwal.fire({ icon: 'info', title: 'ยังไม่ได้ตรวจสอบใครเลย', text: 'กรุณาเลือก "ตรงกัน" หรือ "ไม่ตรงกัน" อย่างน้อย 1 คนก่อนบันทึก', confirmButtonColor: '#0891b2' });
+        MySwal.fire({ icon: 'info', title: 'ยังไม่ได้ตรวจใครเลย', text: 'กรุณาตรวจอย่างน้อย 1 คนก่อนกดบันทึก', confirmButtonColor: '#0891b2' });
         return;
       }
       MySwal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
