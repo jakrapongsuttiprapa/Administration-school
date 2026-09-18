@@ -323,6 +323,18 @@
             </button>
           </div>
 
+          <!-- เก็บถาวรข้อมูลเก่า (เฉพาะฝ่ายปกครอง) -->
+          <div class="grid grid-cols-1 gap-4 mb-4">
+            <button onclick="openArchiveManager()" class="btn-pastel nav-card w-full bg-gradient-to-r from-amber-700 to-orange-800 text-white p-5 rounded-3xl shadow-lg border border-amber-600 flex justify-between items-center group relative overflow-hidden">
+              <div class="absolute right-[-10px] bottom-[-25px] opacity-15 transform group-hover:scale-110 transition duration-500"><svg class="w-28 h-28" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4zm-1 6a1 1 0 011-1h13a1 1 0 011 1v6a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" clip-rule="evenodd"></path></svg></div>
+              <div class="relative z-10 text-left">
+                <div class="font-extrabold text-lg text-white flex items-center gap-2">📦 เก็บถาวรข้อมูลเก่า</div>
+                <div class="text-xs text-amber-100 mt-1 font-medium">เฉพาะฝ่ายปกครอง — ย้ายข้อมูลเก่าออกจากชีตหลัก ให้โหลดเร็วขึ้น</div>
+              </div>
+              <svg class="w-6 h-6 text-amber-100 relative z-10 transform group-hover:translate-x-2 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+          </div>
+
           <!-- ปุ่มสมุดโทรศัพท์ -->
           <div class="grid grid-cols-1 gap-4">
             <button onclick="loginContact()" class="btn-pastel nav-card w-full bg-emerald-600 hover:bg-emerald-700 text-white p-5 rounded-3xl shadow-lg border border-emerald-500/50 flex justify-between items-center group relative overflow-hidden">
@@ -1537,6 +1549,49 @@
           loadLockedRules();
         } else {
           MySwal.fire('ผิดพลาด', res.message, 'error');
+        }
+      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
+    }
+
+    // ==================== เก็บถาวรข้อมูลเก่า (ฝ่ายปกครอง) ====================
+    async function openArchiveManager() {
+      const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#b45309', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
+      if (password === '7846') {
+        currentDisciplineAuth = password;
+        showArchiveDatePicker();
+      } else if (password) {
+        MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
+      }
+    }
+
+    async function showArchiveDatePicker() {
+      const todayStr = localDateStr();
+      const { value: cutoffDateStr } = await MySwal.fire({
+        title: '📦 เก็บถาวรข้อมูลเก่า',
+        html: `<div class="text-left text-sm text-gray-600 mb-3">ระบบจะย้ายข้อมูล<b>ตรวจแต่งกาย เช็คชื่อ และพฤติกรรม ที่เก่ากว่าวันที่เลือก</b> ไปเก็บไว้ในชีตสำรอง (ไม่ได้ลบทิ้ง — รายงาน ประวัติรายบุคคล และเปรียบเทียบรายเดือน ยังดึงข้อมูลเก่ามารวมได้ตามปกติ)<br><br>แนะนำ: เลือกวันเริ่มต้นภาคเรียนปัจจุบัน เพื่อย้ายเฉพาะข้อมูลภาคเรียนก่อนหน้า</div><div class="text-left ml-1 text-sm text-gray-600 font-bold mb-1">ย้ายข้อมูลที่เก่ากว่าวันที่:</div><input id="archive-cutoff-date" type="date" max="${todayStr}" class="swal2-input" style="display:flex;width:90%;margin:5px auto 5px auto;font-size:16px;border-radius:12px;padding:12px;">`,
+        confirmButtonText: 'ดูสรุปก่อนย้าย', confirmButtonColor: '#b45309', showCancelButton: true, cancelButtonText: 'ยกเลิก',
+        preConfirm: () => {
+          const date = document.getElementById('archive-cutoff-date').value;
+          if (!date) { Swal.showValidationMessage('กรุณาเลือกวันที่'); return false; }
+          return date;
+        }
+      });
+      if (cutoffDateStr) confirmAndArchive(cutoffDateStr);
+    }
+
+    async function confirmAndArchive(cutoffDateStr) {
+      const { isConfirmed } = await MySwal.fire({
+        title: 'ยืนยันการเก็บถาวร?',
+        html: `จะย้ายข้อมูลที่เก่ากว่า <b>${formatThaiDate(cutoffDateStr)}</b> ออกจากชีตหลักทั้งหมด<br>การดำเนินการนี้จะเขียนทับชีตหลัก กรุณายืนยันว่าต้องการดำเนินการต่อ`,
+        icon: 'warning', confirmButtonText: 'ยืนยัน เก็บถาวรเลย', confirmButtonColor: '#b45309', showCancelButton: true, cancelButtonText: 'ยกเลิก'
+      });
+      if (!isConfirmed) return;
+      MySwal.fire({ title: 'กำลังเก็บถาวรข้อมูล...', html: 'อาจใช้เวลาสักครู่ กรุณารอ', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      callAPI('archiveOldData', { cutoffDateStr: cutoffDateStr, password: currentDisciplineAuth }).then(res => {
+        if (res.success) {
+          MySwal.fire({ icon: 'success', title: 'เก็บถาวรสำเร็จ!', html: '<div class="text-left text-sm">' + res.summary.map(s => '• ' + s).join('<br>') + '</div>', confirmButtonColor: '#b45309' });
+        } else {
+          MySwal.fire('ล้มเหลว', res.message, 'error');
         }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
     }
