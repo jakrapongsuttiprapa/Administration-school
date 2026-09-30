@@ -323,18 +323,6 @@
             </button>
           </div>
 
-          <!-- เก็บถาวรข้อมูลเก่า (เฉพาะฝ่ายปกครอง) -->
-          <div class="grid grid-cols-1 gap-4 mb-4">
-            <button onclick="openArchiveManager()" class="btn-pastel nav-card w-full bg-gradient-to-r from-amber-700 to-orange-800 text-white p-5 rounded-3xl shadow-lg border border-amber-600 flex justify-between items-center group relative overflow-hidden">
-              <div class="absolute right-[-10px] bottom-[-25px] opacity-15 transform group-hover:scale-110 transition duration-500"><svg class="w-28 h-28" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4zm-1 6a1 1 0 011-1h13a1 1 0 011 1v6a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" clip-rule="evenodd"></path></svg></div>
-              <div class="relative z-10 text-left">
-                <div class="font-extrabold text-lg text-white flex items-center gap-2">📦 เก็บถาวรข้อมูลเก่า</div>
-                <div class="text-xs text-amber-100 mt-1 font-medium">เฉพาะฝ่ายปกครอง — ย้ายข้อมูลเก่าออกจากชีตหลัก ให้โหลดเร็วขึ้น</div>
-              </div>
-              <svg class="w-6 h-6 text-amber-100 relative z-10 transform group-hover:translate-x-2 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-          </div>
-
           <!-- ปุ่มสมุดโทรศัพท์ -->
           <div class="grid grid-cols-1 gap-4">
             <button onclick="loginContact()" class="btn-pastel nav-card w-full bg-emerald-600 hover:bg-emerald-700 text-white p-5 rounded-3xl shadow-lg border border-emerald-500/50 flex justify-between items-center group relative overflow-hidden">
@@ -693,25 +681,51 @@
 
   <script>
     // ════════════════════════════════════════
-    // API CONFIG — GitHub Pages -> GAS Web App
+    // API CONFIG — GitHub Pages -> Supabase (ฟังก์ชัน oomsin_api ในฐานข้อมูล)
     // ════════════════════════════════════════
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzt6xOsUgXzljdVKP9shOrzK6jl1diU6PTzNudWUVgbAJy_GKxKhZEd58LHVw2YmNU5gA/exec';
+    // <<<API-BEGIN
+    const SUPABASE_URL = 'https://jxlkomfcbvkhmybgfxjh.supabase.co';   // <-- ใส่ Project URL ของคุณ
+    const SUPABASE_KEY = 'sb_publishable_xXQlvlO0PAHIKNbcqCwnJg_fiYPud_n';            // <-- ใส่ Publishable key (sb_publishable_...) ห้ามใส่ Secret key ที่นี่เด็ดขาด
+
+    // เรียงชื่อภาษาไทยที่หน้าเว็บ (ให้ตรงกับที่ระบบเดิมเรียง) — ฐานข้อมูลส่งมาเรียงแบบพื้นฐานไว้ก่อนแล้ว
+    const thSort = (a, b) => String(a || '').localeCompare(String(b || ''));
+    const MONTH_ORDER = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const discReportSort = (a, b) => a.className === b.className
+      ? (a.month === b.month ? thSort(a.name, b.name) : MONTH_ORDER.indexOf(a.month) - MONTH_ORDER.indexOf(b.month))
+      : thSort(a.className, b.className);
+    function postProcess(action, res) {
+      try {
+        if (action === 'getAllStudentsList' && Array.isArray(res)) res.sort((a, b) => a.className === b.className ? thSort(a.name, b.name) : thSort(a.className, b.className));
+        else if ((action === 'getStudentsByClass' || action === 'getContactsByClass') && Array.isArray(res)) res.sort((a, b) => thSort(a.name, b.name));
+        else if (action === 'classMonitorOverview' && res && Array.isArray(res.classmates)) res.classmates.sort((a, b) => thSort(a.name, b.name));
+        else if (action === 'getDisciplineReport' && Array.isArray(res)) res.sort(discReportSort);
+        else if (action === 'exportMonthlyDisciplineReportDoc' && res && Array.isArray(res.report)) res.report.sort(discReportSort);
+        else if (action === 'getAbsenceReport' && Array.isArray(res)) res.sort((a, b) => a.className !== b.className ? thSort(a.className, b.className) : ((b.consecutiveAbsence - a.consecutiveAbsence) || (b.totalLate - a.totalLate) || thSort(a.name, b.name)));
+      } catch (e) { /* เรียงไม่ได้ก็ใช้ลำดับจากฐานข้อมูลตามเดิม */ }
+      return res;
+    }
 
     async function callAPI(action, payload = {}) {
       // จำกัดเวลารอสูงสุด 25 วินาที — กันปัญหาค้างโหลดตลอดไปแบบไม่รู้จบ (ไม่ว่าจะติดที่เน็ต/เซิร์ฟเวอร์/deploy คนละ URL)
+      if (/YOUR-PROJECT|YOUR_KEY/.test(SUPABASE_URL + SUPABASE_KEY)) {
+        MySwal.fire('ยังไม่ได้ตั้งค่า', 'กรุณาใส่ SUPABASE_URL และ SUPABASE_KEY ที่ต้นสคริปต์ใน index.html', 'error');
+        throw new Error('ยังไม่ได้ตั้งค่า Supabase');
+      }
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000);
       try {
-        const res = await fetch(API_URL, {
+        const headers = { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY };
+        if (SUPABASE_KEY.indexOf('eyJ') === 0) headers['Authorization'] = 'Bearer ' + SUPABASE_KEY; // คีย์แบบเก่า (JWT) ต้องส่งเพิ่ม
+        const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/oomsin_api', {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action, ...payload }),
+          headers: headers,
+          body: JSON.stringify({ action, payload }),
           signal: controller.signal
         });
         if (!res.ok) {
           throw new Error('เครือข่ายผิดพลาด (HTTP ' + res.status + ')');
         }
-        return await res.json();
+        return postProcess(action, await res.json());
       } catch (err) {
         if (err.name === 'AbortError') {
           throw new Error('เชื่อมต่อเซิร์ฟเวอร์นานเกินไป กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
@@ -721,6 +735,7 @@
         clearTimeout(timeoutId);
       }
     }
+    // API-END>>>
 
     // ป้องกันกดปุ่มบันทึกซ้ำระหว่างรอผลลัพธ์จากเซิร์ฟเวอร์ (ดับเบิลคลิก/กดรัวตอนเน็ตช้า)
     // ปิดปุ่มจริง (disabled) ทันทีที่กด ไม่ใช่แค่โชว์ป๊อปอัพโหลด เพราะป๊อปอัพอาจขึ้นช้ากว่าคลิกที่สอง 1 จังหวะ
@@ -1417,14 +1432,193 @@
       container.innerHTML = overviewHtml + html;
     }
 
+    // <<<DOCX-BEGIN
+    // ==================== สร้างเอกสาร Word (.docx) ในเบราว์เซอร์ (แทน Google Docs เดิม) ====================
+    // รับไลบรารี docx (D) เข้ามา จึงทดสอบนอกเบราว์เซอร์ได้ — รูปแบบเอกสารทำตามฉบับ Google Docs เดิม
+    function makeDocxBuilders(D) {
+      var FONT = 'Sarabun';
+      var C = D.AlignmentType.CENTER, R = D.AlignmentType.RIGHT, J = D.AlignmentType.BOTH;
+      var SIGNERS = [
+        ['นายโชคดี พัฒเชียรทอง', 'หัวหน้าฝ่ายปกครอง'],
+        ['นายนิรุตต์ รุ่งเรือง', 'รองผู้อำนวยการระดับมัธยมศึกษาตอนปลาย'],
+        ['นางสาวนันท์รัตน์ เกื้อหนุน', 'ผู้อำนวยการโรงเรียนธนาคารออมสิน']
+      ];
+      function thDigits(s) { return String(s).replace(/[0-9]/g, function (d) { return '๐๑๒๓๔๕๖๗๘๙'.charAt(+d); }); }
+      function runs(text, o) {
+        return String(text).split('\n').map(function (p, i) {
+          return new D.TextRun({ text: p, font: FONT, size: o.size || 32, bold: !!o.bold, break: i > 0 ? 1 : undefined });
+        });
+      }
+      function para(text, o) {
+        o = o || {};
+        return new D.Paragraph({ alignment: o.align, indent: o.indent, keepNext: o.keepNext,
+          spacing: { before: o.before || 0, after: o.after === undefined ? 120 : o.after }, children: runs(text, o) });
+      }
+      function cell(text, w, o) {
+        o = o || {};
+        return new D.TableCell({ width: { size: w, type: D.WidthType.DXA }, verticalAlign: D.VerticalAlign.CENTER,
+          margins: { top: 40, bottom: 40, left: 80, right: 80 },
+          children: [para(text, { size: o.size || 28, bold: o.bold, align: o.align, after: 0 })] });
+      }
+      function table(rows, widths, o) {
+        o = o || {};
+        var total = widths.reduce(function (a, b) { return a + b; }, 0);
+        return new D.Table({ width: { size: total, type: D.WidthType.DXA }, columnWidths: widths, borders: o.noBorder ? D.TableBorders.NONE : undefined,
+          rows: rows.map(function (r, i) {
+            var head = o.header && i === 0;
+            return new D.TableRow({ tableHeader: !!head, cantSplit: true, children: r.map(function (c, j) {
+              var mid = head || (o.center && o.center.indexOf(j) >= 0);
+              return cell(c, widths[j], { bold: head, size: head ? 30 : 28, align: mid ? C : undefined });
+            }) });
+          }) });
+      }
+      function signBlocks() {
+        var out = [para('', { after: 360 })];
+        SIGNERS.forEach(function (s) {
+          out.push(para('ลงชื่อ..........................................................', { align: C, after: 0, keepNext: true }));
+          out.push(para('(' + s[0] + ')\n' + s[1], { align: C, after: 300 }));
+        });
+        return out;
+      }
+      function doc(children) {
+        return new D.Document({ styles: { default: { document: { run: { font: FONT, size: 32 } } } },
+          sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1134, bottom: 1134, left: 1247, right: 1247 } } }, children: children }] });
+      }
+      function thShortDate(iso) { var p = String(iso).split('-'); return (+p[2]) + '/' + (+p[1]) + '/' + (+p[0] + 543); }
+
+      // 1) ทะเบียนรายงานนักเรียนที่ผิดระเบียบ (ช่วงเดือน)
+      function buildDisciplineReport(data) {
+        var label = data.startMonth === data.endMonth ? data.startMonth : 'ตั้งแต่ ' + data.startMonth + ' ถึง ' + data.endMonth;
+        var rep = data.report || [];
+        var viol = rep.filter(function (r) { return r.brokenRules && r.brokenRules.length > 0; });
+        var pend = rep.filter(function (r) { return !r.notInspected && !(r.brokenRules && r.brokenRules.length) && r.pendingRules && r.pendingRules.length > 0; }).length;
+        var notInsp = rep.filter(function (r) { return r.notInspected; }).length;
+        var kids = [
+          para('บันทึกข้อความ', { bold: true, align: C }),
+          para('เรื่อง ทะเบียนรายงานนักเรียนที่ผิดระเบียบการแต่งกาย ประจำเดือน ' + label + ' ปีการศึกษา ' + data.academicYear, { bold: true, align: C }),
+          para('ตารางสรุปรายชื่อนักเรียนที่ผิดระเบียบการแต่งกาย ดังต่อไปนี้', { before: 240 })
+        ];
+        if (!viol.length) kids.push(para('- ไม่พบนักเรียนที่ผิดระเบียบในช่วงเวลาดังกล่าว -', { align: C }));
+        else {
+          var rows = [['ลำดับ', 'ชื่อ-สกุล', 'ชั้น', 'เดือน', 'รายการที่ผิดระเบียบ']];
+          viol.forEach(function (st, i) { rows.push([String(i + 1), st.name, st.className, st.month, st.brokenRules.join(', ')]); });
+          kids.push(table(rows, [1000, 2900, 900, 1300, 3200], { header: true, center: [0, 2] }));
+        }
+        if (pend || notInsp) {
+          var parts = []; if (pend) parts.push('ตรวจไม่ครบ ' + pend + ' คน'); if (notInsp) parts.push('ยังไม่ได้ตรวจเลย ' + notInsp + ' คน');
+          kids.push(para('หมายเหตุ: ในช่วงเวลานี้มีนักเรียนที่' + parts.join(' และ ') + ' (ดูรายละเอียดในหน้ารายงานของระบบ)', { size: 28, before: 240 }));
+        }
+        return doc(kids.concat(signBlocks()));
+      }
+
+      // 2) รายงานประวัตินักเรียนรายบุคคล
+      function buildStudentHistory(d) {
+        var cr = d.conductResult || { score: 100, totalDeducted: 0, records: [] }, ir = d.inspectResult || { records: [] };
+        var at = d.attendanceSummary || { absent: 0, late: 0, leave: 0 };
+        var kids = [
+          para('บันทึกข้อความ', { bold: true, align: C }),
+          para('เรื่อง รายงานประวัตินักเรียนรายบุคคล', { bold: true, align: C }),
+          para('ชื่อ-สกุล: ' + d.studentName + '     ชั้น: ' + d.studentClass),
+          para('1. สรุปคะแนนความประพฤติและการมาเรียน', { bold: true, before: 240 }),
+          para('คะแนนความประพฤติปัจจุบัน: ' + cr.score + ' คะแนน (จากคะแนนเต็ม 100 คะแนน หักไปแล้ว ' + cr.totalDeducted + ' คะแนน)'),
+          para('ขาดเรียน: ' + at.absent + ' วัน     มาสาย: ' + at.late + ' ครั้ง     ลา/ป่วย: ' + at.leave + ' วัน'),
+          para('2. ประวัติการถูกตัดคะแนนความประพฤติ', { bold: true, before: 240 })
+        ];
+        if (!cr.records.length) kids.push(para('- ไม่มีประวัติถูกตัดคะแนน -', { align: C }));
+        else {
+          var rows = [['ลำดับ', 'วันที่', 'เวลา', 'รายการที่ทำผิด', 'คะแนนที่ตัด']];
+          cr.records.forEach(function (r, i) { rows.push([String(i + 1), thShortDate(r.date), r.time || '-', r.rule, String(r.points)]); });
+          kids.push(table(rows, [1000, 1500, 1000, 4400, 1400], { header: true, center: [0, 1, 2, 4] }));
+        }
+        kids.push(para('3. ประวัติการตรวจเครื่องแต่งกาย (เฉพาะเดือนที่พบข้อบกพร่อง)', { bold: true, before: 240 }));
+        var bad = (ir.records || []).filter(function (r) { return r.brokenRules && r.brokenRules.length > 0; }).sort(function (a, b) { return String(b.period).localeCompare(String(a.period)); });
+        if (!bad.length) kids.push(para('- ไม่พบประวัติการแต่งกายผิดระเบียบ -', { align: C }));
+        else {
+          var rows2 = [['ลำดับ', 'เดือน', 'รายการที่ไม่ผ่าน']];
+          bad.forEach(function (r, i) { rows2.push([String(i + 1), r['เดือน'] + (r['ปี'] ? ' ' + r['ปี'] : ''), r.brokenRules.join(', ')]); });
+          kids.push(table(rows2, [1000, 2400, 5900], { header: true, center: [0] }));
+        }
+        return doc(kids.concat(signBlocks()));
+      }
+
+      // 3) หนังสือว่ากล่าวตักเตือน / หนังสือทำทัณฑ์บน (ตัดคะแนน 40 ขึ้นไป = ทัณฑ์บน)
+      function buildConductLetter(rec) {
+        var isP = !!rec.isProbation, p = String(rec.dateStr).split('-');
+        var thDate = (+p[2]) + ' / ' + (+p[1]) + ' / ' + (+p[0] + 543);
+        var yr = thDigits(rec.academicYear), sem = thDigits(rec.semester), ind = { firstLine: 720 };
+        var kids = [
+          para(isP ? 'หนังสือทำทัณฑ์บนนักเรียน' : 'หนังสือว่ากล่าวตักเตือน', { bold: true, align: C }),
+          para('โรงเรียนธนาคารออมสิน อำเภอบางสะพาน จังหวัดประจวบคีรีขันธ์ ๗๗๒๓๐', { align: R }),
+          para('วันที่ ' + thDate, { align: R })
+        ];
+        if (isP) {
+          kids.push(para('เนื่องจาก ' + rec.name + ' นักเรียนชั้น ' + rec.className + ' ภาคเรียนที่ ' + sem + ' ปีการศึกษา ' + yr + ' ซึ่งเป็นนักเรียนในความปกครองของท่านได้ประพฤติตนผิดต่อระเบียบข้อบังคับของโรงเรียน โดยมีความผิดเรื่อง: "' + rec.rule + '" อันไม่เหมาะสมกับสภาพนักเรียน', { indent: ind, align: J }));
+          kids.push(para('ทางโรงเรียนได้เห็นว่าการประพฤติตนของนักเรียนดังกล่าวเป็นพฤติกรรมที่เสี่ยง จึงเห็นเป็นการสมควรให้นักเรียนได้ให้คำมั่นสัญญาต่อทางโรงเรียนเป็นลายลักษณ์อักษร เพื่อช่วยกันกวดขันอบรมให้นักเรียนได้ปรับปรุงแก้ไขพฤติกรรม หากปรากฏว่านักเรียนดังกล่าวยังฝ่าฝืนอีก ข้าพเจ้าซึ่งเป็นผู้ปกครองยินยอมให้ทางโรงเรียนพิจารณาลงโทษขั้นสูงสุด', { indent: ind, align: J }));
+        } else {
+          kids.push(para('ด้วย ' + rec.name + ' นักเรียนชั้น ' + rec.className + ' ปีการศึกษา ' + yr + ' ได้กระทำผิดระเบียบ วินัย กฎของโรงเรียน โดยมีความผิดเรื่อง: "' + rec.rule + '"', { indent: ind, align: J }));
+          kids.push(para('การกระทำดังกล่าวเป็นการกระทำผิดระเบียบ ทางฝ่ายปกครองจึงได้ทำหนังสือตักเตือนนักเรียนเพื่อไม่ให้ประพฤติปฏิบัติเช่นนี้อีก หากยังฝ่าฝืนนักเรียนจะถูกดำเนินการทางวินัยโดยหักคะแนนความประพฤติและทำหนังสือทัณฑ์บนต่อไป', { indent: ind, align: J }));
+        }
+        if (rec.description) kids.push(para('หมายเหตุ: ' + rec.description, { indent: ind, align: J }));
+        kids.push(para('', { after: 360 }));
+        kids.push(table([
+          ['ลงชื่อ....................นักเรียน', 'ลงชื่อ....................ผู้ปกครอง'],
+          ['(' + rec.name + ')', '(..............................)'],
+          ['\nลงชื่อ................ครูประจำชั้น', '\nลงชื่อ................ครูประจำชั้น'],
+          ['(..............................)', '(..............................)']
+        ], [4650, 4650], { noBorder: true, center: [0, 1] }));
+        kids.push(para('', { after: 240 }));
+        SIGNERS.forEach(function (s) {
+          kids.push(para('ลงชื่อ......................................................', { align: C, indent: { left: 3300 }, after: 0, keepNext: true }));
+          kids.push(para('(' + s[0] + ')\n' + s[1], { align: C, indent: { left: 3300 }, after: 300 }));
+        });
+        return doc(kids);
+      }
+
+      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, thDigits: thDigits };
+    }
+
+    var DOCX_CDN = 'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js';
+    var docxBuilders = null, lastDocxUrl = null;
+    function docxError(msg) { var e = new Error(msg); e.docx = true; return e; }
+    // โหลดตัวสร้างไฟล์ Word เฉพาะตอนที่ต้องใช้ (ไม่ทำให้หน้าเว็บเปิดช้าลง)
+    function loadDocx() {
+      if (docxBuilders) return Promise.resolve(docxBuilders);
+      return new Promise(function (resolve, reject) {
+        var ready = function () {
+          try { docxBuilders = makeDocxBuilders(window.docx); resolve(docxBuilders); }
+          catch (e) { reject(docxError('เตรียมตัวสร้างไฟล์ Word ไม่สำเร็จ: ' + (e && e.message))); }
+        };
+        if (window.docx) return ready();
+        var sc = document.createElement('script');
+        sc.src = DOCX_CDN; sc.onload = ready;
+        sc.onerror = function () { reject(docxError('โหลดตัวสร้างไฟล์ Word ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่')); };
+        document.head.appendChild(sc);
+      });
+    }
+    function safeFileName(t) { return String(t).replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').trim(); }
+    function escHtmlAttr(t) { return String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    // สร้างไฟล์แล้วโชว์ปุ่มให้กดดาวน์โหลดเอง (iPad/Safari มักบล็อกการดาวน์โหลดอัตโนมัติหลังรอเครือข่าย)
+    function presentDocx(docObj, fileName, introHtml) {
+      return Promise.resolve().then(function () { return window.docx.Packer.toBlob(docObj); }).then(function (blob) {
+        if (lastDocxUrl) URL.revokeObjectURL(lastDocxUrl);
+        lastDocxUrl = URL.createObjectURL(blob);
+        return MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: (introHtml || '') + '<div class="flex flex-col gap-3 mt-5"><a href="' + lastDocxUrl + '" download="' + escHtmlAttr(safeFileName(fileName)) + '.docx" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดไฟล์ Word (.docx)</a></div>' });
+      }, function (e) { throw docxError('สร้างไฟล์ Word ไม่สำเร็จ: ' + ((e && e.message) || e)); });
+    }
+    function fmtStamp(t) { var m = String(t || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/); return m ? (+m[3]) + '/' + (+m[2]) + '/' + (+m[1] + 543) + ' ' + m[4] + ':' + m[5] : (t || ''); }
+    const docxErrText = (err) => (err && err.docx) ? err.message : 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+    // DOCX-END>>>
+
     function exportDisciplineReportList() {
       if (!currentDiscStartMonth || !currentDiscEndMonth) { MySwal.fire('ข้อผิดพลาด', 'ไม่พบข้อมูลเดือนที่เลือก', 'error'); return; }
       const btn = document.getElementById('btn-export-discipline');
       if (!lockButton(btn)) return;
       MySwal.fire({ title: 'กำลังสร้างหนังสือราชการ...', html: 'กรุณารอสักครู่ ระบบกำลังสร้างไฟล์เอกสาร', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       callAPI('exportMonthlyDisciplineReportDoc', { startMonth: currentDiscStartMonth, endMonth: currentDiscEndMonth, password: currentDisciplineAuth }).then(res => {
-        if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` }); } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
-      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        if (!res.success) { MySwal.fire('ล้มเหลว', res.message, 'error'); return; }
+        const label = res.startMonth === res.endMonth ? res.startMonth : `${res.startMonth}-${res.endMonth}`;
+        return loadDocx().then(B => presentDocx(B.buildDisciplineReport(res), `ทะเบียนรายงานนักเรียนที่ผิดระเบียบ_${label}_${res.academicYear}`));
+      }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
         .finally(() => unlockButton(btn));
     }
 
@@ -1499,15 +1693,16 @@
       });
     }
 
-    // ส่งออกประวัติของนักเรียนที่กำลังดูอยู่เป็นเอกสาร Google Docs (บันทึกข้อความทางการ)
+    // ส่งออกประวัติของนักเรียนที่กำลังดูอยู่เป็นไฟล์ Word (บันทึกข้อความทางการ)
     function exportStudentHistoryReport() {
       if (!currentHistoryName || !currentHistoryClass) { MySwal.fire('เดี๋ยวก่อน!', 'กรุณาค้นหาและเลือกดูประวัตินักเรียนก่อนครับ', 'warning'); return; }
       const btn = document.getElementById('btn-export-history');
       if (!lockButton(btn)) return;
       MySwal.fire({ title: 'กำลังสร้างหนังสือราชการ...', html: 'กรุณารอสักครู่ ระบบกำลังสร้างไฟล์เอกสาร', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       callAPI('exportStudentHistoryDoc', { name: currentHistoryName, className: currentHistoryClass, password: currentDisciplineAuth }).then(res => {
-        if (res.success) { MySwal.fire({ icon: 'success', title: 'สร้างเอกสารสำเร็จ!', html: `<div class="flex flex-col gap-3 mt-5"><a href="${res.docxUrl}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:shadow-lg transition">ดาวน์โหลดเป็นไฟล์ Word (.docx)</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-700 px-5 py-3.5 rounded-xl border border-gray-300 font-bold inline-flex items-center justify-center gap-2 hover:bg-gray-200 transition">เปิดดูใน Google Docs</a></div>` }); } else { MySwal.fire('ล้มเหลว', res.message, 'error'); }
-      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        if (!res.success) { MySwal.fire('ล้มเหลว', res.message, 'error'); return; }
+        return loadDocx().then(B => presentDocx(B.buildStudentHistory(res), `รายงานประวัตินักเรียนรายบุคคล_${res.studentName}_${res.studentClass}`));
+      }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
         .finally(() => unlockButton(btn));
     }
 
@@ -1549,49 +1744,6 @@
           loadLockedRules();
         } else {
           MySwal.fire('ผิดพลาด', res.message, 'error');
-        }
-      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
-    }
-
-    // ==================== เก็บถาวรข้อมูลเก่า (ฝ่ายปกครอง) ====================
-    async function openArchiveManager() {
-      const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#b45309', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '7846') {
-        currentDisciplineAuth = password;
-        showArchiveDatePicker();
-      } else if (password) {
-        MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
-      }
-    }
-
-    async function showArchiveDatePicker() {
-      const todayStr = localDateStr();
-      const { value: cutoffDateStr } = await MySwal.fire({
-        title: '📦 เก็บถาวรข้อมูลเก่า',
-        html: `<div class="text-left text-sm text-gray-600 mb-3">ระบบจะย้ายข้อมูล<b>ตรวจแต่งกาย เช็คชื่อ และพฤติกรรม ที่เก่ากว่าวันที่เลือก</b> ไปเก็บไว้ในชีตสำรอง (ไม่ได้ลบทิ้ง — รายงาน ประวัติรายบุคคล และเปรียบเทียบรายเดือน ยังดึงข้อมูลเก่ามารวมได้ตามปกติ)<br><br>แนะนำ: เลือกวันเริ่มต้นภาคเรียนปัจจุบัน เพื่อย้ายเฉพาะข้อมูลภาคเรียนก่อนหน้า</div><div class="text-left ml-1 text-sm text-gray-600 font-bold mb-1">ย้ายข้อมูลที่เก่ากว่าวันที่:</div><input id="archive-cutoff-date" type="date" max="${todayStr}" class="swal2-input" style="display:flex;width:90%;margin:5px auto 5px auto;font-size:16px;border-radius:12px;padding:12px;">`,
-        confirmButtonText: 'ดูสรุปก่อนย้าย', confirmButtonColor: '#b45309', showCancelButton: true, cancelButtonText: 'ยกเลิก',
-        preConfirm: () => {
-          const date = document.getElementById('archive-cutoff-date').value;
-          if (!date) { Swal.showValidationMessage('กรุณาเลือกวันที่'); return false; }
-          return date;
-        }
-      });
-      if (cutoffDateStr) confirmAndArchive(cutoffDateStr);
-    }
-
-    async function confirmAndArchive(cutoffDateStr) {
-      const { isConfirmed } = await MySwal.fire({
-        title: 'ยืนยันการเก็บถาวร?',
-        html: `จะย้ายข้อมูลที่เก่ากว่า <b>${formatThaiDate(cutoffDateStr)}</b> ออกจากชีตหลักทั้งหมด<br>การดำเนินการนี้จะเขียนทับชีตหลัก กรุณายืนยันว่าต้องการดำเนินการต่อ`,
-        icon: 'warning', confirmButtonText: 'ยืนยัน เก็บถาวรเลย', confirmButtonColor: '#b45309', showCancelButton: true, cancelButtonText: 'ยกเลิก'
-      });
-      if (!isConfirmed) return;
-      MySwal.fire({ title: 'กำลังเก็บถาวรข้อมูล...', html: 'อาจใช้เวลาสักครู่ กรุณารอ', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      callAPI('archiveOldData', { cutoffDateStr: cutoffDateStr, password: currentDisciplineAuth }).then(res => {
-        if (res.success) {
-          MySwal.fire({ icon: 'success', title: 'เก็บถาวรสำเร็จ!', html: '<div class="text-left text-sm">' + res.summary.map(s => '• ' + s).join('<br>') + '</div>', confirmButtonColor: '#b45309' });
-        } else {
-          MySwal.fire('ล้มเหลว', res.message, 'error');
         }
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
     }
@@ -1767,7 +1919,7 @@
       const records = result.records.map(rec => { let cleanRec = { brokenRules: rec.brokenRules }; for (let key in rec) { if (key !== 'brokenRules') cleanRec[key.trim()] = rec[key]; } return cleanRec; });
       // เรียงประวัติให้เดือนล่าสุดอยู่บนสุด (เดือนที่ตรวจไปแล้วจะไหลลงด้านล่าง)
       const thMonthsCalendarOrder = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-      records.sort((a, b) => thMonthsCalendarOrder.indexOf(b['เดือน']) - thMonthsCalendarOrder.indexOf(a['เดือน']));
+      records.sort((a, b) => (a.period && b.period) ? String(b.period).localeCompare(String(a.period)) : thMonthsCalendarOrder.indexOf(b['เดือน']) - thMonthsCalendarOrder.indexOf(a['เดือน']));
       let overallBroken = {}; for (let key in result.overallBroken) overallBroken[key.trim()] = result.overallBroken[key];
 
       // --- Widget คะแนนพฤติกรรม ---
@@ -1886,7 +2038,7 @@
         let borderColor = hasBrokenThisMonth ? 'border-red-400' : 'border-green-400';
         let statusBadge = hasBrokenThisMonth ? `<div class="bg-red-50 text-red-700 px-4 py-3 rounded-xl text-sm mb-5 border border-red-200"><strong>จุดที่ต้องแก้ไข:</strong> <span class="font-medium">${rec.brokenRules.join(', ')}</span></div>` : `<div class="bg-green-50 text-green-700 px-4 py-3 rounded-xl text-base mb-5 border border-green-200 flex items-center gap-2"><strong>สถานะ:</strong> ผ่านระเบียบเรียบร้อย 💖</div>`;
         let card = `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-l-8 ${borderColor} shadow-md">`;
-        card += `<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-5 gap-3"><h4 class="font-extrabold text-gray-800 text-xl">เดือน: ${rec['เดือน'] || 'ไม่มีข้อมูล'}</h4><span class="text-[11px] font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">${rec['Timestamp'] || ''}</span></div>`;
+        card += `<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-5 gap-3"><h4 class="font-extrabold text-gray-800 text-xl">เดือน: ${rec['เดือน'] || 'ไม่มีข้อมูล'}${rec['ปี'] ? ' ' + rec['ปี'] : ''}</h4><span class="text-[11px] font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">${fmtStamp(rec['Timestamp'])}</span></div>`;
         card += statusBadge;
         card += `<div class="grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-3 text-sm">`;
         ruleItems.forEach(rule => {
@@ -2342,12 +2494,17 @@
       let ruleDesc = globalConductRules[ruleIdx].rule;
       let description = document.getElementById('conduct-description').value.trim();
       let payload = { name: document.getElementById('conduct-student-name').value, className: document.getElementById('conduct-student-class').value, dateStr: dStr, timeStr: tStr, month: monthStr, rule: ruleDesc, points: points, description: description, password: currentDisciplineAuth };
-      MySwal.fire({ title: 'กำลังบันทึกและสร้างเอกสาร...', html: 'อาจใช้เวลา 10-15 วินาที กรุณารอสักครู่', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
+      MySwal.fire({ title: 'กำลังบันทึกและสร้างเอกสาร...', html: 'กรุณารอสักครู่', allowOutsideClick: false, didOpen: () => MySwal.showLoading() });
       callAPI('saveConductAndGenerateDoc', { data: payload }).then(res => {
-        if (res.success) {
-          MySwal.fire({ icon: 'success', title: 'ดำเนินการสำเร็จ!', html: `บันทึกข้อมูลและสร้างหนังสือราชการเรียบร้อยแล้ว<br><br><div class="flex flex-col gap-2 mt-2"><a href="${res.docxUrl}" class="bg-blue-600 text-white p-4 rounded-xl shadow-md font-bold text-sm hover:bg-blue-700 transition">ดาวน์โหลดไฟล์ Word</a><a href="${res.docUrl}" target="_blank" class="bg-gray-100 text-gray-800 p-4 rounded-xl shadow-sm border border-gray-300 font-bold text-sm hover:bg-gray-200 transition">เปิดดู Google Docs</a></div>` }).then(() => loadConductOverview());
-        } else { MySwal.fire('ผิดพลาด', res.message, 'error'); }
-      }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'))
+        if (!res.success) { MySwal.fire('ผิดพลาด', res.message, 'error'); return; }
+        const rec = res.record;
+        const fileName = (rec.isProbation ? 'หนังสือทำทัณฑ์บน_' : 'หนังสือว่ากล่าวตักเตือน_') + rec.name;
+        // ข้อมูลถูกบันทึกแล้ว — ถ้าสร้างไฟล์ Word ไม่สำเร็จ ให้ลองสร้างใหม่ได้โดยไม่ต้องบันทึกซ้ำ (กันแถวซ้ำ)
+        const tryDoc = () => loadDocx().then(B => presentDocx(B.buildConductLetter(rec), fileName, 'บันทึกข้อมูลเรียบร้อยแล้ว<br>'))
+          .catch(err => MySwal.fire({ icon: 'warning', title: 'บันทึกข้อมูลแล้ว แต่สร้างไฟล์ Word ไม่สำเร็จ', text: docxErrText(err), showCancelButton: true, confirmButtonText: 'ลองสร้างไฟล์อีกครั้ง', cancelButtonText: 'ปิด' })
+            .then(r => r.isConfirmed ? tryDoc() : null));
+        return tryDoc().then(() => loadConductOverview());
+      }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
         .finally(() => unlockButton(btn));
     }
 
