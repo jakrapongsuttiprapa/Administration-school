@@ -249,7 +249,15 @@
         <div class="relative z-20 w-full lg:w-[60%] mt-[270px] sm:mt-[290px] lg:mt-0">
           <div class="text-center lg:text-left mb-6 lg:mb-8">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2 drop-shadow-sm">สวัสดีนักเรียนม.ปลาย</h2>
-            <p class="text-gray-500 text-sm md:text-base font-medium bg-white/50 lg:bg-transparent inline-block lg:block px-3 py-1 rounded-lg">ภาคเรียนที่ 1 ปีการศึกษา 2569</p>
+            <div id="semester-bar" class="inline-flex lg:flex flex-wrap items-center justify-center lg:justify-start gap-2 bg-white/60 lg:bg-transparent px-3 py-1.5 rounded-xl">
+              <span class="text-gray-500 text-sm md:text-base font-medium">ภาคเรียนที่</span>
+              <div class="inline-flex rounded-xl overflow-hidden border-2 border-pink-300 shadow-sm" role="group" aria-label="เลือกภาคเรียน">
+                <button id="sem-btn-1" type="button" onclick="setSemester(1)" aria-pressed="false" class="px-4 py-1 font-extrabold text-sm md:text-base transition bg-white text-pink-600 hover:bg-pink-50">1</button>
+                <button id="sem-btn-2" type="button" onclick="setSemester(2)" aria-pressed="true" class="px-4 py-1 font-extrabold text-sm md:text-base transition bg-pink-500 text-white">2</button>
+              </div>
+              <span id="semester-ay" class="text-gray-500 text-sm md:text-base font-medium">ปีการศึกษา 2569</span>
+            </div>
+            <p id="semester-hint" class="text-gray-400 text-xs md:text-sm font-medium mt-1 text-center lg:text-left">เทอม 2 = พ.ย.–มี.ค. · คะแนนพฤติกรรมนับทั้งปีการศึกษา</p>
           </div>
 
           <!-- 4 ปุ่มหลัก -->
@@ -689,7 +697,13 @@
 
     // เรียงชื่อภาษาไทยที่หน้าเว็บ (ให้ตรงกับที่ระบบเดิมเรียง) — ฐานข้อมูลส่งมาเรียงแบบพื้นฐานไว้ก่อนแล้ว
     const thSort = (a, b) => String(a || '').localeCompare(String(b || ''));
-    const MONTH_ORDER = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    // ลำดับเดือนตามปีการศึกษา (พ.ค. ... เม.ย.) เพื่อให้ พ.ย. ธ.ค. ม.ค. ก.พ. มี.ค. เรียงต่อกันถูก
+    const MONTH_ORDER = ['พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม','มกราคม','กุมภาพันธ์','มีนาคม','เมษายน'];
+    // ภาคเรียนที่เลือก (หน้าแรกเปลี่ยนได้) ค่าเริ่มต้นมาจากฐานข้อมูล = เทอม 2 | ปีการศึกษา (พ.ศ.) เริ่มต้นคำนวณจากวันที่ แล้วฐานข้อมูลปรับให้ตรง
+    let currentSemester = 2;
+    let currentAY = (new Date().getFullYear() + 543) - (new Date().getMonth() < 4 ? 1 : 0);
+    // คำสั่งที่นับ/แสดงข้อมูลตามเทอม — callAPI แนบ semester และ academicYear ให้เองทุกครั้ง (หน้าเว็บที่เรียกไม่ต้องรู้เรื่องนี้)
+    const SEM_ACTIONS = new Set(['getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview']);
     const discReportSort = (a, b) => a.className === b.className
       ? (a.month === b.month ? thSort(a.name, b.name) : MONTH_ORDER.indexOf(a.month) - MONTH_ORDER.indexOf(b.month))
       : thSort(a.className, b.className);
@@ -719,7 +733,7 @@
         const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/oomsin_api', {
           method: 'POST',
           headers: headers,
-          body: JSON.stringify({ action, payload }),
+          body: JSON.stringify({ action, payload: SEM_ACTIONS.has(action) ? Object.assign({ semester: currentSemester, academicYear: currentAY }, payload) : payload }),
           signal: controller.signal
         });
         if (!res.ok) {
@@ -802,14 +816,62 @@
       return d + ' ' + (thMonthsShort[m - 1] || '') + ' ' + (y + 543);
     }
 
+    // <<<SEM-BEGIN
+    // ==================== ภาคเรียน ====================
+    // เทอม 1 = พ.ค.–ต.ค. | เทอม 2 = พ.ย.–มี.ค. | คะแนนพฤติกรรมนับทั้งปีการศึกษา ส่วนการแต่งกายและเช็คชื่อนับแยกเทอม
+    // (currentSemester / currentAY ประกาศไว้ในบล็อก API ด้านบน เพราะ callAPI ต้องใช้)
+    const THMONTHS_CAL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const SEM_MONTHS = {
+      1: ['พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม'],
+      2: ['พฤศจิกายน','ธันวาคม','มกราคม','กุมภาพันธ์','มีนาคม']
+    };
+    const ACADEMIC_MONTHS = MONTH_ORDER;
+    // เดือนของเทอมที่เลือก: เดือนล่าสุดที่ถึงแล้วอยู่บนสุด ไล่ย้อนไปเดือนแรก แล้วเดือนที่ยังไม่ถึงต่อท้าย
+    // เทอมที่จบแล้ว = เดือนสุดท้ายก่อน | เทอมที่ยังไม่เริ่ม = เรียงจากเดือนแรก
     function getRecentMonthsFirst() {
-      const thMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-      const currentIdx = new Date().getMonth();
-      let ordered = [];
-      for (let i = currentIdx; i >= 0; i--) ordered.push(thMonths[i]);
-      for (let i = currentIdx + 1; i < 12; i++) ordered.push(thMonths[i]);
-      return ordered;
+      const list = SEM_MONTHS[currentSemester] || SEM_MONTHS[2];
+      const Y = currentAY - 543, now = new Date(), nowKey = now.getFullYear() * 12 + now.getMonth();
+      const keyOf = (m) => { const mi = THMONTHS_CAL.indexOf(m); return (mi >= 4 ? Y : Y + 1) * 12 + mi; };
+      let cur = -1; list.forEach((m, i) => { if (keyOf(m) <= nowKey) cur = i; });
+      if (cur < 0) return list.slice();
+      const out = [];
+      for (let i = cur; i >= 0; i--) out.push(list[i]);
+      for (let i = cur + 1; i < list.length; i++) out.push(list[i]);
+      return out;
     }
+    function isThisMonth(m) { return THMONTHS_CAL[new Date().getMonth()] === m; }
+
+    const SEM_BTN_BASE = 'px-4 py-1 font-extrabold text-sm md:text-base transition ';
+    function updateSemesterChip() {
+      const chip = document.getElementById('semester-chip'); if (!chip) return;
+      chip.textContent = 'เทอม ' + currentSemester + ' · ' + currentAY;
+      chip.classList.toggle('hidden', !window.__currentView || window.__currentView === 'view-home');
+    }
+    function renderSemesterBar() {
+      [1, 2].forEach(n => {
+        const b = document.getElementById('sem-btn-' + n); if (!b) return;
+        b.className = SEM_BTN_BASE + (n === currentSemester ? 'bg-pink-500 text-white' : 'bg-white text-pink-600 hover:bg-pink-50');
+        b.setAttribute('aria-pressed', n === currentSemester ? 'true' : 'false');
+      });
+      const ay = document.getElementById('semester-ay'); if (ay) ay.textContent = 'ปีการศึกษา ' + currentAY;
+      const hint = document.getElementById('semester-hint');
+      if (hint) hint.textContent = (currentSemester === 1 ? 'เทอม 1 = พ.ค.–ต.ค.' : 'เทอม 2 = พ.ย.–มี.ค.') + ' · คะแนนพฤติกรรมนับทั้งปีการศึกษา';
+      updateSemesterChip();
+    }
+    // เปลี่ยนเทอมที่หน้าแรกเท่านั้น: ทุกหน้าที่เปิดหลังจากนี้ใช้เทอมนี้ (ไม่มีหน้าค้างที่ใช้ข้อมูลเทอมเก่า)
+    function setSemester(n) { currentSemester = (n === 1 || n === '1') ? 1 : 2; renderSemesterBar(); }
+    // ตอนเปิดแอป: ใช้ค่าที่ฐานข้อมูลตั้งไว้ (ค่าเริ่มต้น = เทอม 2) ถ้าเชื่อมต่อไม่ได้ก็ใช้ค่าเริ่มต้นในหน้าเว็บต่อไป
+    function initSemester() {
+      renderSemesterBar();
+      return callAPI('getSemesterConfig').then(cfg => {
+        if (cfg && cfg.success) {
+          if (cfg.defaultSemester === 1 || cfg.defaultSemester === 2) currentSemester = cfg.defaultSemester;
+          if (cfg.academicYear) currentAY = cfg.academicYear;
+          renderSemesterBar();
+        }
+      }).catch(() => {});
+    }
+    // SEM-END>>>
 
     const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-verify-inspection','view-student','view-student-history','view-lock-manager','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison','view-overview'];
 
@@ -829,10 +891,13 @@
       target.classList.remove('view-enter');
       void target.offsetWidth;
       target.classList.add('view-enter');
+      window.__currentView = id;
+      updateSemesterChip();
     }
 
     function initDashboard() {
       showView('view-home');
+      initSemester();
       loadDashboardStats();
     }
 
@@ -985,7 +1050,7 @@
       const classes = ALL_CLASSES;
       const months = getRecentMonthsFirst(); // เดือนล่าสุดอยู่บนสุด เดือนที่ผ่าน/ตรวจไปแล้วไล่ลงด้านล่าง
       let classOptions = classes.map(c => `<option value="${c}">${c}</option>`).join('');
-      let monthOptions = months.map((m, i) => `<option value="${m}">${m}${i === 0 ? ' (เดือนปัจจุบัน)' : ''}</option>`).join('');
+      let monthOptions = months.map((m, i) => `<option value="${m}">${m}${isThisMonth(m) ? ' (เดือนปัจจุบัน)' : ''}</option>`).join('');
       const { value: formValues } = await MySwal.fire({
         title: 'เลือกห้องและเดือนที่ตรวจ',
         html: `<select id="swal-class" class="swal2-select mb-4" style="display:flex;width:85%;margin:15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องเรียน --</option>${classOptions}</select><select id="swal-month" class="swal2-select" style="display:flex;width:85%;margin:10px auto 20px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกเดือน --</option>${monthOptions}</select>`,
@@ -1165,9 +1230,9 @@
     }
 
     async function showDisciplineMonthSelector() {
-      const months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      const months = (SEM_MONTHS[currentSemester] || SEM_MONTHS[2]).slice();   // เฉพาะเดือนของเทอมที่เลือก เรียงตามปีการศึกษา
       let monthOptionsStart = months.map((m,i) => `<option value="${m}" ${i===0?'selected':''}>${m}</option>`).join('');
-      let monthOptionsEnd = months.map((m,i) => `<option value="${m}" ${i===11?'selected':''}>${m}</option>`).join('');
+      let monthOptionsEnd = months.map((m,i) => `<option value="${m}" ${i===months.length-1?'selected':''}>${m}</option>`).join('');
       const { value: formValues } = await MySwal.fire({
         title: 'เลือกช่วงเวลาที่ต้องการดูรายงาน',
         html: `<div class="text-left ml-6 mt-4 text-sm text-gray-600 font-bold">ตั้งแต่เดือน:</div><select id="swal-disc-start" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;">${monthOptionsStart}</select><div class="text-left ml-6 text-sm text-gray-600 font-bold">ถึงเดือน:</div><select id="swal-disc-end" class="swal2-select" style="display:flex;width:85%;margin:5px auto 10px auto;font-size:16px;border-radius:12px;padding:12px;">${monthOptionsEnd}</select>`,
@@ -1182,7 +1247,7 @@
 
     async function selectVerifyClassMonth() {
       let classOptions = ALL_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
-      let monthOptions = getRecentMonthsFirst().map((m, i) => `<option value="${m}">${m}${i === 0 ? ' (เดือนปัจจุบัน)' : ''}</option>`).join('');
+      let monthOptions = getRecentMonthsFirst().map((m, i) => `<option value="${m}">${m}${isThisMonth(m) ? ' (เดือนปัจจุบัน)' : ''}</option>`).join('');
       const { value: formValues } = await MySwal.fire({
         title: 'เลือกห้องและเดือนที่จะตรวจสอบซ้ำ',
         html: `<select id="swal-verify-class" class="swal2-select mb-4" style="display:flex;width:85%;margin:15px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกห้องเรียน --</option>${classOptions}</select><select id="swal-verify-month" class="swal2-select" style="display:flex;width:85%;margin:10px auto 20px auto;font-size:16px;border-radius:12px;padding:12px;"><option value="" disabled selected>-- เลือกเดือน --</option>${monthOptions}</select>`,
@@ -1315,7 +1380,7 @@
       const container = document.getElementById('discipline-report-container'); container.innerHTML = '';
       if (reportData.length === 0) { container.innerHTML = `<div class="glass-card p-12 text-center rounded-3xl text-green-600 font-extrabold text-2xl shadow">🎉 ยอดเยี่ยมมาก!<br><span class="text-gray-500 text-sm font-medium mt-3 block">ไม่มีนักเรียนที่ผิดระเบียบในช่วงเวลาที่เลือก</span></div>`; return; }
 
-      const thMonthsOrder = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      const thMonthsOrder = ACADEMIC_MONTHS;   // เรียงเดือนตามปีการศึกษา (พ.ย. ธ.ค. ม.ค. ก.พ. มี.ค.)
       const esc = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
       // จัดกลุ่มข้อมูล: ห้อง -> นักเรียน -> สรุปจำนวนครั้งที่ผิดจริง / ข้อที่ยังไม่ตรวจ / เดือนที่ไม่ได้ตรวจเลย / หมายเหตุหัวหน้าห้อง
@@ -1495,7 +1560,7 @@
         var notInsp = rep.filter(function (r) { return r.notInspected; }).length;
         var kids = [
           para('บันทึกข้อความ', { bold: true, align: C }),
-          para('เรื่อง ทะเบียนรายงานนักเรียนที่ผิดระเบียบการแต่งกาย ประจำเดือน ' + label + ' ปีการศึกษา ' + data.academicYear, { bold: true, align: C }),
+          para('เรื่อง ทะเบียนรายงานนักเรียนที่ผิดระเบียบการแต่งกาย ประจำเดือน ' + label + (data.semester ? ' ภาคเรียนที่ ' + data.semester : '') + ' ปีการศึกษา ' + data.academicYear, { bold: true, align: C }),
           para('ตารางสรุปรายชื่อนักเรียนที่ผิดระเบียบการแต่งกาย ดังต่อไปนี้', { before: 240 })
         ];
         if (!viol.length) kids.push(para('- ไม่พบนักเรียนที่ผิดระเบียบในช่วงเวลาดังกล่าว -', { align: C }));
@@ -1518,7 +1583,7 @@
         var kids = [
           para('บันทึกข้อความ', { bold: true, align: C }),
           para('เรื่อง รายงานประวัตินักเรียนรายบุคคล', { bold: true, align: C }),
-          para('ชื่อ-สกุล: ' + d.studentName + '     ชั้น: ' + d.studentClass),
+          para('ชื่อ-สกุล: ' + d.studentName + '     ชั้น: ' + d.studentClass + (d.academicYear ? '     ภาคเรียนที่ ' + d.semester + ' ปีการศึกษา ' + d.academicYear : '')),
           para('1. สรุปคะแนนความประพฤติและการมาเรียน', { bold: true, before: 240 }),
           para('คะแนนความประพฤติปัจจุบัน: ' + cr.score + ' คะแนน (จากคะแนนเต็ม 100 คะแนน หักไปแล้ว ' + cr.totalDeducted + ' คะแนน)'),
           para('ขาดเรียน: ' + at.absent + ' วัน     มาสาย: ' + at.late + ' ครั้ง     ลา/ป่วย: ' + at.leave + ' วัน'),
@@ -1965,7 +2030,7 @@
             </div>
             <div class="text-center sm:text-left flex-grow">
               <div class="font-extrabold text-2xl text-gray-800 mb-1">${scoreMsg}</div>
-              <div class="text-sm text-gray-500 font-medium">ถูกตัดคะแนนสะสม <strong class="text-red-500">${totalDed} คะแนน</strong> | เหลือ <strong style="color:${scoreColor}">${scoreVal} คะแนน</strong></div>
+              <div class="text-sm text-gray-500 font-medium">ถูกตัดคะแนนสะสมปีการศึกษา ${currentAY} <strong class="text-red-500">${totalDed} คะแนน</strong> | เหลือ <strong style="color:${scoreColor}">${scoreVal} คะแนน</strong></div>
               <div class="text-xs text-gray-400 mt-1">(เต็ม 100 คะแนน / ตัดคะแนนตามพฤติกรรมที่บันทึกโดยฝ่ายปกครอง)</div>
             </div>
           </div>
@@ -2026,7 +2091,7 @@
       if (hasBroken) {
         let brokenList = [];
         for (const [rule, count] of Object.entries(overallBroken)) brokenList.push(`<li class="bg-white p-3 rounded-xl border border-red-100 shadow-sm flex justify-between items-center"><span class="font-bold text-gray-700">${rule}</span> <span class="text-red-500 font-black bg-red-50 px-2 py-1 rounded-md text-xs">${count} ครั้ง</span></li>`);
-        summaryHtml = `<div class="glass-card bg-red-50/80 border-t-4 border-red-400 rounded-3xl p-6 md:p-8 mb-6 shadow-md"><h3 class="text-red-600 font-extrabold text-xl md:text-2xl mb-3">สรุปผลแต่งกายสะสม (จุดที่ควรปรับปรุง)</h3><ul class="text-sm grid grid-cols-1 sm:grid-cols-2 gap-3">${brokenList.join('')}</ul></div>`;
+        summaryHtml = `<div class="glass-card bg-red-50/80 border-t-4 border-red-400 rounded-3xl p-6 md:p-8 mb-6 shadow-md"><h3 class="text-red-600 font-extrabold text-xl md:text-2xl mb-3">สรุปผลแต่งกายเทอม ${currentSemester} (จุดที่ควรปรับปรุง)</h3><ul class="text-sm grid grid-cols-1 sm:grid-cols-2 gap-3">${brokenList.join('')}</ul></div>`;
       } else {
         summaryHtml = `<div class="glass-card bg-green-50/80 border-t-4 border-green-400 rounded-3xl p-10 mb-6 shadow-md text-center"><div class="text-7xl mb-5">🌟</div><h3 class="text-green-600 font-extrabold text-3xl mb-3">ยอดเยี่ยมมาก!</h3><p class="text-lg text-green-700 font-medium">คุณแต่งกายถูกระเบียบเป๊ะ ขอชื่นชมครับ!</p></div>`;
       }
@@ -2584,9 +2649,10 @@
 
     // ==================== ส่วนเปรียบเทียบรายเดือน ====================
     async function showComparisonView() {
-      const months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-      let optsA = months.map((m,i) => `<option value="${m}" ${i===4?'selected':''}>${m}</option>`).join('');
-      let optsB = months.map((m,i) => `<option value="${m}" ${i===5?'selected':''}>${m}</option>`).join('');
+      const months = (SEM_MONTHS[currentSemester] || SEM_MONTHS[2]).slice();   // เดือนของเทอมที่เลือก
+      const recentM = getRecentMonthsFirst(), defB = recentM[0], defA = recentM[1] || recentM[0];   // ค่าเริ่มต้น = เดือนล่าสุดเทียบกับเดือนก่อนหน้า
+      let optsA = months.map((m) => `<option value="${m}" ${m===defA?'selected':''}>${m}</option>`).join('');
+      let optsB = months.map((m) => `<option value="${m}" ${m===defB?'selected':''}>${m}</option>`).join('');
       const { value: form } = await MySwal.fire({
         title: '📊 เปรียบเทียบรายเดือน',
         html: `<p class="text-sm text-gray-500 mb-5 font-medium">เลือก 2 เดือนที่ต้องการเปรียบเทียบ</p><div class="flex flex-col gap-4"><div class="bg-violet-50 border border-violet-200 rounded-2xl p-4"><div class="text-xs font-extrabold text-violet-500 uppercase tracking-widest mb-2">เดือนที่ 1</div><select id="cmp-monthA" class="w-full border-2 border-violet-200 rounded-xl px-4 py-3 font-bold text-gray-800 focus:outline-none focus:border-violet-400 bg-white">${optsA}</select></div><div class="text-center text-2xl text-gray-400 font-black">VS</div><div class="bg-rose-50 border border-rose-200 rounded-2xl p-4"><div class="text-xs font-extrabold text-rose-500 uppercase tracking-widest mb-2">เดือนที่ 2</div><select id="cmp-monthB" class="w-full border-2 border-rose-200 rounded-xl px-4 py-3 font-bold text-gray-800 focus:outline-none focus:border-rose-400 bg-white">${optsB}</select></div></div>`,
@@ -2768,5 +2834,6 @@ function renderClassroomOverview(res) {
 }
 
   </script>
+  <div id="semester-chip" class="hidden fixed left-3 bottom-3 z-40 px-3 py-1.5 rounded-full bg-white/90 border border-pink-200 text-pink-600 text-xs font-extrabold shadow-md pointer-events-none select-none"></div>
 </body>
 </html>
