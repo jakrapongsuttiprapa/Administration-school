@@ -1232,7 +1232,8 @@
     async function showDisciplineMonthSelector() {
       const months = (SEM_MONTHS[currentSemester] || SEM_MONTHS[2]).slice();   // เฉพาะเดือนของเทอมที่เลือก เรียงตามปีการศึกษา
       let monthOptionsStart = months.map((m,i) => `<option value="${m}" ${i===0?'selected':''}>${m}</option>`).join('');
-      let monthOptionsEnd = months.map((m,i) => `<option value="${m}" ${i===months.length-1?'selected':''}>${m}</option>`).join('');
+      const defEnd = getRecentMonthsFirst()[0];   // เดือนสิ้นสุดเริ่มต้น = เดือนล่าสุดที่ถึงแล้ว (ไม่ครอบเดือนที่ยังไม่ถึง)
+      let monthOptionsEnd = months.map((m,i) => `<option value="${m}" ${m===defEnd?'selected':''}>${m}</option>`).join('');
       const { value: formValues } = await MySwal.fire({
         title: 'เลือกช่วงเวลาที่ต้องการดูรายงาน',
         html: `<div class="text-left ml-6 mt-4 text-sm text-gray-600 font-bold">ตั้งแต่เดือน:</div><select id="swal-disc-start" class="swal2-select mb-2" style="display:flex;width:85%;margin:5px auto 15px auto;font-size:16px;border-radius:12px;padding:12px;">${monthOptionsStart}</select><div class="text-left ml-6 text-sm text-gray-600 font-bold">ถึงเดือน:</div><select id="swal-disc-end" class="swal2-select" style="display:flex;width:85%;margin:5px auto 10px auto;font-size:16px;border-radius:12px;padding:12px;">${monthOptionsEnd}</select>`,
@@ -2650,7 +2651,7 @@
     // ==================== ส่วนเปรียบเทียบรายเดือน ====================
     async function showComparisonView() {
       const months = (SEM_MONTHS[currentSemester] || SEM_MONTHS[2]).slice();   // เดือนของเทอมที่เลือก
-      const recentM = getRecentMonthsFirst(), defB = recentM[0], defA = recentM[1] || recentM[0];   // ค่าเริ่มต้น = เดือนล่าสุดเทียบกับเดือนก่อนหน้า
+      const iB = Math.max(0, months.indexOf(getRecentMonthsFirst()[0])), defB = iB > 0 ? months[iB] : months[1], defA = iB > 0 ? months[iB - 1] : months[0];   // เดือนล่าสุดเทียบกับเดือนก่อนหน้า (เทอมยังไม่เริ่ม = สองเดือนแรก)
       let optsA = months.map((m) => `<option value="${m}" ${m===defA?'selected':''}>${m}</option>`).join('');
       let optsB = months.map((m) => `<option value="${m}" ${m===defB?'selected':''}>${m}</option>`).join('');
       const { value: form } = await MySwal.fire({
