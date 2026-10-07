@@ -181,7 +181,37 @@
         radial-gradient(120% 90% at 0% 0%, rgba(255,255,255,0.30) 0%, transparent 46%),
         radial-gradient(100% 85% at 100% 100%, rgba(255,255,255,0.10) 0%, transparent 52%);
     }
-  </style>
+  
+/* ===== UI ใหม่: การ์ดตรวจแต่งกาย / เช็คชื่อ ===== */
+.stu-card .stu-accent{background:linear-gradient(#d1d5db,#9ca3af)}
+.stu-card[data-status="pass"] .stu-accent{background:linear-gradient(#34d399,#10b981)}
+.stu-card[data-status="fail"] .stu-accent{background:linear-gradient(#fb7185,#e11d48)}
+.stu-card[data-status="pending"] .stu-accent{background:linear-gradient(#fcd34d,#f59e0b)}
+.stu-card[data-status="pass"] .stu-chip{background:#d1fae5;color:#047857}
+.stu-card[data-status="fail"] .stu-chip{background:#ffe4e6;color:#be123c}
+.stu-card[data-status="pending"] .stu-chip{background:#fef3c7;color:#b45309}
+.stu-card[data-status="pass"] .stu-prog-bar{background:linear-gradient(90deg,#34d399,#10b981)}
+.stu-card[data-status="fail"] .stu-prog-bar{background:linear-gradient(90deg,#fb7185,#e11d48)}
+.rule-box{transition:background .2s,border-color .2s}
+.rule-box[data-state="pass"]{background:#ecfdf5;border-color:#a7f3d0}
+.rule-box[data-state="fail"]{background:#fff1f2;border-color:#fda4af}
+.rule-box[data-state="na"]{background:#f3f4f6;border-color:#e5e7eb}
+.rule-box.rule-locked{background:#f3f4f6!important;border-color:#d1d5db!important}
+.rule-box[data-state="pass"] .rule-dot{background:#10b981}
+.rule-box[data-state="fail"] .rule-dot{background:#f43f5e}
+.rule-box[data-state="pending"] .rule-dot{background:#fbbf24}
+.rule-box[data-state="na"] .rule-dot{background:#9ca3af}
+.att-card .att-accent{background:linear-gradient(#d1d5db,#9ca3af)}
+.att-card[data-st="มาเรียน"] .att-accent{background:linear-gradient(#34d399,#10b981)}
+.att-card[data-st="มาสาย"] .att-accent{background:linear-gradient(#fdba74,#f97316)}
+.att-card[data-st="ขาดเรียน"] .att-accent{background:linear-gradient(#fb7185,#e11d48)}
+.att-card[data-st="ลา/ป่วย"] .att-accent{background:linear-gradient(#fde047,#eab308)}
+.seg-opt:active{transform:scale(.97)}
+.seg-opt:focus-within{box-shadow:0 0 0 3px rgba(236,72,153,.25)}
+
+details>summary{list-style:none}
+details>summary::-webkit-details-marker{display:none}
+</style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
 
@@ -377,6 +407,23 @@
       </div>
 
       <!-- Stats + Activities -->
+      <div id="sem-progress" class="hidden rise glass-card elev rounded-3xl border-t-4 border-fuchsia-400 relative overflow-hidden p-5 md:p-6 mb-6" style="--d:0.1s">
+        <div class="absolute inset-0 bg-gradient-to-r from-fuchsia-50 via-pink-50/60 to-white pointer-events-none"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="min-w-0">
+              <p class="text-[10px] font-bold text-fuchsia-400 uppercase tracking-[0.15em] mb-1">ความคืบหน้าภาคเรียน</p>
+              <h3 id="semprog-title" class="font-black text-gray-800 text-xl leading-tight">ภาคเรียนที่ 2 · ปีการศึกษา 2569</h3>
+            </div>
+            <span id="semprog-badge" class="text-xs font-extrabold px-3 py-1.5 rounded-full bg-fuchsia-100 text-fuchsia-600 whitespace-nowrap">กำลังโหลด...</span>
+          </div>
+          <div class="mt-4 h-3.5 rounded-full bg-white/80 border border-fuchsia-100 overflow-hidden shadow-inner">
+            <div id="semprog-bar" class="h-full rounded-full bg-gradient-to-r from-fuchsia-400 via-pink-500 to-rose-500" style="width:0%;transition:width 1.2s cubic-bezier(.22,1,.36,1)"></div>
+          </div>
+          <div class="flex justify-between items-center text-[11px] font-bold text-gray-400 mt-1.5"><span id="semprog-from">–</span><span id="semprog-pct" class="text-fuchsia-600 text-sm font-black tabular">0%</span><span id="semprog-to">–</span></div>
+          <div id="semprog-months" class="flex flex-wrap gap-2 mt-4"></div>
+        </div>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="rise glass-card elev hover:elev-hi rounded-3xl border-t-4 border-pink-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative" style="--d:0.14s">
           <div class="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50/50 to-white pointer-events-none"></div>
@@ -510,6 +557,16 @@
           <div class="bg-red-50 border border-red-100 rounded-2xl p-3 text-center"><div id="teacher-stat-fail" class="font-black text-2xl text-red-600">0</div><div class="text-[11px] text-red-500 font-bold uppercase">ไม่ผ่าน</div></div>
           <div class="bg-amber-50 border border-amber-100 rounded-2xl p-3 text-center"><div id="teacher-stat-pending" class="font-black text-2xl text-amber-600">0</div><div class="text-[11px] text-amber-500 font-bold uppercase">ยังไม่ตรวจ</div></div>
         </div>
+        <div class="mt-5">
+          <div class="flex items-center justify-between gap-3 mb-1.5"><span id="teacher-progress-text" class="text-xs font-extrabold text-gray-500">ตรวจครบแล้ว 0/0 คน</span></div>
+          <div class="h-2.5 rounded-full bg-gray-100 overflow-hidden"><div id="teacher-progress-bar" class="h-full rounded-full bg-gradient-to-r from-pink-400 to-rose-500" style="width:0%;transition:width .5s ease"></div></div>
+          <div id="teacher-filter" class="flex flex-wrap gap-2 mt-3">
+            <button type="button" data-f="all" onclick="setTeacherFilter('all')">ทั้งหมด <span id="tf-all" class="tabular">0</span></button>
+            <button type="button" data-f="incomplete" onclick="setTeacherFilter('incomplete')">ยังไม่ครบ <span id="tf-incomplete" class="tabular">0</span></button>
+            <button type="button" data-f="fail" onclick="setTeacherFilter('fail')">ไม่ผ่าน <span id="tf-fail" class="tabular">0</span></button>
+            <button type="button" data-f="pass" onclick="setTeacherFilter('pass')">ผ่านครบ <span id="tf-pass" class="tabular">0</span></button>
+          </div>
+        </div>
       </div>
       <div id="students-container" class="space-y-5"></div>
       <div class="mt-8 text-center no-print sticky bottom-6 z-20">
@@ -562,16 +619,17 @@
       <div class="glass-card rounded-2xl px-5 py-3 mb-4 border-t-4 border-pink-400 shadow-md sticky top-[70px] z-40 text-center">
         <p class="text-gray-600 text-sm md:text-base font-medium" id="student-class-label">เลือกห้องและชื่อของตัวเองเพื่อดูผลการตรวจ</p>
       </div>
-      <div class="glass-card rounded-3xl p-8 mb-6 border-t-4 border-pink-400 shadow-md">
-        <h2 class="text-2xl font-extrabold text-gray-800 mb-6 text-center">🔍 ตรวจสอบผลการแต่งกาย</h2>
+      <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-pink-400 shadow-xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-pink-100/60 pointer-events-none"></div>
+        <div class="relative z-10 text-center mb-6"><div class="w-16 h-16 mx-auto rounded-3xl bg-gradient-to-br from-pink-500 to-rose-500 text-white flex items-center justify-center text-3xl shadow-lg mb-3 transform -rotate-3">🔍</div><h2 class="text-2xl font-extrabold text-gray-800">ตรวจสอบผลการแต่งกาย</h2><p class="text-sm text-gray-400 font-medium mt-1">เลือกห้องและชื่อ แล้วดูผลตรวจ คะแนนพฤติกรรม และการมาเรียน</p></div>
         <div class="flex flex-col gap-3">
-          <select id="studentSearchClass" onchange="studentSearchLoadNames()" class="w-full p-4 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 bg-white/90 text-lg font-bold shadow-sm transition text-center">
+          <select id="studentSearchClass" onchange="studentSearchLoadNames()" class="relative z-10 w-full p-4 border-2 border-pink-100 rounded-2xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 bg-white text-lg font-bold shadow-sm hover:border-pink-300 transition text-center">
             <option value="" disabled selected>-- เลือกห้องเรียน --</option>
           </select>
-          <select id="studentSearchName" class="w-full p-4 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-500 bg-white/90 text-lg font-bold shadow-sm transition text-center">
+          <select id="studentSearchName" class="relative z-10 w-full p-4 border-2 border-pink-100 rounded-2xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 bg-white text-lg font-bold shadow-sm hover:border-pink-300 transition text-center">
             <option value="" disabled selected>-- เลือกห้องก่อน --</option>
           </select>
-          <button onclick="searchStudent()" class="btn-pastel bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 px-10 rounded-xl shadow-md whitespace-nowrap text-lg">🔎 ตรวจสอบ</button>
+          <button onclick="searchStudent()" class="btn-pastel relative z-10 bg-gradient-to-r from-pink-500 via-rose-500 to-fuchsia-500 text-white font-extrabold py-4 px-10 rounded-2xl shadow-lg whitespace-nowrap text-lg">🔎 ตรวจสอบผล</button>
         </div>
         <p class="text-xs text-gray-400 text-center mt-4 font-medium">🔒 เลือกชื่อตัวเอง ครูโอ๊ตจะแสดงผลให้ทราบ</p>
         <div class="mt-5 pt-5 border-t border-gray-100">
@@ -628,8 +686,17 @@
       <div class="flex justify-between items-center mb-4 no-print card-flat p-3 rounded-2xl">
         <button onclick="goHome(true)" class="text-blue-600 font-bold flex items-center gap-1 hover:text-blue-800 bg-blue-50 px-4 py-2 rounded-xl transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
       </div>
-      <div class="card-flat rounded-2xl p-5 mb-4 border-l-8 border-blue-500 text-center md:text-left shadow-sm">
-        <h2 class="text-xl font-bold text-gray-700">📅 เช็คชื่อห้อง: <span id="att-display-class" class="text-blue-600 text-2xl font-black"></span> | วันที่: <span id="att-display-date" class="text-blue-600 text-xl font-black"></span></h2>
+      <div class="card-flat rounded-3xl p-5 md:p-6 mb-4 border-l-8 border-blue-500 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 text-center md:text-left">
+          <h2 class="text-xl font-bold text-gray-700">📅 เช็คชื่อห้อง: <span id="att-display-class" class="text-blue-600 text-2xl font-black"></span> | วันที่: <span id="att-display-date" class="text-blue-600 text-xl font-black"></span></h2>
+          <button type="button" onclick="markAllPresent()" class="self-center md:self-auto bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white font-extrabold text-sm px-5 py-2.5 rounded-xl shadow-md transition whitespace-nowrap">✓ ทุกคนมาเรียน</button>
+        </div>
+        <div class="grid grid-cols-4 gap-2.5 mt-4">
+          <div class="rounded-2xl bg-emerald-50 border border-emerald-100 py-2.5 text-center"><div id="att-stat-present" class="font-black text-2xl text-emerald-600 tabular">0</div><div class="text-[11px] font-extrabold text-emerald-500">มาเรียน</div></div>
+          <div class="rounded-2xl bg-orange-50 border border-orange-100 py-2.5 text-center"><div id="att-stat-late" class="font-black text-2xl text-orange-600 tabular">0</div><div class="text-[11px] font-extrabold text-orange-500">มาสาย</div></div>
+          <div class="rounded-2xl bg-rose-50 border border-rose-100 py-2.5 text-center"><div id="att-stat-absent" class="font-black text-2xl text-rose-600 tabular">0</div><div class="text-[11px] font-extrabold text-rose-500">ขาดเรียน</div></div>
+          <div class="rounded-2xl bg-amber-50 border border-amber-100 py-2.5 text-center"><div id="att-stat-leave" class="font-black text-2xl text-amber-600 tabular">0</div><div class="text-[11px] font-extrabold text-amber-500">ลา/ป่วย</div></div>
+        </div>
       </div>
       <div class="overflow-x-auto whitespace-nowrap mb-4 pb-2 no-scrollbar no-print">
         <div id="attendance-class-tabs" class="flex gap-2 inline-flex px-1"></div>
@@ -651,6 +718,23 @@
         <p class="text-gray-500 font-medium">แสดงสรุปจำนวนวันที่ขาด การขาดติดต่อกัน และจำนวนครั้ง+เวลาที่มาสาย</p>
       </div>
       <div id="absence-stats-container" class="space-y-6"></div>
+    </div>
+
+    <!-- 6b. ศูนย์งานค้าง (ฝ่ายปกครอง) -->
+    <div id="view-workcenter" class="hidden">
+      <div class="flex justify-between items-center mb-4 no-print glass-card p-3 rounded-2xl gap-2 flex-wrap">
+        <button onclick="goHome(true)" class="text-amber-700 font-bold flex items-center gap-1 hover:text-amber-900 bg-amber-50 px-4 py-2 rounded-xl transition">← กลับหน้าแรก</button>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="loadWorkCenter()" class="bg-white border border-amber-200 text-amber-700 hover:bg-amber-50 px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition">↻ รีเฟรช</button>
+          <button id="btn-export-summary" onclick="exportSemesterSummary()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm shadow font-bold transition">📄 สรุปรายภาคเรียน (Word)</button>
+        </div>
+      </div>
+      <div class="glass-card rounded-3xl p-6 md:p-8 mb-5 border-l-8 border-amber-500 shadow-md">
+        <h2 class="text-2xl font-extrabold text-gray-800 mb-1">📌 ศูนย์งานค้าง</h2>
+        <p id="wc-sub" class="text-gray-500 font-medium">รวมเรื่องที่ฝ่ายปกครองต้องตามต่อ</p>
+        <div id="wc-counters" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5"></div>
+      </div>
+      <div id="wc-container" class="space-y-5"></div>
     </div>
 
     <!-- 7. หน้าบันทึกพฤติกรรม (Dark Mode) -->
@@ -764,7 +848,7 @@
     let currentSemester = 2;
     let currentAY = (new Date().getFullYear() + 543) - (new Date().getMonth() < 4 ? 1 : 0);
     // คำสั่งที่นับ/แสดงข้อมูลตามเทอม — callAPI แนบ semester และ academicYear ให้เองทุกครั้ง (หน้าเว็บที่เรียกไม่ต้องรู้เรื่องนี้)
-    const SEM_ACTIONS = new Set(['getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview']);
+    const SEM_ACTIONS = new Set(['getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview','getSemesterProgress','getWorkCenter','getSemesterSummary']);
     const discReportSort = (a, b) => a.className === b.className
       ? (a.month === b.month ? thSort(a.name, b.name) : MONTH_ORDER.indexOf(a.month) - MONTH_ORDER.indexOf(b.month))
       : thSort(a.className, b.className);
@@ -773,6 +857,7 @@
         if (action === 'getAllStudentsList' && Array.isArray(res)) res.sort((a, b) => a.className === b.className ? thSort(a.name, b.name) : thSort(a.className, b.className));
         else if ((action === 'getStudentsByClass' || action === 'getContactsByClass') && Array.isArray(res)) res.sort((a, b) => thSort(a.name, b.name));
         else if (action === 'classMonitorOverview' && res && Array.isArray(res.classmates)) res.classmates.sort((a, b) => thSort(a.name, b.name));
+        else if (action === 'getWorkCenter' && res && Array.isArray(res.uninspected)) res.uninspected.forEach(r => { if (Array.isArray(r.names)) r.names.sort(thSort); });
         else if (action === 'getDisciplineReport' && Array.isArray(res)) res.sort(discReportSort);
         else if (action === 'exportMonthlyDisciplineReportDoc' && res && Array.isArray(res.report)) res.report.sort(discReportSort);
         else if (action === 'getAbsenceReport' && Array.isArray(res)) res.sort((a, b) => a.className !== b.className ? thSort(a.className, b.className) : ((b.consecutiveAbsence - a.consecutiveAbsence) || (b.totalLate - a.totalLate) || thSort(a.name, b.name)));
@@ -920,7 +1005,7 @@
       updateSemesterChip();
     }
     // เปลี่ยนเทอมที่หน้าแรกเท่านั้น: ทุกหน้าที่เปิดหลังจากนี้ใช้เทอมนี้ (ไม่มีหน้าค้างที่ใช้ข้อมูลเทอมเก่า)
-    function setSemester(n) { currentSemester = (n === 1 || n === '1') ? 1 : 2; renderSemesterBar(); }
+    function setSemester(n) { currentSemester = (n === 1 || n === '1') ? 1 : 2; renderSemesterBar(); loadSemesterProgress(); }
     // ตอนเปิดแอป: ใช้ค่าที่ฐานข้อมูลตั้งไว้ (ค่าเริ่มต้น = เทอม 2) ถ้าเชื่อมต่อไม่ได้ก็ใช้ค่าเริ่มต้นในหน้าเว็บต่อไป
     function initSemester() {
       renderSemesterBar();
@@ -929,12 +1014,13 @@
           if (cfg.defaultSemester === 1 || cfg.defaultSemester === 2) currentSemester = cfg.defaultSemester;
           if (cfg.academicYear) currentAY = cfg.academicYear;
           renderSemesterBar();
+          loadSemesterProgress();
         }
       }).catch(() => {});
     }
     // SEM-END>>>
 
-    const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-verify-inspection','view-student','view-student-history','view-lock-manager','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison','view-overview'];
+    const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-verify-inspection','view-student','view-student-history','view-lock-manager','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison','view-overview','view-workcenter'];
 
     function showView(id) {
       ALL_VIEWS.forEach(v => document.getElementById(v).classList.add('hidden'));
@@ -1024,6 +1110,144 @@
     // ใช้แนวเดียวกับ attendanceLoadToken ที่เคยแก้ปัญหาแบบนี้ในหน้าเช็คชื่อมาแล้ว
     let dashboardLoadToken = 0;
 
+    // <<<PROGRESS-BEGIN
+    // ==================== ความคืบหน้าภาคเรียน (หน้าแรก) ====================
+    const TH_MON_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    function thDateShort(iso) { const p = String(iso || '').split('-'); if (p.length < 3) return '–'; return (+p[2]) + ' ' + TH_MON_SHORT[(+p[1]) - 1] + ' ' + (+p[0] + 543); }
+    function monthShort(name) { const i = THMONTHS_CAL.indexOf(name); return i >= 0 ? TH_MON_SHORT[i] : name; }
+    function escHtml(t) { return (t == null ? '' : String(t)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    let semProgToken = 0;
+    function renderSemesterProgress(res) {
+      const $ = (id) => document.getElementById(id);
+      $('semprog-title').textContent = 'ภาคเรียนที่ ' + res.semester + ' · ปีการศึกษา ' + res.academicYear;
+      const badge = $('semprog-badge'), base = 'text-xs font-extrabold px-3 py-1.5 rounded-full whitespace-nowrap ';
+      if (res.status === 'running') { badge.textContent = 'เหลืออีก ' + res.daysLeft + ' วัน'; badge.className = base + 'bg-fuchsia-100 text-fuchsia-600'; }
+      else if (res.status === 'before') { badge.textContent = 'เปิดภาคเรียนในอีก ' + res.daysToStart + ' วัน'; badge.className = base + 'bg-amber-100 text-amber-700'; }
+      else { badge.textContent = 'สิ้นสุดภาคเรียนแล้ว'; badge.className = base + 'bg-emerald-100 text-emerald-700'; }
+      $('semprog-from').textContent = thDateShort(res.start); $('semprog-to').textContent = thDateShort(res.end); $('semprog-pct').textContent = res.pct + '%';
+      const bar = $('semprog-bar'), reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      bar.dataset.pct = res.pct;
+      if (reduce) bar.style.width = res.pct + '%'; else requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = res.pct + '%'; }));
+      $('semprog-months').innerHTML = (res.months || []).map(m => {
+        const cov = m.total > 0 ? Math.min(100, Math.round(m.inspected / m.total * 100)) : 0;
+        let tone, label, barc;
+        if (m.inspected === 0) { tone = 'bg-gray-50 border-gray-200 text-gray-400'; label = m.state === 'future' ? 'ยังไม่ถึง' : (m.state === 'current' ? 'ยังไม่เริ่มตรวจ' : 'ไม่มีข้อมูล'); barc = 'bg-gray-300'; }
+        else if (cov >= 100) { tone = 'bg-emerald-50 border-emerald-200 text-emerald-700'; label = '✓ ตรวจครบ'; barc = 'bg-emerald-400'; }
+        else { tone = 'bg-amber-50 border-amber-200 text-amber-700'; label = 'ตรวจ ' + m.inspected + '/' + m.total; barc = 'bg-amber-400'; }
+        const ring = m.state === 'current' ? ' ring-2 ring-fuchsia-300 shadow-md' : '';
+        return `<div class="semprog-chip flex-1 min-w-[84px] rounded-2xl px-3 py-2.5 border text-center ${tone}${ring}" data-state="${m.state}"><div class="text-xs font-extrabold">${monthShort(m.month)}${m.state === 'current' ? ' <span class="text-fuchsia-500">●</span>' : ''}</div><div class="mt-1.5 h-1.5 rounded-full bg-white/80 overflow-hidden"><div class="h-full rounded-full ${barc}" style="width:${cov}%"></div></div><div class="text-[10px] font-bold mt-1 tabular">${label}</div></div>`;
+      }).join('');
+    }
+    function loadSemesterProgress() {
+      const box = document.getElementById('sem-progress'); if (!box) return;
+      const myToken = ++semProgToken;
+      callAPI('getSemesterProgress').then(res => {
+        if (myToken !== semProgToken) return;
+        if (!res || !res.success) { box.classList.add('hidden'); return; }   // ฐานข้อมูลยังไม่ได้ติดตั้งแพตช์ 4: ซ่อนแถบนี้ ไม่ให้หน้าแรกพัง
+        box.classList.remove('hidden'); renderSemesterProgress(res);
+      }).catch(() => {});
+    }
+    // PROGRESS-END>>>
+
+    // <<<WORKCENTER-BEGIN
+    // ==================== ศูนย์งานค้าง (ฝ่ายปกครอง) + สรุปรายภาคเรียน (Word) ====================
+    const DISC_MENU = [
+      { act: 'report', icon: '📋', title: 'รายงานการทำผิดระเบียบ', desc: 'ทะเบียนนักเรียนที่ผิดระเบียบรายเดือน', grad: 'from-purple-500 to-indigo-500' },
+      { act: 'verify', icon: '🔍', title: 'ตรวจแต่งกาย (ฝ่ายปกครอง)', desc: 'ตรวจสอบซ้ำได้ทุกข้อเหมือนครูประจำชั้น', grad: 'from-cyan-500 to-sky-500' },
+      { act: 'work', icon: '📌', title: 'ศูนย์งานค้าง', desc: 'ห้องที่ยังไม่ตรวจ · ขาดติดกัน · พฤติกรรมต่ำ', grad: 'from-amber-500 to-orange-500' },
+      { act: 'summary', icon: '📄', title: 'สรุปรายภาคเรียน (Word)', desc: 'รายงานเสนอผู้บริหารปลายภาคเรียน', grad: 'from-emerald-500 to-teal-500' }
+    ];
+    function discMenuHtml() {
+      return '<div class="grid grid-cols-1 gap-3 text-left mt-3">' + DISC_MENU.map(m => `<button type="button" data-act="${m.act}" class="group flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r ${m.grad} text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition"><span class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl flex-shrink-0">${m.icon}</span><span class="min-w-0"><span class="block font-extrabold text-base">${m.title}</span><span class="block text-xs opacity-90 font-medium mt-0.5">${m.desc}</span></span><span class="ml-auto text-xl opacity-70 group-hover:translate-x-1 transition">→</span></button>`).join('') + '</div>';
+    }
+    function runDisciplineAction(act) {
+      if (act === 'report') showDisciplineMonthSelector();
+      else if (act === 'verify') selectVerifyClassMonth();
+      else if (act === 'work') showWorkCenter();
+      else if (act === 'summary') exportSemesterSummary();
+    }
+    async function openDisciplineMenu() {
+      const act = await new Promise(resolve => {
+        MySwal.fire({ title: 'เลือกเมนูฝ่ายปกครอง', html: discMenuHtml(), showConfirmButton: false, showCancelButton: true, cancelButtonText: 'ปิด',
+          didOpen: (el) => { (el || document).querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => { resolve(b.dataset.act); Swal.close(); })); }
+        }).then(() => resolve(null));
+      });
+      if (act) runDisciplineAction(act);
+    }
+
+    function showWorkCenter() { showView('view-workcenter'); loadWorkCenter(); }
+    let wcToken = 0;
+    function loadWorkCenter() {
+      const myToken = ++wcToken;
+      document.getElementById('wc-counters').innerHTML = ''; document.getElementById('wc-container').innerHTML = cardSkeletonRows(3);
+      callAPI('getWorkCenter', { password: currentDisciplineAuth }).then(res => {
+        if (myToken !== wcToken) return;
+        if (!res || res.error) { document.getElementById('wc-container').innerHTML = ''; MySwal.fire('ผิดพลาด', (res && res.error) || 'โหลดข้อมูลไม่สำเร็จ', 'error'); return; }
+        renderWorkCenter(res);
+      }).catch(() => { if (myToken !== wcToken) return; document.getElementById('wc-container').innerHTML = '<div class="text-center p-12 glass-card rounded-3xl text-red-500 font-bold shadow">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</div>'; });
+    }
+    function renderWorkCenter(res) {
+      const c = res.counters, th = res.thresholds, esc = escHtml;
+      const subEl = document.getElementById('wc-sub');
+      subEl.textContent = 'ผลตรวจเดือน' + res.month + ' · ภาคเรียนที่ ' + res.semester + ' ปีการศึกษา ' + res.academicYear;
+      const oldWarn = document.getElementById('wc-warn'); if (oldWarn) oldWarn.remove();
+      if (res.calendarMonth && res.calendarMonth !== res.month) {   // เดือนที่ติดตามเป็นค่าที่ตั้งเอง: ถ้าลืมเปลี่ยน จะเห็นว่า "ตรวจครบแล้ว" ทั้งที่เดือนใหม่ยังไม่ได้ตรวจ
+        const w = document.createElement('div'); w.id = 'wc-warn';
+        w.className = 'mt-3 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 leading-relaxed';
+        w.textContent = `⚠ ตอนนี้เป็นเดือน${res.calendarMonth} แต่หน้านี้ติดตามผลตรวจเดือน${res.month} (ตามค่า "เดือนที่แสดงในภาพรวมเดือนนี้") ถ้าเริ่มตรวจเดือนใหม่แล้ว ให้เปลี่ยนค่านั้นก่อน`;
+        subEl.insertAdjacentElement('afterend', w);
+      }
+      const total = c.uninspectedRooms + c.absentStreak + c.lowConduct;
+      const tile = (val, label, hint, on) => `<div class="wc-tile rounded-2xl border p-4 text-center ${val > 0 ? on : 'bg-emerald-50 border-emerald-100 text-emerald-600'}"><div class="font-black text-3xl tabular">${val}</div><div class="text-[11px] font-extrabold mt-1">${label}</div><div class="text-[10px] font-bold opacity-80 mt-0.5">${val > 0 ? hint : 'ไม่มีเรื่องค้าง'}</div></div>`;
+      document.getElementById('wc-counters').innerHTML =
+        tile(c.uninspectedRooms, 'ห้องที่ยังตรวจไม่ครบ', c.uninspectedStudents + ' คนที่ยังไม่ได้ตรวจ', 'bg-amber-50 border-amber-200 text-amber-700') +
+        tile(c.absentStreak, 'ขาดเรียนติดกัน', 'ตั้งแต่ ' + th.minStreak + ' วันขึ้นไป', 'bg-rose-50 border-rose-200 text-rose-600') +
+        tile(c.lowConduct, 'พฤติกรรมต่ำกว่า ' + th.lowConduct, 'ต่ำกว่า ' + th.criticalConduct + ': ' + c.criticalConduct + ' คน', 'bg-orange-50 border-orange-200 text-orange-600') +
+        tile(total, 'รวมเรื่องที่ต้องตาม', 'จาก 3 หมวด', 'bg-fuchsia-50 border-fuchsia-200 text-fuchsia-600');
+      const sect = (icon, title, sub, body, n) => `<div class="glass-card rounded-3xl p-5 md:p-6 shadow-md border border-white/70"><div class="flex items-center justify-between gap-3 mb-4 flex-wrap"><h3 class="font-extrabold text-gray-800 text-lg flex items-center gap-2"><span>${icon}</span>${title}</h3><span class="text-[11px] font-bold text-gray-400">${sub}</span></div>${body}</div>`;
+      const ok = (msg) => `<div class="text-center py-5 text-emerald-600 font-bold bg-emerald-50 border border-emerald-100 rounded-2xl">✓ ${msg}</div>`;
+      // 1) ห้องที่ยังไม่ได้ตรวจ
+      const roomsHtml = res.uninspected.length ? '<div class="space-y-2.5">' + res.uninspected.map(r => {
+        const pct = r.total ? Math.round(r.inspected / r.total * 100) : 0, none = r.inspected === 0;
+        return `<details class="wc-room rounded-2xl border ${none ? 'border-rose-200 bg-rose-50/60' : 'border-amber-200 bg-amber-50/60'}"><summary class="cursor-pointer list-none flex items-center gap-3 px-4 py-3"><span class="font-black text-gray-800 w-14 flex-shrink-0">${esc(r.cls)}</span><span class="flex-1 h-2 rounded-full bg-white/80 overflow-hidden"><span class="block h-full rounded-full ${none ? 'bg-rose-300' : 'bg-amber-400'}" style="width:${pct}%"></span></span><span class="text-xs font-extrabold ${none ? 'text-rose-600' : 'text-amber-700'} whitespace-nowrap">${none ? 'ยังไม่ได้ตรวจเลย' : 'ค้าง ' + r.missing + ' คน'}</span><span class="text-[10px] font-bold text-gray-400 tabular whitespace-nowrap">${r.inspected}/${r.total}</span></summary><div class="px-4 pb-3 flex flex-wrap gap-1.5">${(r.names || []).map(n => `<span class="text-[11px] font-bold bg-white border border-gray-200 text-gray-600 rounded-full px-2.5 py-1">${esc(n)}</span>`).join('')}</div></details>`;
+      }).join('') + '</div>' : ok('ตรวจครบทุกห้องแล้ว');
+      // 2) ขาดติดกัน
+      const streakHtml = res.streaks.length ? '<div class="space-y-2 max-h-[26rem] overflow-y-auto pr-1">' + res.streaks.map(s => {
+        const hot = s.streak >= 5;
+        return `<div class="wc-streak flex items-center gap-3 rounded-2xl border ${hot ? 'border-rose-200 bg-rose-50/60' : 'border-orange-200 bg-orange-50/60'} px-4 py-3"><div class="min-w-0 flex-1"><div class="font-extrabold text-gray-800 truncate">${esc(s.name)}</div><div class="text-[11px] font-bold text-gray-400">${esc(s.className)} · ${thDateShort(s.since)} – ${thDateShort(s.lastDate)}</div></div><span class="text-xs font-black ${hot ? 'bg-rose-500' : 'bg-orange-500'} text-white rounded-full px-3 py-1.5 whitespace-nowrap">ขาดติดกัน ${s.streak} วัน</span></div>`;
+      }).join('') + '</div>' : ok('ไม่มีนักเรียนที่ขาดติดกันตอนนี้');
+      // 3) พฤติกรรมต่ำ
+      const lowHtml = res.lowConduct.length ? '<div class="space-y-2 max-h-[26rem] overflow-y-auto pr-1">' + res.lowConduct.map(s => {
+        const crit = s.score < th.criticalConduct;
+        return `<div class="wc-low flex items-center gap-3 rounded-2xl border ${crit ? 'border-rose-200 bg-rose-50/60' : 'border-amber-200 bg-amber-50/60'} px-4 py-3"><div class="min-w-0 flex-1"><div class="font-extrabold text-gray-800 truncate">${esc(s.name)}</div><div class="text-[11px] font-bold text-gray-400">${esc(s.className)} · ถูกตัดคะแนน ${s.incidents} ครั้ง${s.lastDate ? ' · ล่าสุด ' + thDateShort(s.lastDate) : ''}</div></div><span class="text-sm font-black ${crit ? 'bg-rose-500' : 'bg-amber-500'} text-white rounded-xl px-3 py-1.5 tabular whitespace-nowrap">${s.score} คะแนน</span></div>`;
+      }).join('') + '</div>' : ok('ไม่มีนักเรียนที่คะแนนต่ำกว่า ' + th.lowConduct);
+      document.getElementById('wc-container').innerHTML =
+        sect('🧥', 'ห้องที่ยังตรวจแต่งกายไม่ครบ', 'เดือน' + esc(res.month) + ' · กดที่ห้องเพื่อดูรายชื่อ', roomsHtml) +
+        sect('🚨', 'ขาดเรียนติดกัน', 'ตั้งแต่ ' + th.minStreak + ' วัน และยังเกิดขึ้นในช่วง ' + th.recentDays + ' วันที่ผ่านมา', streakHtml) +
+        sect('⭐', 'คะแนนพฤติกรรมต่ำกว่า ' + th.lowConduct, 'สะสมทั้งปีการศึกษา ' + res.academicYear, lowHtml);
+    }
+    function chooseSummarySemester() {
+      return new Promise(resolve => {
+        const opt = (n) => `<button type="button" data-sem="${n}" class="w-full text-left p-4 rounded-2xl border-2 ${n === currentSemester ? 'border-emerald-400 bg-emerald-50' : 'border-gray-200 bg-white hover:border-emerald-300'} transition"><span class="block font-black text-lg text-gray-800">ภาคเรียนที่ ${n}</span><span class="block text-xs font-bold text-gray-400 mt-0.5">${n === 1 ? 'พฤษภาคม – ตุลาคม' : 'พฤศจิกายน – มีนาคม'} · ปีการศึกษา ${currentAY}</span>${n === currentSemester ? '<span class="inline-block mt-1.5 text-[10px] font-extrabold text-emerald-600 bg-emerald-100 rounded-full px-2 py-0.5">เทอมที่เลือกอยู่</span>' : ''}</button>`;
+        MySwal.fire({ title: 'สรุปรายภาคเรียน (Word)', html: `<p class="text-sm text-gray-500 mb-4">เลือกภาคเรียนที่ต้องการสรุป</p><div class="grid grid-cols-1 gap-3">${opt(1)}${opt(2)}</div>`,
+          showConfirmButton: false, showCancelButton: true, cancelButtonText: 'ยกเลิก',
+          didOpen: (el) => { (el || document).querySelectorAll('[data-sem]').forEach(b => b.addEventListener('click', () => { resolve(+b.dataset.sem); Swal.close(); })); }
+        }).then(() => resolve(null));
+      });
+    }
+    async function exportSemesterSummary() {
+      const sem = await chooseSummarySemester(); if (!sem) return;
+      const btn = document.getElementById('btn-export-summary');
+      if (btn && !lockButton(btn)) return;
+      MySwal.fire({ title: 'กำลังสร้างรายงานสรุป...', html: `ภาคเรียนที่ ${sem} · กรุณารอสักครู่ ระบบกำลังรวบรวมข้อมูลทั้งภาคเรียน`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      callAPI('getSemesterSummary', { password: currentDisciplineAuth, semester: sem }).then(res => {
+        if (!res || res.error) { MySwal.fire('ล้มเหลว', (res && res.error) || 'สร้างรายงานไม่สำเร็จ', 'error'); return; }
+        return loadDocx().then(B => presentDocx(B.buildSemesterSummary(res), `สรุปผลฝ่ายปกครอง_เทอม${res.semester}_${res.academicYear}`));
+      }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
+        .finally(() => { if (btn) unlockButton(btn); });
+    }
+    // WORKCENTER-END>>>
+
     // <<<ROOMS-BEGIN
     // ==================== ผลตรวจรายห้อง (การ์ดภาพรวมหน้าแรก) ====================
     let roomStatsToken = 0;
@@ -1099,6 +1323,7 @@
     function loadDashboardStats() {
       const myToken = ++dashboardLoadToken;
       loadRoomStats();   // รีเฟรชผลตรวจรายห้องพร้อมตัวเลขหน้าแรกเสมอ
+      loadSemesterProgress();
       callAPI('getDashboardStats').then(stats => {
         if (myToken !== dashboardLoadToken) return; // มีการโหลดรอบใหม่แซงไปแล้ว ทิ้งผลรอบนี้
         document.getElementById('stat-month-label').innerText = stats.displayMonth;   // หัวข้อมีคำว่า "เดือน" นำหน้าอยู่แล้ว
@@ -1176,9 +1401,23 @@
     }
 
     // ==================== ส่วนครู ====================
+    // ตรวจรหัสผ่านที่ฐานข้อมูล — หน้าเว็บไม่เก็บรหัสไว้ในโค้ดอีกแล้ว
+    // (เดิมรหัสครู/ฝ่ายปกครองเขียนอยู่ในโค้ดหน้าเว็บ ใครกด View Source ก็เห็น แล้วเอาไปเรียกระบบเองได้ทุกคำสั่ง)
+    async function checkAccess(role, password) {
+      MySwal.fire({ title: 'กำลังตรวจสอบรหัสผ่าน...', allowOutsideClick: false, showConfirmButton: false, didOpen: () => Swal.showLoading() });
+      try {
+        const r = await callAPI('verifyAccess', { role, password });
+        if (r && r.success) return { ok: true };
+        const e = (r && r.error) || 'รหัสผ่านไม่ถูกต้อง!';
+        return { ok: false, msg: /ไม่รู้จัก action/.test(e) ? 'ฐานข้อมูลยังไม่ได้อัปเดต (แพตช์ 5) กรุณาแจ้งผู้ดูแลระบบ' : e };
+      } catch (e) { return { ok: false, msg: 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง' }; }
+      finally { Swal.close(); }
+    }
+
     async function loginTeacher() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูผู้สอน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#ec4899', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '1150') { currentTeacherAuth = password; selectClassAndMonth(); } else if (password) { MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error'); }
+      const acc = password ? await checkAccess('teacher', password) : { ok: false };
+      if (acc.ok) { currentTeacherAuth = password; selectClassAndMonth(); } else if (password) { MySwal.fire('ผิดพลาด', acc.msg, 'error'); }
     }
 
     async function selectClassAndMonth() {
@@ -1197,6 +1436,7 @@
 
     function loadStudents() {
       showView('view-teacher');
+      applyTeacherFilter();
       // เติมตัวเลือกในดรอปดาวน์สลับห้อง/เดือนให้ตรงกับที่กำลังดูอยู่ (สร้างใหม่ทุกครั้งเผื่อเดือนล่าสุดเปลี่ยน)
       document.getElementById('teacher-switch-class').innerHTML = ALL_CLASSES.map(c => `<option value="${c}" ${c === currentClass ? 'selected' : ''}>${c}</option>`).join('');
       document.getElementById('teacher-switch-month').innerHTML = getRecentMonthsFirst().map(m => `<option value="${m}" ${m === currentMonth ? 'selected' : ''}>${m}</option>`).join('');
@@ -1223,24 +1463,55 @@
     }
 
     // นับสรุปผ่าน/ไม่ผ่าน/ยังไม่ตรวจแบบสด อัปเดตทุกครั้งที่ครูกดเปลี่ยนค่าข้อไหนก็ตาม (ดูใน setupTeacherStatsListener ด้านล่าง)
-    function recomputeTeacherStats() {
-      let passCount = 0, failCount = 0, pendingCount = 0;
-      currentStudents.forEach((student, sIndex) => {
-        let hasFail = false, hasPending = false;
-        ruleItems.forEach((rule, rIndex) => {
-          let selected = document.querySelector(`input[name="st_${sIndex}_rule_${rIndex}"]:checked`);
-          let val = selected ? selected.value : 'ยังไม่ตรวจ';
-          if (val === 'ไม่ผ่าน') hasFail = true;
-          else if (val === 'ยังไม่ตรวจ') hasPending = true;
-        });
-        if (hasFail) failCount++;
-        else if (hasPending) pendingCount++;
-        else passCount++;
+    // <<<TEACHERUI-BEGIN
+    // ==================== UI ตรวจแต่งกาย (ครู) ====================
+    // การ์ดนักเรียนแต่ละคนมี data-status (pass | fail | pending) ให้แถบสีข้างการ์ดและชิปสถานะเปลี่ยนตามที่ครูติ๊ก
+    // ช่องตัวเลือก (radio) ยังใช้ชื่อ/ค่าเดิมทุกประการ (st_<คน>_rule_<ข้อ>) จึงบันทึกข้อมูลด้วยโค้ดเดิม
+    let teacherFilter = 'all';
+    function applyTeacherFilter() {
+      document.querySelectorAll('#students-container .stu-card').forEach(card => {
+        const f = teacherFilter;
+        const show = f === 'all' || (f === 'incomplete' && card.dataset.incomplete === '1') || (f === 'fail' && card.dataset.status === 'fail') || (f === 'pass' && card.dataset.status === 'pass');
+        card.classList.toggle('hidden', !show);
       });
-      document.getElementById('teacher-stat-pass').innerText = passCount;
-      document.getElementById('teacher-stat-fail').innerText = failCount;
-      document.getElementById('teacher-stat-pending').innerText = pendingCount;
+      document.querySelectorAll('#teacher-filter [data-f]').forEach(b => {
+        const on = b.dataset.f === teacherFilter;
+        b.className = 'teacher-chip px-3.5 py-2 rounded-xl text-xs font-extrabold border transition whitespace-nowrap ' + (on ? 'bg-pink-500 border-pink-500 text-white shadow-md' : 'bg-white border-gray-200 text-gray-500 hover:bg-pink-50');
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
     }
+    function setTeacherFilter(f) { teacherFilter = f; applyTeacherFilter(); }
+    function recomputeTeacherStats() {
+      let pass = 0, fail = 0, pending = 0, complete = 0, incomplete = 0;
+      const cards = document.querySelectorAll('#students-container .stu-card');
+      cards.forEach(card => {
+        let nFail = 0, nPend = 0, nRules = 0;
+        card.querySelectorAll('.rule-box').forEach(box => {
+          const sel = box.querySelector('input[type="radio"]:checked');
+          const v = sel ? sel.value : 'ยังไม่ตรวจ'; nRules++;
+          const st = v === 'ผ่าน' ? 'pass' : (v === 'ไม่ผ่าน' ? 'fail' : (v === 'ยังไม่ตรวจ' ? 'pending' : 'na'));
+          if (box.dataset.state !== st) box.dataset.state = st;
+          if (v === 'ไม่ผ่าน') nFail++; else if (v === 'ยังไม่ตรวจ') nPend++;
+        });
+        const status = nFail ? 'fail' : (nPend ? 'pending' : 'pass');
+        card.dataset.status = status; card.dataset.incomplete = nPend ? '1' : '0';
+        if (status === 'fail') fail++; else if (status === 'pending') pending++; else pass++;
+        if (nPend) incomplete++; else complete++;
+        const chip = card.querySelector('.stu-chip');
+        if (chip) chip.textContent = status === 'pass' ? '✓ ผ่านครบทุกข้อ' : (status === 'fail' ? `✕ ไม่ผ่าน ${nFail} ข้อ` + (nPend ? ` · ยังไม่ตรวจ ${nPend}` : '') : `◔ ยังไม่ตรวจ ${nPend} ข้อ`);
+        const done = nRules - nPend;
+        const bar = card.querySelector('.stu-prog-bar'); if (bar) bar.style.width = (nRules ? Math.round(done / nRules * 100) : 0) + '%';
+        const pt = card.querySelector('.stu-prog-text'); if (pt) pt.textContent = `${done}/${nRules} ข้อ`;
+      });
+      const total = cards.length, pct = total ? Math.round(complete / total * 100) : 0;
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+      set('teacher-stat-pass', pass); set('teacher-stat-fail', fail); set('teacher-stat-pending', pending);
+      const pb = document.getElementById('teacher-progress-bar'); if (pb) pb.style.width = pct + '%';
+      set('teacher-progress-text', `ตรวจครบแล้ว ${complete}/${total} คน (${pct}%)`);
+      set('tf-all', total); set('tf-incomplete', incomplete); set('tf-fail', fail); set('tf-pass', pass);
+      applyTeacherFilter();
+    }
+    // TEACHERUI-END>>>
 
     // แนบ event listener ครั้งเดียวที่ container (ไม่ใช่ใส่ onchange ทุกช่องนับพันครั้ง) — ยังทำงานถูกต้อง
     // แม้ innerHTML ของลูกข้างในจะถูกเขียนทับใหม่ทุกครั้งที่สลับห้อง เพราะ listener อยู่ที่ตัว container เอง
@@ -1249,49 +1520,62 @@
     });
 
     function renderStudentCards() {
+      teacherFilter = 'all';
       const container = document.getElementById('students-container');
-      if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-pink-600 font-bold text-xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; document.getElementById('teacher-stat-pass').innerText = '0'; document.getElementById('teacher-stat-fail').innerText = '0'; document.getElementById('teacher-stat-pending').innerText = '0'; return; }
+      if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 glass-card rounded-3xl text-pink-600 font-bold text-xl shadow">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; recomputeTeacherStats(); return; }
       const esc = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-      // สร้าง HTML ทั้งหมดเป็นสตริงเดียวก่อน แล้วค่อยเขียนลง DOM ครั้งเดียว
-      // (การ์ดนี้มี 14 กฎ × 4 ตัวเลือก = 56 ช่องต่อคน เดิมสร้างทีละคนแล้วแปะทีละคน ช้ากว่ามาก)
+      const OPTS = [
+        ['ผ่าน', '✓ ผ่าน', 'has-[:checked]:bg-emerald-500 has-[:checked]:border-emerald-500 has-[:checked]:text-white has-[:checked]:shadow-md'],
+        ['ไม่ผ่าน', '✕ ไม่ผ่าน', 'has-[:checked]:bg-rose-500 has-[:checked]:border-rose-500 has-[:checked]:text-white has-[:checked]:shadow-md'],
+        ['ยังไม่ตรวจ', '◔ ยังไม่ตรวจ', 'has-[:checked]:bg-amber-100 has-[:checked]:border-amber-300 has-[:checked]:text-amber-700'],
+        ['ไม่ต้องใส่', '–', 'has-[:checked]:bg-gray-300 has-[:checked]:border-gray-300 has-[:checked]:text-gray-700']
+      ];
+      // สร้าง HTML ทั้งหมดเป็นสตริงเดียวก่อน แล้วค่อยเขียนลง DOM ครั้งเดียว (การ์ดนี้มี 14 กฎ × 4 ตัวเลือก = 56 ช่องต่อคน)
       const cardsHtml = currentStudents.map((student, sIndex) => {
-        let headerHtml = `<div class="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-pink-100 pb-3">
-          <div class="font-bold text-lg text-gray-800 flex items-center gap-2.5 min-w-0"><span class="bg-pink-100 text-pink-600 w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0">${sIndex+1}</span> ${student.name}</div>
-          <button type="button" onclick="markAllPass(${sIndex})" class="text-xs font-bold bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded-lg border border-green-200 transition flex-shrink-0 whitespace-nowrap">✅ ผ่านทั้งหมด</button>
-        </div>`;
-        let monitorCommentHtml = student.monitorComment ? `<div class="mb-3 -mt-1 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${esc(student.monitorComment)}</span></div>` : '';
-        let sum = student.summary || { absent: 0, late: 0, leave: 0, conductScore: 100, conductIncidents: 0 };
-        let scoreColor = sum.conductScore >= 80 ? 'green' : (sum.conductScore >= 60 ? 'amber' : 'red');
-        let summaryHtml = `<div class="flex flex-wrap gap-1.5 mb-3 text-xs">
-          <span class="bg-red-50 text-red-600 border border-red-200 px-2.5 py-1 rounded-lg font-bold">ขาด ${sum.absent}</span>
-          <span class="bg-orange-50 text-orange-600 border border-orange-200 px-2.5 py-1 rounded-lg font-bold">สาย ${sum.late}</span>
-          <span class="bg-yellow-50 text-yellow-600 border border-yellow-200 px-2.5 py-1 rounded-lg font-bold">ลา ${sum.leave}</span>
-          <span class="bg-${scoreColor}-50 text-${scoreColor}-700 border border-${scoreColor}-200 px-2.5 py-1 rounded-lg font-bold">⭐ พฤติกรรม ${sum.conductScore} คะแนน</span>
+        const monitorCommentHtml = student.monitorComment ? `<div class="mt-3 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-100 rounded-xl px-3 py-2 flex items-start gap-1.5"><span class="flex-shrink-0">👑</span><span><b>หัวหน้าห้องแจ้งไว้:</b> ${esc(student.monitorComment)}</span></div>` : '';
+        const sum = student.summary || { absent: 0, late: 0, leave: 0, conductScore: 100, conductIncidents: 0 };
+        const scoreColor = sum.conductScore >= 80 ? 'emerald' : (sum.conductScore >= 60 ? 'amber' : 'rose');
+        const summaryHtml = `<div class="flex flex-wrap gap-1.5 my-3 text-xs">
+          <span class="inline-flex items-center gap-1 bg-rose-50 text-rose-600 border border-rose-100 px-2.5 py-1 rounded-full font-extrabold whitespace-nowrap">ขาด <b class="tabular">${sum.absent}</b></span>
+          <span class="inline-flex items-center gap-1 bg-orange-50 text-orange-600 border border-orange-100 px-2.5 py-1 rounded-full font-extrabold whitespace-nowrap">สาย <b class="tabular">${sum.late}</b></span>
+          <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-600 border border-amber-100 px-2.5 py-1 rounded-full font-extrabold whitespace-nowrap">ลา <b class="tabular">${sum.leave}</b></span>
+          <span class="inline-flex items-center gap-1 bg-${scoreColor}-50 text-${scoreColor}-700 border border-${scoreColor}-100 px-2.5 py-1 rounded-full font-extrabold whitespace-nowrap">⭐ พฤติกรรม <b class="tabular">${sum.conductScore}</b></span>
         </div>`;
         let rulesHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
         ruleItems.forEach((rule, rIndex) => {
-          // ── ค่า default เมื่อยังไม่มีข้อมูลบันทึก: "ยังไม่ตรวจ" ไม่ใช่ "ไม่ผ่าน" ──
-          // (เดิม default เป็น "ไม่ผ่าน" ทำให้ถ้าครูไม่ได้แตะเลยแล้วบันทึก จะกลายเป็นบันทึกว่าทุกคนไม่ผ่านทั้งที่ยังไม่ได้ตรวจจริง)
+          // ── ค่า default เมื่อยังไม่มีข้อมูลบันทึก: "ยังไม่ตรวจ" ไม่ใช่ "ไม่ผ่าน" (กันบันทึกว่าทุกคนไม่ผ่านทั้งที่ครูไม่ได้แตะ) ──
           let savedVal;
-          if (student.record) {
-            savedVal = student.record[rule];
-          } else {
+          if (student.record) { savedVal = student.record[rule]; }
+          else {
             savedVal = 'ยังไม่ตรวจ';
             if (rule === 'โบว์' && student.name.startsWith('นาย')) savedVal = 'ไม่ต้องใส่';
             if (rule === 'หนวดเครา' && student.name.startsWith('นางสาว')) savedVal = 'ไม่ต้องใส่';
           }
-          let radName = `st_${sIndex}_rule_${rIndex}`;
-          const isLocked = currentLockedRules.indexOf(rule) !== -1;
-          if (isLocked) {
+          const radName = `st_${sIndex}_rule_${rIndex}`;
+          if (currentLockedRules.indexOf(rule) !== -1) {
             // ข้อที่ถูกล็อก: ครูดูได้อย่างเดียว แก้ไขไม่ได้ (ฝ่ายปกครองเท่านั้นที่ตรวจข้อนี้ได้ ผ่านหน้าตรวจสอบซ้ำ)
-            let lockedBadge = savedVal === 'ผ่าน' ? 'bg-green-100 text-green-700' : (savedVal === 'ไม่ผ่าน' ? 'bg-red-100 text-red-700' : (savedVal === 'ไม่ต้องใส่' ? 'bg-gray-200 text-gray-700' : 'bg-amber-100 text-amber-700'));
-            rulesHtml += `<div class="bg-gray-100 p-3 rounded-xl border border-gray-300 opacity-90"><div class="text-sm font-bold text-gray-500 mb-2 flex items-center gap-1.5">🔒 ${rule} <span class="text-[10px] font-bold text-gray-400">(เฉพาะฝ่ายปกครอง)</span></div><div class="${lockedBadge} text-sm font-bold text-center py-2 rounded-lg">${savedVal}</div><input type="radio" name="${radName}" value="${savedVal}" class="hidden" checked></div>`;
+            const lockedBadge = savedVal === 'ผ่าน' ? 'bg-green-100 text-green-700' : (savedVal === 'ไม่ผ่าน' ? 'bg-red-100 text-red-700' : (savedVal === 'ไม่ต้องใส่' ? 'bg-gray-200 text-gray-700' : 'bg-amber-100 text-amber-700'));
+            rulesHtml += `<div class="rule-box rule-locked rounded-2xl border p-3 opacity-90" data-state="pending"><div class="flex items-center gap-2 mb-2.5"><span class="rule-dot w-2 h-2 rounded-full bg-gray-400 flex-shrink-0"></span><span class="rule-name text-sm font-extrabold text-gray-500">🔒 ${rule}</span><span class="text-[10px] font-bold text-gray-400">(เฉพาะฝ่ายปกครอง)</span></div><div class="${lockedBadge} text-sm font-extrabold text-center py-2.5 rounded-xl">${savedVal}</div><input type="radio" name="${radName}" value="${savedVal}" class="hidden" checked></div>`;
           } else {
-            rulesHtml += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-200"><div class="text-sm font-bold text-gray-700 mb-2">${rule}</div><div class="grid grid-cols-2 gap-1.5 text-sm font-bold bg-white p-1 rounded-lg border border-gray-100"><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-green-100 has-[:checked]:text-green-700 text-gray-500"><input type="radio" name="${radName}" value="ผ่าน" class="hidden" ${savedVal === 'ผ่าน' ? 'checked' : ''}> ผ่าน</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-red-100 has-[:checked]:text-red-700 text-gray-500"><input type="radio" name="${radName}" value="ไม่ผ่าน" class="hidden" ${savedVal === 'ไม่ผ่าน' ? 'checked' : ''}> ไม่ผ่าน</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-amber-100 has-[:checked]:text-amber-700 text-gray-500"><input type="radio" name="${radName}" value="ยังไม่ตรวจ" class="hidden" ${savedVal === 'ยังไม่ตรวจ' ? 'checked' : ''}> ยังไม่ตรวจ</label><label class="flex items-center justify-center gap-1 cursor-pointer py-1.5 rounded-md has-[:checked]:bg-gray-200 has-[:checked]:text-gray-800 text-gray-500"><input type="radio" name="${radName}" value="ไม่ต้องใส่" class="hidden" ${savedVal === 'ไม่ต้องใส่' ? 'checked' : ''}> -</label></div></div>`;
+            const opts = OPTS.map(([val, label, cls]) => `<label class="seg-opt flex items-center justify-center gap-1 cursor-pointer h-10 rounded-xl border text-[13px] font-extrabold select-none transition bg-white border-gray-200 text-gray-400 hover:border-gray-300 ${cls}"${val === 'ไม่ต้องใส่' ? ' title="ไม่ต้องใส่"' : ''}><input type="radio" name="${radName}" value="${val}" class="hidden" ${savedVal === val ? 'checked' : ''}>${label}</label>`).join('');
+            rulesHtml += `<div class="rule-box rounded-2xl border border-gray-200 bg-white p-3" data-state="pending"><div class="flex items-center gap-2 mb-2.5"><span class="rule-dot w-2 h-2 rounded-full bg-amber-400 flex-shrink-0"></span><span class="rule-name text-sm font-extrabold text-gray-700">${rule}</span></div><div class="grid grid-cols-2 gap-1.5">${opts}</div></div>`;
           }
         });
         rulesHtml += `</div>`;
-        return `<div class="bg-white rounded-2xl p-4 md:p-6 mb-4 border border-gray-200">${headerHtml}${monitorCommentHtml}${summaryHtml}${rulesHtml}</div>`;
+        return `<div class="stu-card relative overflow-hidden bg-white rounded-3xl border border-gray-100 shadow-md hover:shadow-lg transition mb-4" data-status="pending" data-incomplete="1" data-sidx="${sIndex}">
+          <div class="stu-accent absolute left-0 top-0 bottom-0 w-1.5"></div>
+          <div class="p-4 md:p-6 pl-5 md:pl-7">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3 flex-1 min-w-[12rem]">
+                <span class="w-11 h-11 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-500 text-white font-black flex items-center justify-center shadow-md flex-shrink-0 tabular">${sIndex + 1}</span>
+                <div class="min-w-0"><div class="font-extrabold text-lg text-gray-800 leading-tight break-words">${esc(student.name)}</div><div class="stu-chip inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full mt-1 bg-amber-100 text-amber-700">◔ ยังไม่ตรวจ</div></div>
+              </div>
+              <button type="button" onclick="markAllPass(${sIndex})" class="text-xs font-extrabold bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white px-4 py-2.5 rounded-xl shadow-md transition flex-shrink-0 whitespace-nowrap">✓ ผ่านทั้งหมด</button>
+            </div>
+            ${monitorCommentHtml}${summaryHtml}
+            <div class="flex items-center gap-2 mb-3"><div class="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden"><div class="stu-prog-bar h-full rounded-full bg-gradient-to-r from-pink-400 to-rose-500" style="width:0%;transition:width .4s ease"></div></div><span class="stu-prog-text text-[11px] font-bold text-gray-400 tabular whitespace-nowrap">0/${ruleItems.length} ข้อ</span></div>
+            ${rulesHtml}
+          </div></div>`;
       }).join('');
       container.innerHTML = cardsHtml;
       recomputeTeacherStats();
@@ -1323,7 +1607,10 @@
           let selected = document.querySelector(`input[name="st_${sIndex}_rule_${rIndex}"]:checked`);
           let val = selected ? selected.value : 'ยังไม่ตรวจ';
           studentResult.results[rule] = val;
-          if (val !== 'ยังไม่ตรวจ') stillAllPending = false;
+          // "ยังไม่ได้แตะ" = ยังเป็นค่าเริ่มต้นของการ์ด คือ ยังไม่ตรวจ หรือ ไม่ต้องใส่ ที่ระบบตั้งให้เองตามเพศ (โบว์ของนักเรียนชาย / หนวดเคราของนักเรียนหญิง)
+          // เดิมนับ "ไม่ต้องใส่" ที่ตั้งให้เองว่าครูแตะแล้ว ทำให้นักเรียนที่ยังไม่ได้ตรวจถูกบันทึกเป็นแถวว่างทุกครั้งที่กดบันทึก (แล้วถูกนับเป็น "ตรวจแล้ว/ผ่าน" บนหน้าแรก)
+          const dflt = ((rule === 'โบว์' && student.name.startsWith('นาย')) || (rule === 'หนวดเครา' && student.name.startsWith('นางสาว'))) ? 'ไม่ต้องใส่' : 'ยังไม่ตรวจ';
+          if (val !== dflt) stillAllPending = false;
         });
         // ข้ามนักเรียนที่ไม่เคยมีประวัติมาก่อน และครูไม่ได้แตะข้อไหนเลยสักข้อ
         // (กันไม่ให้บันทึก "ยังไม่ตรวจ" กลายเป็นข้อมูลจริงของคนที่ยังไม่ได้ดูเลย)
@@ -1346,22 +1633,12 @@
     // ==================== ส่วนฝ่ายปกครอง (แต่งกาย) ====================
     async function loginDiscipline() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#9333ea', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '7846') {
+      const acc = password ? await checkAccess('discipline', password) : { ok: false };
+      if (acc.ok) {
         currentDisciplineAuth = password;
-        const menuResult = await MySwal.fire({
-          title: 'เลือกเมนูฝ่ายปกครอง',
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: '📋 รายงานการทำผิดระเบียบ',
-          denyButtonText: '🔍 ตรวจแต่งกาย (ฝ่ายปกครอง)',
-          cancelButtonText: 'ยกเลิก',
-          confirmButtonColor: '#9333ea',
-          denyButtonColor: '#0891b2'
-        });
-        if (menuResult.isConfirmed) showDisciplineMonthSelector();
-        else if (menuResult.isDenied) selectVerifyClassMonth();
+        await openDisciplineMenu();
       }
-      else if (password) MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
+      else if (password) MySwal.fire('ผิดพลาด', acc.msg, 'error');
     }
 
     async function showDisciplineMonthSelector() {
@@ -1775,7 +2052,75 @@
         return doc(kids);
       }
 
-      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, thDigits: thDigits };
+      // 4) สรุปผลการดำเนินงานฝ่ายปกครองรายภาคเรียน (เสนอผู้บริหาร)
+      function buildSemesterSummary(d) {
+        function n0(v) { return Number(v) || 0; }
+        function pct(a, b) { return b > 0 ? (Math.round(a * 1000 / b) / 10).toFixed(1) + '%' : '-'; }
+        var rooms = (d.rooms || []).filter(function (r) { return n0(r.total) > 0; }), months = d.months || [];
+        var at = d.attendance || {}, atRooms = (at.rooms || []).filter(function (r) { return n0(r.absent) + n0(r.late) + n0(r.leave) > 0 || rooms.some(function (x) { return x.cls === r.cls; }); });
+        var cd = d.conduct || {}, recs = 0, failed = 0, absent = 0, late = 0, leave = 0;
+        rooms.forEach(function (r) { recs += n0(r.records); failed += n0(r.failedRecords); });
+        atRooms.forEach(function (r) { absent += n0(r.absent); late += n0(r.late); leave += n0(r.leave); });
+        function line(text, o) { o = o || {}; return para(text, { size: o.size || 30, indent: { left: 360 }, after: o.after === undefined ? 40 : o.after, bold: o.bold }); }
+        function h(text) { return para(text, { bold: true, before: 200, keepNext: true }); }
+        var kids = [
+          para('สรุปผลการดำเนินงานฝ่ายปกครองนักเรียน', { bold: true, align: C, after: 0 }),
+          para('ภาคเรียนที่ ' + d.semester + ' ปีการศึกษา ' + d.academicYear, { bold: true, align: C, after: 0 }),
+          para('โรงเรียนธนาคารออมสิน ระดับมัธยมศึกษาตอนปลาย', { align: C, after: 0 }),
+          para('ช่วงเวลา ' + thShortDate(d.start) + ' - ' + thShortDate(d.end) + '     ข้อมูล ณ วันที่ ' + thShortDate(d.generated), { size: 28, align: C, after: 160 }),
+          h('1. ภาพรวม'),
+          line('นักเรียนทั้งหมด ' + n0(d.students) + ' คน'),
+          line(recs > 0 ? 'ผลตรวจเครื่องแต่งกายทั้งภาคเรียน ผ่านเกณฑ์ร้อยละ ' + pct(recs - failed, recs).replace('%', '') + ' (ไม่ผ่าน ' + failed + ' จาก ' + recs + ' รายการตรวจ)' : 'ผลตรวจเครื่องแต่งกาย: ยังไม่มีข้อมูลการตรวจในภาคเรียนนี้'),
+          line('การมาเรียน: ขาดเรียน ' + absent + ' ครั้ง   มาสาย ' + late + ' ครั้ง   ลา/ป่วย ' + leave + ' ครั้ง (บันทึกการมาเรียน ' + n0(at.daysRecorded) + ' วัน)'),
+          line('ความประพฤติ: ตัดคะแนน ' + n0(cd.records) + ' ครั้ง รวม ' + n0(cd.points) + ' คะแนน   นักเรียนคะแนนต่ำกว่า 80 จำนวน ' + n0(cd.below80) + ' คน (ต่ำกว่า 60 จำนวน ' + n0(cd.below60) + ' คน)', { after: 120 }),
+          h('2. ผลตรวจเครื่องแต่งกายรายเดือน')
+        ];
+        var mrows = [['เดือน', 'ตรวจแล้ว (คน)', 'ผ่าน', 'ไม่ผ่าน', 'ผ่านเกณฑ์']];
+        months.forEach(function (m) {
+          if (m.state === 'future' && !n0(m.inspected)) mrows.push([m.month, '-', '-', '-', 'ยังไม่ถึงกำหนด']);
+          else mrows.push([m.month, String(n0(m.inspected)), String(n0(m.passed)), String(n0(m.failed)), pct(n0(m.passed), n0(m.inspected))]);
+        });
+        kids.push(table(mrows, [2600, 1700, 1500, 1500, 2100], { header: true, center: [1, 2, 3, 4] }));
+        kids.push(h('3. ผลตรวจเครื่องแต่งกายรายห้อง'));
+        if (!rooms.length) kids.push(para('- ไม่มีข้อมูล -', { align: C }));
+        else {
+          var rrows = [['ห้อง', 'นักเรียน', 'รายการตรวจ', 'ไม่ผ่าน', 'ผ่านเกณฑ์', 'นร.ที่เคยไม่ผ่าน']];
+          rooms.forEach(function (r) { rrows.push([r.cls, String(n0(r.total)), String(n0(r.records)), String(n0(r.failedRecords)), pct(n0(r.records) - n0(r.failedRecords), n0(r.records)), String(n0(r.failedStudents))]); });
+          kids.push(table(rrows, [1300, 1300, 1700, 1400, 1700, 2000], { header: true, center: [0, 1, 2, 3, 4, 5] }));
+        }
+        kids.push(h('4. ข้อที่ไม่ผ่านบ่อย 5 อันดับแรก'));
+        if (!(d.topRules || []).length) kids.push(para('- ไม่พบข้อที่ไม่ผ่าน -', { align: C }));
+        else {
+          var trows = [['อันดับ', 'ข้อที่ไม่ผ่าน', 'จำนวนครั้ง', 'พบในการตรวจร้อยละ']];
+          d.topRules.forEach(function (r, i) { trows.push([String(i + 1), r.rule, String(n0(r.count)), pct(n0(r.count), recs).replace('%', '')]); });
+          kids.push(table(trows, [1100, 4300, 1700, 2300], { header: true, center: [0, 2, 3] }));
+        }
+        kids.push(h('5. การมาเรียน'));
+        if (!atRooms.length) kids.push(para('- ไม่มีข้อมูลการมาเรียน -', { align: C }));
+        else {
+          var arows = [['ห้อง', 'ขาด (ครั้ง)', 'สาย (ครั้ง)', 'ลา/ป่วย (ครั้ง)', 'นร.ที่เคยขาด (คน)']];
+          atRooms.forEach(function (r) { arows.push([r.cls, String(n0(r.absent)), String(n0(r.late)), String(n0(r.leave)), String(n0(r.studentsAbsent))]); });
+          kids.push(table(arows, [1400, 1800, 1800, 2100, 2300], { header: true, center: [0, 1, 2, 3, 4] }));
+        }
+        if ((at.topAbsent || []).length) {
+          kids.push(para('นักเรียนที่ขาดเรียนมากที่สุด 5 อันดับแรก', { size: 30, before: 160, keepNext: true }));
+          var brows = [['อันดับ', 'ชื่อ-สกุล', 'ชั้น', 'ขาด (วัน)']];
+          at.topAbsent.forEach(function (r, i) { brows.push([String(i + 1), r.name, r.className, String(n0(r.absent))]); });
+          kids.push(table(brows, [1100, 4600, 1700, 2000], { header: true, center: [0, 2, 3] }));
+        }
+        kids.push(h('6. ความประพฤติ (คะแนนนับสะสมทั้งปีการศึกษา ' + d.academicYear + ')'));
+        kids.push(line('ตัดคะแนน ' + n0(cd.records) + ' ครั้ง (' + n0(cd.students) + ' คน) รวม ' + n0(cd.points) + ' คะแนน'));
+        kids.push(line('แยกตามระดับ: เล็กน้อย ' + n0(cd.minor) + ' ครั้ง   ปานกลาง ' + n0(cd.mid) + ' ครั้ง   ร้ายแรง ' + n0(cd.severe) + ' ครั้ง'));
+        kids.push(line('ออกหนังสือทำทัณฑ์บน ' + n0(cd.probation) + ' ฉบับ และหนังสือว่ากล่าวตักเตือน ' + n0(cd.warning) + ' ฉบับ', { after: 120 }));
+        if ((cd.topRules || []).length) {
+          var crows = [['อันดับ', 'ข้อบังคับที่ถูกตัดคะแนน', 'จำนวนครั้ง', 'คะแนนที่ตัดรวม']];
+          cd.topRules.forEach(function (r, i) { crows.push([String(i + 1), r.rule, String(n0(r.count)), String(n0(r.points))]); });
+          kids.push(table(crows, [1100, 4500, 1700, 2100], { header: true, center: [0, 2, 3] }));
+        }
+        return doc(kids.concat(signBlocks()));
+      }
+
+      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, buildSemesterSummary: buildSemesterSummary, thDigits: thDigits };
     }
 
     var DOCX_CDN = 'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js';
@@ -1839,11 +2184,12 @@
     // ==================== รายงานนักเรียนรายบุคคล (ฝ่ายปกครอง) ====================
     async function openStudentHistory() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#6366f1', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '7846') {
+      const acc = password ? await checkAccess('discipline', password) : { ok: false };
+      if (acc.ok) {
         currentDisciplineAuth = password;
         showStudentHistoryView();
       } else if (password) {
-        MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
+        MySwal.fire('ผิดพลาด', acc.msg, 'error');
       }
     }
 
@@ -1886,7 +2232,7 @@
         }
         document.getElementById('history-display-label').innerHTML = `ประวัติของ <span class="font-black text-indigo-600">${res.studentName}</span> ห้อง <span class="font-black text-indigo-600">${res.studentClass}</span>`;
         currentHistoryName = res.studentName; currentHistoryClass = res.studentClass;
-        renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary, 'studentHistoryContainer');
+        renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary, 'studentHistoryContainer', res.studentClass);
       }).catch(() => {
         document.getElementById('studentHistoryContainer').innerHTML = '';
         currentHistoryName = ""; currentHistoryClass = "";
@@ -1910,12 +2256,13 @@
     // ==================== จัดการล็อครายการตรวจ (ฝ่ายปกครอง) ====================
     async function openLockManager() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#334155', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '7846') {
+      const acc = password ? await checkAccess('discipline', password) : { ok: false };
+      if (acc.ok) {
         currentDisciplineAuth = password;
         showView('view-lock-manager');
         loadLockedRules();
       } else if (password) {
-        MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
+        MySwal.fire('ผิดพลาด', acc.msg, 'error');
       }
     }
 
@@ -1976,7 +2323,7 @@
           return;
         }
         document.getElementById('student-class-label').innerHTML = `สวัสดี <span class="font-black text-pink-600">${res.studentName}</span> ห้อง <span class="font-black text-pink-600">${res.studentClass}</span>`;
-        renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary);
+        renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary, undefined, res.studentClass);
       }).catch(() => {
         document.getElementById('studentResultContainer').innerHTML = '';
         MySwal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', confirmButtonColor: '#ec4899' });
@@ -2115,7 +2462,7 @@
         .finally(() => unlockButton(btn));
     }
 
-    function renderStudentResult(result, conductData, studentName, attendanceSummary, containerId) {
+    function renderStudentResult(result, conductData, studentName, attendanceSummary, containerId, studentClass) {
       const container = document.getElementById(containerId || 'studentResultContainer'); container.innerHTML = '';
       const records = result.records.map(rec => { let cleanRec = { brokenRules: rec.brokenRules }; for (let key in rec) { if (key !== 'brokenRules') cleanRec[key.trim()] = rec[key]; } return cleanRec; });
       // เรียงประวัติให้เดือนล่าสุดอยู่บนสุด (เดือนที่ตรวจไปแล้วจะไหลลงด้านล่าง)
@@ -2143,6 +2490,19 @@
       } else {
         conductRecordsHtml = `<div class="mt-4 text-center text-green-600 font-bold text-sm bg-green-50 border border-green-200 rounded-xl p-3">ไม่มีประวัติถูกตัดคะแนน 🎉</div>`;
       }
+
+      // --- โปรไฟล์นักเรียน (ส่วนหัว): ชื่อ ชั้น เทอม และตัวเลขสำคัญ 4 ตัว ---
+      const heroAtt = attendanceSummary || { absent: 0, late: 0, leave: 0 };
+      const heroInitial = String(studentName || '').replace(/^(นางสาว|เด็กหญิง|เด็กชาย|นาง|นาย)\s*/, '').replace(/^[เแโใไ]+/, '').charAt(0) || '👤';
+      const heroTile = (val, label) => `<div class="bg-white/15 border border-white/25 rounded-2xl py-3 px-2 text-center"><div class="font-black text-2xl md:text-3xl tabular">${val}</div><div class="text-[11px] font-bold opacity-90 mt-0.5">${label}</div></div>`;
+      const heroCard = `<div class="rise relative overflow-hidden rounded-3xl shadow-xl text-white p-6 md:p-8 mb-6 bg-gradient-to-br from-pink-500 via-rose-500 to-fuchsia-600">
+        <div class="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/10 pointer-events-none"></div><div class="absolute -left-12 -bottom-16 w-56 h-56 rounded-full bg-white/10 pointer-events-none"></div>
+        <div class="relative z-10 flex items-center gap-4">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-white/20 border-2 border-white/40 flex items-center justify-center text-3xl md:text-4xl font-black shadow-inner flex-shrink-0">${heroInitial}</div>
+          <div class="min-w-0"><div class="text-[11px] font-bold uppercase tracking-[0.15em] opacity-80">ภาคเรียนที่ ${currentSemester} · ปีการศึกษา ${currentAY}</div><div class="font-black text-2xl md:text-3xl leading-tight break-words">${escHtml(studentName)}</div>${studentClass ? `<div class="font-bold opacity-90 mt-0.5">ชั้น ${escHtml(studentClass)}</div>` : ''}</div>
+        </div>
+        <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">${heroTile(scoreVal, 'คะแนนพฤติกรรม')}${heroTile(heroAtt.absent, 'ขาดเรียน (วัน)')}${heroTile(heroAtt.late, 'มาสาย (ครั้ง)')}${heroTile(heroAtt.leave, 'ลา/ป่วย (วัน)')}</div>
+      </div>`;
 
       let conductCard = `
         <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 ${scoreBg} shadow-md">
@@ -2173,23 +2533,8 @@
           ${conductRecordsHtml}
         </div>`;
 
-      container.innerHTML += conductCard;
+      container.innerHTML += heroCard + conductCard;
 
-      // --- สรุปการมาเรียน (ขาด/สาย/ลา) ---
-      let att = attendanceSummary || { absent: 0, late: 0, leave: 0 };
-      let attendanceCard = `
-        <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-sky-400 shadow-md">
-          <h3 class="font-extrabold text-gray-800 text-xl mb-5 flex items-center gap-2">
-            <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            สถิติการมาเรียน
-          </h3>
-          <div class="grid grid-cols-3 gap-3">
-            <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-red-600">${att.absent}</div><div class="text-xs text-red-400 font-bold mt-1">ขาดเรียน</div></div>
-            <div class="bg-orange-50 border border-orange-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-orange-600">${att.late}</div><div class="text-xs text-orange-400 font-bold mt-1">มาสาย</div></div>
-            <div class="bg-yellow-50 border border-yellow-100 rounded-2xl p-4 text-center"><div class="font-black text-2xl text-yellow-600">${att.leave}</div><div class="text-xs text-yellow-400 font-bold mt-1">ลา/ป่วย</div></div>
-          </div>
-        </div>`;
-      container.innerHTML += attendanceCard;
 
       // --- คำเตือนสำหรับเรื่องที่ทำผิดซ้ำๆ (โทนให้กำลังใจ ไม่ตำหนิ) ---
       let repeatedUniformIssues = Object.entries(overallBroken).filter(([rule, count]) => count >= 2).sort((a, b) => b[1] - a[1]);
@@ -2217,7 +2562,7 @@
       }
 
       if (records.length === 0) {
-        container.innerHTML += `<div class="glass-card p-12 text-center rounded-3xl mt-4 border border-gray-100"><div class="text-6xl mb-4">👻</div><div class="text-red-500 font-extrabold text-2xl">ไม่พบข้อมูลการตรวจแต่งกาย</div></div>`;
+        container.innerHTML += `<div class="glass-card p-12 text-center rounded-3xl mt-4 border border-gray-100"><div class="text-6xl mb-4">👻</div><div class="text-red-500 font-extrabold text-2xl">ไม่พบข้อมูลการตรวจแต่งกาย</div><div class="text-sm text-gray-400 font-medium mt-3 leading-relaxed">ภาคเรียนที่ ${currentSemester} ยังไม่มีข้อมูล ลองสลับเป็นภาคเรียนที่ ${currentSemester === 1 ? 2 : 1} ที่หน้าแรก</div></div>`;
         return;
       }
 
@@ -2259,11 +2604,12 @@
       const btn = document.getElementById('btn-quick-late');
       if (!lockButton(btn)) return;
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนครูผู้สอน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#f97316', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-      if (password === '1150') {
+      const acc = password ? await checkAccess('teacher', password) : { ok: false };
+      if (acc.ok) {
         currentTeacherAuth = password;
         await showQuickLateForm(); // รอจนจบขั้นตอนทั้งหมด (เลือกห้อง/ชื่อ/เวลา + บันทึกจริง) ก่อนปลดล็อกปุ่ม
       } else if (password) {
-        MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
+        MySwal.fire('ผิดพลาด', acc.msg, 'error');
       }
       unlockButton(btn); // ปลดล็อกเมื่อจบธุรกรรมทั้งหมดแล้วเท่านั้น กันไม่ให้เปิด 2 รอบซ้อนกันจนป๊อปอัพชนกัน
     }
@@ -2334,9 +2680,10 @@
       });
       if (role) {
         const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตน', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: role === 'teacher' ? '#3b82f6' : '#0891b2', showCancelButton: true, cancelButtonText: 'ยกเลิก' });
-        if (role === 'teacher' && password === '1150') { currentTeacherAuth = password; selectAttendanceClassDate(); }
-        else if (role === 'discipline' && password === '7846') { currentDisciplineAuth = password; loadAbsenceReport(); }
-        else if (password) MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error');
+        const acc = password ? await checkAccess(role, password) : { ok: false };
+        if (role === 'teacher' && acc.ok) { currentTeacherAuth = password; selectAttendanceClassDate(); }
+        else if (role === 'discipline' && acc.ok) { currentDisciplineAuth = password; loadAbsenceReport(); }
+        else if (password) MySwal.fire('ผิดพลาด', acc.msg, 'error');
       }
     }
 
@@ -2363,12 +2710,11 @@
     function renderAttendanceTabs() {
       const container = document.getElementById('attendance-class-tabs');
       container.innerHTML = ALL_CLASSES.map(cls => {
-        const isActive = cls === currentClass;
-        const btnClass = isActive ? 'bg-blue-500 text-white border-blue-600 ring-2 ring-blue-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50';
-        return `<button onclick="switchAttendanceClass('${cls}')" class="px-5 py-2.5 rounded-xl text-sm font-bold border whitespace-nowrap focus:outline-none ${btnClass}">${cls}</button>`;
+        const on = cls === currentClass;
+        return `<button onclick="switchAttendanceClass('${cls}')" class="att-tab px-5 py-2.5 rounded-2xl text-sm font-extrabold border whitespace-nowrap focus:outline-none transition ${on ? 'att-tab-active bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-transparent shadow-md' : 'bg-white text-gray-500 border-gray-200 hover:bg-blue-50'}">${cls}</button>`;
       }).join('');
-      const activeBtn = container.querySelector('.bg-blue-500');
-      if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      const activeBtn = container.querySelector('.att-tab-active');
+      if (activeBtn && activeBtn.scrollIntoView) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
     function switchAttendanceClass(cls) { currentClass = cls; document.getElementById('att-display-class').innerText = currentClass; renderAttendanceTabs(); loadAttendanceData(currentClass); }
@@ -2389,30 +2735,37 @@
 
     function renderAttendanceCards(dateStr) {
       const container = document.getElementById('attendance-students-container'); container.dataset.date = dateStr;
-      if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 card-flat rounded-2xl text-blue-600 font-extrabold text-xl">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; return; }
+      if (currentStudents.length === 0) { container.innerHTML = `<div class="text-center p-12 card-flat rounded-2xl text-blue-600 font-extrabold text-xl">ไม่มีรายชื่อนักเรียนในห้องนี้</div>`; recomputeAttendanceStats(); return; }
+      const esc = (t) => (t || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const OPT = [
+        ['มาเรียน', '✓', 'has-[:checked]:bg-emerald-500 has-[:checked]:border-emerald-500 has-[:checked]:text-white has-[:checked]:shadow-md'],
+        ['มาสาย', '⏰', 'has-[:checked]:bg-orange-500 has-[:checked]:border-orange-500 has-[:checked]:text-white has-[:checked]:shadow-md'],
+        ['ขาดเรียน', '✕', 'has-[:checked]:bg-rose-500 has-[:checked]:border-rose-500 has-[:checked]:text-white has-[:checked]:shadow-md'],
+        ['ลา/ป่วย', '✎', 'has-[:checked]:bg-amber-400 has-[:checked]:border-amber-400 has-[:checked]:text-white has-[:checked]:shadow-md']
+      ];
       // สร้าง HTML ทั้งหมดเป็นสตริงเดียวก่อน แล้วค่อยเขียนลง DOM ครั้งเดียว (เร็วกว่าสร้างทีละการ์ดแล้ว appendChild วนลูปมาก)
       const cardsHtml = currentStudents.map((student, sIndex) => {
-        let savedVal = student.status || 'มาเรียน'; let savedTime = student.arrivalTime || ''; let radName = `att_${sIndex}`;
-        return `<div class="bg-white rounded-2xl p-3.5 md:p-4 border border-gray-200">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="font-bold text-gray-800 flex items-center gap-2.5"><span class="bg-blue-50 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0">${sIndex+1}</span> ${student.name}</div>
-            <div class="flex flex-wrap gap-1.5 text-sm font-bold">
-              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-green-100 has-[:checked]:border-green-400 has-[:checked]:text-green-800 text-gray-500"><input type="radio" name="${radName}" value="มาเรียน" class="hidden" ${savedVal==='มาเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาเรียน</label>
-              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-orange-100 has-[:checked]:border-orange-400 has-[:checked]:text-orange-800 text-gray-500"><input type="radio" name="${radName}" value="มาสาย" class="hidden" ${savedVal==='มาสาย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> มาสาย</label>
-              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-red-100 has-[:checked]:border-red-400 has-[:checked]:text-red-800 text-gray-500"><input type="radio" name="${radName}" value="ขาดเรียน" class="hidden" ${savedVal==='ขาดเรียน'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ขาดเรียน</label>
-              <label class="flex-1 min-w-[76px] flex items-center justify-center gap-1 cursor-pointer bg-gray-50 px-3 py-2.5 rounded-lg border border-gray-200 has-[:checked]:bg-yellow-100 has-[:checked]:border-yellow-400 has-[:checked]:text-yellow-800 text-gray-500"><input type="radio" name="${radName}" value="ลา/ป่วย" class="hidden" ${savedVal==='ลา/ป่วย'?'checked':''} onchange="toggleLateTimeInput(${sIndex})"> ลา/ป่วย</label>
+        const savedVal = student.status || 'มาเรียน', savedTime = student.arrivalTime || '', radName = `att_${sIndex}`;
+        const opts = OPT.map(([v, icon, cls]) => `<label class="seg-opt flex-1 min-w-[78px] flex items-center justify-center gap-1 cursor-pointer h-11 rounded-xl border text-[13px] font-extrabold select-none transition bg-white border-gray-200 text-gray-400 hover:border-gray-300 ${cls}"><input type="radio" name="${radName}" value="${v}" class="hidden" ${savedVal === v ? 'checked' : ''} onchange="toggleLateTimeInput(${sIndex})"><span>${icon}</span>${v}</label>`).join('');
+        return `<div id="att_card_${sIndex}" class="att-card relative overflow-hidden bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition" data-st="${savedVal}">
+          <div class="att-accent absolute left-0 top-0 bottom-0 w-1.5"></div>
+          <div class="p-3.5 md:p-4 pl-5 md:pl-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div class="font-extrabold text-gray-800 flex items-center gap-3 flex-1 min-w-[10rem]"><span class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-500 text-white flex items-center justify-center text-sm flex-shrink-0 shadow-sm tabular">${sIndex + 1}</span><span class="break-words">${esc(student.name)}</span></div>
+              <div class="flex flex-wrap gap-1.5 md:w-[430px] md:flex-shrink-0">${opts}</div>
             </div>
-          </div>
-          <div id="late_time_wrap_${sIndex}" class="${savedVal==='มาสาย' ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-dashed border-orange-200 flex items-center gap-2">
-            <span class="text-xs font-bold text-orange-600 whitespace-nowrap">⏰ เวลาที่มาถึง</span>
-            <input type="time" id="late_time_${sIndex}" value="${savedTime}" class="p-1.5 border border-orange-200 rounded-lg focus:outline-none focus:border-orange-400 bg-orange-50/50 text-sm font-bold">
-          </div>
-        </div>`;
+            <div id="late_time_wrap_${sIndex}" class="${savedVal === 'มาสาย' ? '' : 'hidden'} mt-3 pt-3 border-t border-dashed border-orange-200 flex items-center gap-2.5">
+              <span class="text-xs font-extrabold text-orange-600 whitespace-nowrap">⏰ เวลาที่มาถึง</span>
+              <input type="time" id="late_time_${sIndex}" value="${savedTime}" class="p-2 border-2 border-orange-200 rounded-xl focus:outline-none focus:border-orange-400 bg-orange-50/50 text-sm font-bold">
+            </div>
+          </div></div>`;
       }).join('');
       container.innerHTML = cardsHtml;
+      recomputeAttendanceStats();
     }
 
     // แสดง/ซ่อนช่องกรอกเวลา ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "มาสาย" ถึงจะโชว์)
+    // แสดง/ซ่อนช่องกรอกเวลา ตามสถานะที่เลือกของนักเรียนคนนั้น (เฉพาะ "มาสาย" ถึงจะโชว์) + อัปเดตแถบสีข้างการ์ดกับตัวนับ
     function toggleLateTimeInput(idx) {
       const selected = document.querySelector(`input[name="att_${idx}"]:checked`);
       const wrap = document.getElementById('late_time_wrap_' + idx);
@@ -2422,11 +2775,28 @@
       // (กันลืมกรอกเวลาแล้วบันทึกไปทั้งที่ไม่มีเวลาจริงอยู่ในนั้นเลย)
       if (isLate) {
         const timeInput = document.getElementById('late_time_' + idx);
-        if (timeInput && !timeInput.value) {
-          const now = new Date();
-          timeInput.value = now.toTimeString().slice(0, 5);
-        }
+        if (timeInput && !timeInput.value) { const now = new Date(); timeInput.value = now.toTimeString().slice(0, 5); }
       }
+      const card = document.getElementById('att_card_' + idx);
+      if (card && selected) card.dataset.st = selected.value;
+      recomputeAttendanceStats();
+    }
+    function recomputeAttendanceStats() {
+      const c = { 'มาเรียน': 0, 'มาสาย': 0, 'ขาดเรียน': 0, 'ลา/ป่วย': 0 };
+      document.querySelectorAll('#attendance-students-container input[type="radio"]:checked').forEach(r => { if (r.value in c) c[r.value]++; });
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+      set('att-stat-present', c['มาเรียน']); set('att-stat-late', c['มาสาย']); set('att-stat-absent', c['ขาดเรียน']); set('att-stat-leave', c['ลา/ป่วย']);
+    }
+    // ปุ่ม "ทุกคนมาเรียน": ตั้งทั้งห้องเป็นมาเรียนในคลิกเดียว (ถ้ามีคนที่เลือกสาย/ขาด/ลาไว้แล้ว ถามยืนยันก่อน กันกดพลาดแล้วข้อมูลหาย)
+    async function markAllPresent() {
+      const radios = [...document.querySelectorAll('#attendance-students-container input[type="radio"][value="มาเรียน"]')];
+      if (!radios.length) return;
+      const others = document.querySelectorAll('#attendance-students-container input[type="radio"]:checked:not([value="มาเรียน"])').length;
+      if (others > 0) {
+        const r = await MySwal.fire({ title: 'ตั้งทุกคนเป็น "มาเรียน" ?', text: `มี ${others} คนที่เลือกสาย/ขาด/ลาไว้ จะถูกเปลี่ยนเป็นมาเรียน`, icon: 'question', showCancelButton: true, confirmButtonText: 'ตกลง', cancelButtonText: 'ยกเลิก', confirmButtonColor: '#10b981' });
+        if (!r.isConfirmed) return;
+      }
+      radios.forEach(r => { r.checked = true; toggleLateTimeInput(+r.name.split('_')[1]); });
     }
 
     function saveAttendanceData() {
@@ -2492,11 +2862,12 @@
     // ==================== ส่วนบันทึกพฤติกรรม ====================
     async function loginConduct() {
       const { value: password } = await MySwal.fire({ title: 'ยืนยันตัวตนฝ่ายปกครอง', input: 'password', inputPlaceholder: 'กรอกรหัสผ่าน', confirmButtonText: 'เข้าสู่ระบบ', confirmButtonColor: '#b91c1c', showCancelButton: true, cancelButtonText: 'ยกเลิก', backdrop: `rgba(0,0,0,0.8)` });
-      if (password === '7846') {
+      const acc = password ? await checkAccess('discipline', password) : { ok: false };
+      if (acc.ok) {
         conductPasswordVerified = true;
         currentDisciplineAuth = password;
         loadConductOverview();
-      } else if (password) { MySwal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง!', 'error'); }
+      } else if (password) { MySwal.fire('ผิดพลาด', acc.msg, 'error'); }
     }
 
     function loadConductOverview() {
@@ -2970,6 +3341,6 @@ function renderClassroomOverview(res) {
 }
 
   </script>
-  <div id="semester-chip" class="hidden fixed left-3 bottom-3 z-40 px-3 py-1.5 rounded-full bg-white/90 border border-pink-200 text-pink-600 text-xs font-extrabold shadow-md pointer-events-none select-none"></div>
+  <div id="semester-chip" class="hidden max-sm:hidden fixed left-3 bottom-3 z-40 px-3 py-1.5 rounded-full bg-white/90 border border-pink-200 text-pink-600 text-xs font-extrabold shadow-md pointer-events-none select-none"></div>
 </body>
 </html>
