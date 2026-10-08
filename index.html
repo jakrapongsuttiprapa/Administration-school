@@ -211,6 +211,18 @@
 
 details>summary{list-style:none}
 details>summary::-webkit-details-marker{display:none}
+
+/* ===== รอบปรับหน้าตา 2: การ์ดภาพรวม + หน้านักเรียน ===== */
+::selection{background:#fbcfe8;color:#831843}
+:focus-visible{outline:3px solid rgba(236,72,153,.4);outline-offset:2px}
+.custom-scroll{scrollbar-width:thin;scrollbar-color:#f9a8d4 transparent}
+.custom-scroll::-webkit-scrollbar{width:6px}.custom-scroll::-webkit-scrollbar-thumb{background:#f9a8d4;border-radius:999px}
+.stu-name[data-on="1"]{border-color:#ec4899;background:#fdf2f8;box-shadow:0 6px 16px -8px rgba(236,72,153,.5)}
+.stu-name .stu-check{opacity:0;transition:opacity .2s}.stu-name[data-on="1"] .stu-check{opacity:1}
+.stu-class-chip[data-on="1"]{background:linear-gradient(135deg,#ec4899,#f43f5e);color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px rgba(244,63,94,.7)}
+.stat-tile{transition:transform .25s ease,box-shadow .25s ease}.stat-tile:hover{transform:translateY(-2px)}
+.room-row{cursor:default}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
@@ -427,30 +439,29 @@ details>summary::-webkit-details-marker{display:none}
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="rise glass-card elev hover:elev-hi rounded-3xl border-t-4 border-pink-400 transform transition duration-300 hover:-translate-y-1 overflow-hidden relative" style="--d:0.14s">
           <div class="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50/50 to-white pointer-events-none"></div>
-          <div class="relative z-10 p-6 md:p-7">
-            <div class="flex justify-between items-start mb-1">
-              <div>
-                <p class="text-[10px] font-bold text-pink-400 uppercase tracking-[0.15em] mb-1 flex items-center gap-1.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>ภาพรวมการแต่งกาย</p>
-                <h3 class="font-black text-gray-800 text-2xl leading-tight">เดือน<span id="stat-month-label">นี้</span></h3>
-              </div>
-              <span class="text-[10px] text-pink-500 bg-pink-100/70 px-2.5 py-1 rounded-full font-bold whitespace-nowrap mt-1 flex-shrink-0" id="stat-date-label">กำลังโหลด...</span>
-            </div>
-
-            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center gap-5 mt-6">
-              <div class="relative w-28 h-28 flex-shrink-0">
-                <div id="stat-ring" class="w-28 h-28 rounded-full transition-all duration-700 ease-out" style="background: conic-gradient(#f3f4f6 0% 100%);"></div>
-                <div class="absolute inset-[8px] bg-white rounded-full flex flex-col items-center justify-center shadow-inner">
-                  <span id="stat-pct" class="text-2xl font-black text-gray-300">–</span>
-                  <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wide">ผ่านเกณฑ์</span>
+          <div class="relative z-10">
+            <div id="stat-hero" class="relative overflow-hidden text-white px-6 md:px-7 pt-6 pb-16 bg-gradient-to-br from-pink-500 via-rose-500 to-fuchsia-600 transition-colors duration-700">
+              <div class="absolute -right-8 -top-10 w-44 h-44 rounded-full bg-white/10 pointer-events-none"></div>
+              <div class="absolute -left-10 -bottom-14 w-48 h-48 rounded-full bg-white/10 pointer-events-none"></div>
+              <div class="relative flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                  <p class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-90 mb-1 flex items-center gap-1.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>ภาพรวมการแต่งกาย</p>
+                  <h3 class="font-black text-3xl leading-tight">เดือน<span id="stat-month-label">นี้</span></h3>
+                  <span id="stat-date-label" class="inline-block mt-2 text-[11px] font-bold bg-white/20 border border-white/30 rounded-full px-3 py-1 whitespace-nowrap">กำลังโหลด...</span>
+                </div>
+                <div class="relative w-24 h-24 md:w-28 md:h-28 flex-shrink-0">
+                  <div id="stat-ring" class="w-full h-full rounded-full transition-all duration-700 ease-out" style="background: conic-gradient(rgba(255,255,255,.28) 0% 100%);"></div>
+                  <div class="absolute inset-[7px] bg-white rounded-full flex flex-col items-center justify-center shadow-inner">
+                    <span id="stat-pct" class="text-2xl font-black text-gray-300">–</span>
+                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wide">ผ่านเกณฑ์</span>
+                  </div>
                 </div>
               </div>
-              <div id="stats-container" class="grid grid-cols-2 gap-2.5 flex-grow w-full">
-                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
-                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
-                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
-                <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
-              </div>
             </div>
+            <div class="relative px-5 md:px-6 -mt-10">
+              <div id="stats-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-2.5"><div class="stat-tile bg-white rounded-2xl shadow-lg shadow-pink-200/40 px-3 py-3.5 text-center"><div class="skeleton h-8 w-8 mx-auto rounded-xl mb-2"></div><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div><div class="stat-tile bg-white rounded-2xl shadow-lg shadow-pink-200/40 px-3 py-3.5 text-center"><div class="skeleton h-8 w-8 mx-auto rounded-xl mb-2"></div><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div><div class="stat-tile bg-white rounded-2xl shadow-lg shadow-pink-200/40 px-3 py-3.5 text-center"><div class="skeleton h-8 w-8 mx-auto rounded-xl mb-2"></div><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div><div class="stat-tile bg-white rounded-2xl shadow-lg shadow-pink-200/40 px-3 py-3.5 text-center"><div class="skeleton h-8 w-8 mx-auto rounded-xl mb-2"></div><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div></div>
+            </div>
+            <div class="px-5 md:px-7 pb-6">
             <div id="rooms-section" class="mt-7 pt-5 border-t border-pink-100">
               <div class="flex items-center justify-between gap-3 flex-wrap">
                 <h4 class="text-sm font-black text-gray-700 flex items-center gap-2 whitespace-nowrap">
@@ -468,7 +479,8 @@ details>summary::-webkit-details-marker{display:none}
                 <div class="mt-3 space-y-2.5"><div class="skeleton h-5 rounded-lg"></div><div class="skeleton h-5 rounded-lg"></div><div class="skeleton h-5 rounded-lg"></div><div class="skeleton h-5 rounded-lg"></div><div class="skeleton h-5 rounded-lg"></div><div class="skeleton h-5 rounded-lg"></div></div>
               </div>
             </div>
-            <div class="text-[10px] text-gray-400 mt-6 text-center font-medium flex items-center justify-center gap-1.5"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> ข้อมูล Real-time จากฐานข้อมูล</div>
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[10px] text-gray-400 font-medium"><span class="flex items-center gap-1.5 whitespace-nowrap"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> ข้อมูล Real-time จากฐานข้อมูล</span><button type="button" onclick="loadDashboardStats()" class="flex-shrink-0 whitespace-nowrap bg-white border border-pink-100 text-pink-500 font-extrabold px-3 py-1 rounded-full hover:bg-pink-50 transition" aria-label="รีเฟรชข้อมูล">↻ รีเฟรช</button></div>
+            </div>
           </div>
         </div>
         <div class="rise glass-card elev hover:elev-hi rounded-3xl border-t-4 border-amber-400 flex flex-col transform transition duration-300 hover:-translate-y-1 overflow-hidden relative" style="--d:0.21s">
@@ -616,23 +628,34 @@ details>summary::-webkit-details-marker{display:none}
     <!-- 4. หน้าสำหรับนักเรียน -->
     <div id="view-student" class="hidden">
       <button onclick="goHome(true)" class="text-pink-600 font-bold flex items-center gap-1 hover:text-pink-800 mb-4 no-print glass-card px-4 py-2 rounded-xl inline-flex shadow-sm transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
-      <div class="glass-card rounded-2xl px-5 py-3 mb-4 border-t-4 border-pink-400 shadow-md sticky top-[70px] z-40 text-center">
+      <div id="student-greeting" class="hidden glass-card rounded-2xl px-5 py-3 mb-4 border-t-4 border-pink-400 shadow-md text-center">
         <p class="text-gray-600 text-sm md:text-base font-medium" id="student-class-label">เลือกห้องและชื่อของตัวเองเพื่อดูผลการตรวจ</p>
       </div>
-      <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-t-4 border-pink-400 shadow-xl relative overflow-hidden">
-        <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-pink-100/60 pointer-events-none"></div>
-        <div class="relative z-10 text-center mb-6"><div class="w-16 h-16 mx-auto rounded-3xl bg-gradient-to-br from-pink-500 to-rose-500 text-white flex items-center justify-center text-3xl shadow-lg mb-3 transform -rotate-3">🔍</div><h2 class="text-2xl font-extrabold text-gray-800">ตรวจสอบผลการแต่งกาย</h2><p class="text-sm text-gray-400 font-medium mt-1">เลือกห้องและชื่อ แล้วดูผลตรวจ คะแนนพฤติกรรม และการมาเรียน</p></div>
-        <div class="flex flex-col gap-3">
-          <select id="studentSearchClass" onchange="studentSearchLoadNames()" class="relative z-10 w-full p-4 border-2 border-pink-100 rounded-2xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 bg-white text-lg font-bold shadow-sm hover:border-pink-300 transition text-center">
-            <option value="" disabled selected>-- เลือกห้องเรียน --</option>
-          </select>
-          <select id="studentSearchName" class="relative z-10 w-full p-4 border-2 border-pink-100 rounded-2xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 bg-white text-lg font-bold shadow-sm hover:border-pink-300 transition text-center">
-            <option value="" disabled selected>-- เลือกห้องก่อน --</option>
-          </select>
-          <button onclick="searchStudent()" class="btn-pastel relative z-10 bg-gradient-to-r from-pink-500 via-rose-500 to-fuchsia-500 text-white font-extrabold py-4 px-10 rounded-2xl shadow-lg whitespace-nowrap text-lg">🔎 ตรวจสอบผล</button>
+      <div class="glass-card rounded-3xl mb-6 border-t-4 border-pink-400 shadow-xl relative overflow-hidden">
+        <div class="relative overflow-hidden text-white text-center px-6 md:px-8 pt-8 pb-14 bg-gradient-to-br from-pink-500 via-rose-500 to-fuchsia-600">
+          <div class="absolute -right-10 -top-12 w-48 h-48 rounded-full bg-white/10 pointer-events-none"></div>
+          <div class="absolute -left-12 -bottom-16 w-52 h-52 rounded-full bg-white/10 pointer-events-none"></div>
+          <div class="relative">
+            <div class="w-16 h-16 mx-auto rounded-3xl bg-white/20 border border-white/40 flex items-center justify-center text-3xl shadow-lg mb-3 transform -rotate-3">🔍</div>
+            <h2 class="text-2xl md:text-3xl font-black">ตรวจสอบผลการแต่งกาย</h2>
+            <p class="text-sm opacity-90 font-medium mt-1.5">เลือกห้อง แล้วเลือกชื่อ เพื่อดูผลตรวจ คะแนนพฤติกรรม และการมาเรียน</p>
+          </div>
         </div>
-        <p class="text-xs text-gray-400 text-center mt-4 font-medium">🔒 เลือกชื่อตัวเอง ครูโอ๊ตจะแสดงผลให้ทราบ</p>
-        <div class="mt-5 pt-5 border-t border-gray-100">
+        <div class="relative px-4 md:px-8 -mt-8 pb-7 space-y-4">
+          <div class="bg-white rounded-2xl shadow-lg shadow-pink-200/40 border border-pink-50 p-4 md:p-5">
+            <div class="flex items-center gap-2.5 mb-3.5"><span class="w-7 h-7 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 text-white text-xs font-black flex items-center justify-center shadow flex-shrink-0">1</span><span class="font-extrabold text-gray-700">เลือกห้องเรียน</span><span id="stu-class-picked" class="ml-auto text-xs font-extrabold text-pink-500"></span></div>
+            <div id="student-class-chips" class="space-y-2"></div>
+            <select id="studentSearchClass" onchange="studentSearchLoadNames()" class="sr-only" tabindex="-1" aria-hidden="true"><option value="" disabled selected>-- เลือกห้องเรียน --</option></select>
+          </div>
+          <div class="bg-white rounded-2xl shadow-lg shadow-pink-200/40 border border-pink-50 p-4 md:p-5">
+            <div class="flex items-center gap-2.5 mb-3.5"><span class="w-7 h-7 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 text-white text-xs font-black flex items-center justify-center shadow flex-shrink-0">2</span><span class="font-extrabold text-gray-700">เลือกชื่อของตัวเอง</span><span id="stu-name-picked" class="ml-auto text-xs font-extrabold text-pink-500 truncate max-w-[55%]"></span></div>
+            <div class="relative mb-3"><span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none">🔎</span><input id="studentNameFilter" type="search" autocomplete="off" placeholder="พิมพ์ชื่อเพื่อค้นหา" oninput="filterStudentNames(this.value)" class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-100 focus:border-pink-300 focus:ring-4 focus:ring-pink-100 outline-none font-bold text-gray-700 bg-gray-50/50"></div>
+            <div id="student-name-list" class="custom-scroll max-h-72 overflow-y-auto space-y-1.5 pr-1"><div class="text-center text-gray-300 py-8 font-bold">เลือกห้องก่อน</div></div>
+            <select id="studentSearchName" class="sr-only" tabindex="-1" aria-hidden="true"><option value="" disabled selected>-- เลือกห้องก่อน --</option></select>
+          </div>
+          <button id="btn-student-search" onclick="searchStudent()" aria-disabled="true" class="btn-pastel w-full bg-gradient-to-r from-pink-500 via-rose-500 to-fuchsia-500 text-white font-extrabold py-4 px-10 rounded-2xl shadow-lg text-lg opacity-60 transition">🔎 ตรวจสอบผล</button>
+          <p class="text-xs text-gray-400 text-center font-medium">🔒 เลือกชื่อตัวเอง ครูโอ๊ตจะแสดงผลให้ทราบ</p>
+          <div class="pt-4 border-t border-pink-100">
           <button onclick="showClassMonitorLogin()" class="btn-pastel nav-card w-full bg-gradient-to-r from-purple-500 to-violet-500 text-white p-4 rounded-2xl shadow-md border border-purple-400 flex justify-between items-center group relative overflow-hidden">
             <div class="absolute right-[-10px] bottom-[-15px] opacity-20 transform group-hover:scale-110 transition duration-500"><svg class="w-20 h-20" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg></div>
             <div class="relative z-10 text-left">
@@ -641,6 +664,7 @@ details>summary::-webkit-details-marker{display:none}
             </div>
             <svg class="w-5 h-5 text-purple-100 relative z-10 transform group-hover:translate-x-2 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
+          </div>
         </div>
       </div>
       <div id="studentResultContainer" class="space-y-6"></div>
@@ -964,11 +988,11 @@ details>summary::-webkit-details-marker{display:none}
 
     // <<<SEM-BEGIN
     // ==================== ภาคเรียน ====================
-    // เทอม 1 = พ.ค.–ต.ค. | เทอม 2 = พ.ย.–มี.ค. | คะแนนพฤติกรรมนับทั้งปีการศึกษา ส่วนการแต่งกายและเช็คชื่อนับแยกเทอม
+    // เทอม 1 = พ.ค.–ก.ย. (ตุลาคมปิดเทอม ไม่มีตรวจ) | เทอม 2 = พ.ย.–มี.ค. | คะแนนพฤติกรรมนับทั้งปีการศึกษา ส่วนการแต่งกายและเช็คชื่อนับแยกเทอม
     // (currentSemester / currentAY ประกาศไว้ในบล็อก API ด้านบน เพราะ callAPI ต้องใช้)
     const THMONTHS_CAL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     const SEM_MONTHS = {
-      1: ['พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม'],
+      1: ['พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน'],   // ตุลาคมปิดเทอม ไม่มีการตรวจเครื่องแบบ
       2: ['พฤศจิกายน','ธันวาคม','มกราคม','กุมภาพันธ์','มีนาคม']
     };
     const ACADEMIC_MONTHS = MONTH_ORDER;
@@ -1001,7 +1025,7 @@ details>summary::-webkit-details-marker{display:none}
       });
       const ay = document.getElementById('semester-ay'); if (ay) ay.textContent = 'ปีการศึกษา ' + currentAY;
       const hint = document.getElementById('semester-hint');
-      if (hint) hint.textContent = (currentSemester === 1 ? 'เทอม 1 = พ.ค.–ต.ค.' : 'เทอม 2 = พ.ย.–มี.ค.') + ' · คะแนนพฤติกรรมนับทั้งปีการศึกษา';
+      if (hint) hint.textContent = (currentSemester === 1 ? 'เทอม 1 = พ.ค.–ก.ย.' : 'เทอม 2 = พ.ย.–มี.ค.') + ' · คะแนนพฤติกรรมนับทั้งปีการศึกษา';
       updateSemesterChip();
     }
     // เปลี่ยนเทอมที่หน้าแรกเท่านั้น: ทุกหน้าที่เปิดหลังจากนี้ใช้เทอมนี้ (ไม่มีหน้าค้างที่ใช้ข้อมูลเทอมเก่า)
@@ -1065,7 +1089,7 @@ details>summary::-webkit-details-marker{display:none}
         <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>
         <div class="bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center"><div class="skeleton h-6 w-10 mx-auto rounded mb-1.5"></div><div class="skeleton h-2.5 w-16 mx-auto rounded"></div></div>`;
       const ring = document.getElementById('stat-ring');
-      if (ring) ring.style.background = 'conic-gradient(#f3f4f6 0% 100%)';
+      if (ring) ring.style.background = 'conic-gradient(rgba(255,255,255,.28) 0% 100%)';
       const pct = document.getElementById('stat-pct');
       if (pct) { pct.innerText = '–'; pct.className = 'text-2xl font-black text-gray-300'; }
     }
@@ -1191,7 +1215,7 @@ details>summary::-webkit-details-marker{display:none}
       const subEl = document.getElementById('wc-sub');
       subEl.textContent = 'ผลตรวจเดือน' + res.month + ' · ภาคเรียนที่ ' + res.semester + ' ปีการศึกษา ' + res.academicYear;
       const oldWarn = document.getElementById('wc-warn'); if (oldWarn) oldWarn.remove();
-      if (res.calendarMonth && res.calendarMonth !== res.month) {   // เดือนที่ติดตามเป็นค่าที่ตั้งเอง: ถ้าลืมเปลี่ยน จะเห็นว่า "ตรวจครบแล้ว" ทั้งที่เดือนใหม่ยังไม่ได้ตรวจ
+      if (res.calendarMonth && res.calendarMonth !== res.month && (!res.expectedMonth || res.expectedMonth !== res.month)) {   // ปิดเทอม (ต.ค./เม.ย.) ไม่มีตรวจ: ตามเดือนก่อนหน้าอยู่ถือว่าปกติ ไม่เตือน   // เดือนที่ติดตามเป็นค่าที่ตั้งเอง: ถ้าลืมเปลี่ยน จะเห็นว่า "ตรวจครบแล้ว" ทั้งที่เดือนใหม่ยังไม่ได้ตรวจ
         const w = document.createElement('div'); w.id = 'wc-warn';
         w.className = 'mt-3 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 leading-relaxed';
         w.textContent = `⚠ ตอนนี้เป็นเดือน${res.calendarMonth} แต่หน้านี้ติดตามผลตรวจเดือน${res.month} (ตามค่า "เดือนที่แสดงในภาพรวมเดือนนี้") ถ้าเริ่มตรวจเดือนใหม่แล้ว ให้เปลี่ยนค่านั้นก่อน`;
@@ -1228,7 +1252,7 @@ details>summary::-webkit-details-marker{display:none}
     }
     function chooseSummarySemester() {
       return new Promise(resolve => {
-        const opt = (n) => `<button type="button" data-sem="${n}" class="w-full text-left p-4 rounded-2xl border-2 ${n === currentSemester ? 'border-emerald-400 bg-emerald-50' : 'border-gray-200 bg-white hover:border-emerald-300'} transition"><span class="block font-black text-lg text-gray-800">ภาคเรียนที่ ${n}</span><span class="block text-xs font-bold text-gray-400 mt-0.5">${n === 1 ? 'พฤษภาคม – ตุลาคม' : 'พฤศจิกายน – มีนาคม'} · ปีการศึกษา ${currentAY}</span>${n === currentSemester ? '<span class="inline-block mt-1.5 text-[10px] font-extrabold text-emerald-600 bg-emerald-100 rounded-full px-2 py-0.5">เทอมที่เลือกอยู่</span>' : ''}</button>`;
+        const opt = (n) => `<button type="button" data-sem="${n}" class="w-full text-left p-4 rounded-2xl border-2 ${n === currentSemester ? 'border-emerald-400 bg-emerald-50' : 'border-gray-200 bg-white hover:border-emerald-300'} transition"><span class="block font-black text-lg text-gray-800">ภาคเรียนที่ ${n}</span><span class="block text-xs font-bold text-gray-400 mt-0.5">${n === 1 ? 'พฤษภาคม – กันยายน' : 'พฤศจิกายน – มีนาคม'} · ปีการศึกษา ${currentAY}</span>${n === currentSemester ? '<span class="inline-block mt-1.5 text-[10px] font-extrabold text-emerald-600 bg-emerald-100 rounded-full px-2 py-0.5">เทอมที่เลือกอยู่</span>' : ''}</button>`;
         MySwal.fire({ title: 'สรุปรายภาคเรียน (Word)', html: `<p class="text-sm text-gray-500 mb-4">เลือกภาคเรียนที่ต้องการสรุป</p><div class="grid grid-cols-1 gap-3">${opt(1)}${opt(2)}</div>`,
           showConfirmButton: false, showCancelButton: true, cancelButtonText: 'ยกเลิก',
           didOpen: (el) => { (el || document).querySelectorAll('[data-sem]').forEach(b => b.addEventListener('click', () => { resolve(+b.dataset.sem); Swal.close(); })); }
@@ -1257,15 +1281,18 @@ details>summary::-webkit-details-marker{display:none}
       const tone = pct === null ? 'gray' : (pct >= 80 ? 'emerald' : (pct >= 50 ? 'amber' : 'rose'));
       const wPass = tot > 0 ? pass / tot * 100 : 0, wFail = tot > 0 ? fail / tot * 100 : 0;
       const tip = `${r.cls}: ผ่าน ${pass} · ไม่ผ่าน ${fail} · ยังไม่ตรวจ ${pend} (นักเรียน ${tot} คน)`;
-      const right = pct !== null ? `<span class="text-sm font-black text-${tone}-600 tabular">${pct}%</span>`
-        : (tot > 0 ? '<span class="text-xs font-extrabold text-amber-500">ยังไม่ตรวจ</span>' : '<span class="text-xs font-bold text-gray-300">–</span>');
-      return `<div class="room-row rise flex items-center gap-2.5 py-1.5 px-1.5 -mx-1.5 rounded-lg hover:bg-pink-50/70 transition" style="--d:${delay.toFixed(3)}s" title="${tip}">
-        <div class="w-[52px] flex-shrink-0 text-xs font-extrabold text-gray-700 tabular">${r.cls}</div>
-        <div class="flex-1 h-2.5 rounded-full bg-gray-100 overflow-hidden flex" role="img" aria-label="${tip}">
+      const big = pct !== null ? `<span class="text-xl font-black text-${tone}-600 tabular leading-none">${pct}%</span>`
+        : (tot > 0 ? '<span class="text-xs font-extrabold text-amber-500 leading-none">ยังไม่ตรวจ</span>' : '<span class="text-sm font-bold text-gray-300 leading-none">–</span>');
+      const box = pct === null ? (tot > 0 ? 'border-dashed border-amber-200 bg-amber-50/40' : 'border-dashed border-gray-200 bg-gray-50/50')
+        : (tone === 'emerald' ? 'border-emerald-100 bg-emerald-50/50' : (tone === 'amber' ? 'border-amber-200 bg-amber-50/60' : 'border-rose-200 bg-rose-50/60'));
+      // บนจอเรียง 3 บรรทัด: ชื่อห้อง / เปอร์เซ็นต์ + จำนวนคน / แถบ (ลำดับใน DOM คงเดิม: ห้อง, แถบ, ตัวเลข — จัดตำแหน่งด้วย order)
+      return `<div class="room-row rise flex flex-col gap-1.5 rounded-2xl border ${box} px-3 py-2.5 transition hover:-translate-y-0.5 hover:shadow-md" data-tone="${tone}" style="--d:${delay.toFixed(3)}s" title="${tip}">
+        <div class="order-1 text-[13px] font-extrabold text-gray-700 tabular whitespace-nowrap">${r.cls}</div>
+        <div class="order-3 h-2 rounded-full bg-white/80 border border-gray-100 overflow-hidden flex" role="img" aria-label="${tip}">
           <div class="room-bar h-full bg-gradient-to-r from-emerald-400 to-emerald-500" data-w="${wPass.toFixed(2)}" style="width:0%"></div>
           <div class="room-bar h-full bg-gradient-to-r from-rose-400 to-rose-500" data-w="${wFail.toFixed(2)}" style="width:0%"></div>
         </div>
-        <div class="w-[96px] flex-shrink-0 flex items-baseline justify-end gap-1.5">${right}<span class="text-[10px] font-bold text-gray-400 tabular">${insp}/${tot}</span></div>
+        <div class="order-2 flex items-baseline justify-between gap-1">${big}<span class="text-[10px] font-bold text-gray-400 tabular whitespace-nowrap">${insp}/${tot}</span></div>
       </div>`;
     }
     function renderRoomStats(res) {
@@ -1273,8 +1300,11 @@ details>summary::-webkit-details-marker{display:none}
       const rooms = res.rooms || []; let html = '', d = 0.04;
       [4, 5, 6].forEach(g => {
         const rs = rooms.filter(r => r.grade === g); if (!rs.length) return;
-        html += `<div class="flex items-center gap-2 mt-3.5 mb-1"><span class="text-[10px] font-black text-pink-500 bg-pink-50 border border-pink-100 px-2.5 py-0.5 rounded-full tracking-wide whitespace-nowrap">มัธยมศึกษาปีที่ ${g}</span><span class="flex-1 h-px bg-pink-100"></span></div>`;
+        const gt = rs.reduce((a, r) => a + r.total, 0), gi = rs.reduce((a, r) => a + r.inspected, 0), gp = rs.reduce((a, r) => a + r.passed, 0);
+        const gsum = gi > 0 ? `ผ่าน ${Math.round(gp / gi * 100)}% · ${gi}/${gt} คน` : `ยังไม่ตรวจ · 0/${gt} คน`;
+        html += `<div class="flex items-center gap-2 mt-4 mb-2"><span class="text-[10px] font-black text-pink-500 bg-pink-50 border border-pink-100 px-2.5 py-0.5 rounded-full tracking-wide whitespace-nowrap">มัธยมศึกษาปีที่ ${g}</span><span class="flex-1 h-px bg-pink-100"></span><span class="text-[10px] font-bold text-gray-400 tabular whitespace-nowrap">${gsum}</span></div><div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-2.5">`;
         rs.forEach(r => { html += roomRowHtml(r, d); d += 0.025; });
+        html += '</div>';
       });
       box.innerHTML = html;
       // สรุปบรรทัดเดียว: ใครยังไม่ได้ตรวจ — ตัวเลข 100% ด้านบนนับเฉพาะคนที่ตรวจแล้ว จึงต้องบอกว่ายังเหลือกี่คน ห้องไหน
@@ -1300,7 +1330,7 @@ details>summary::-webkit-details-marker{display:none}
         section.classList.remove('hidden'); renderRoomStats(res);
       }).catch(() => {
         if (myToken !== roomStatsToken) return;
-        document.getElementById('rooms-container').innerHTML = '<div class="text-center text-red-400 text-xs font-medium py-4 mt-3 border-2 border-dashed border-red-100 rounded-2xl">❌ โหลดผลตรวจรายห้องไม่สำเร็จ</div>';
+        document.getElementById('rooms-container').innerHTML = '<div class="text-center text-red-400 text-xs font-medium py-4 mt-3 border-2 border-dashed border-red-100 rounded-2xl">โหลดผลตรวจรายห้องไม่สำเร็จ <button type="button" onclick="loadRoomStats()" class="ml-1 text-pink-500 font-extrabold underline">ลองใหม่</button></div>';
       });
     }
     // จำนวนข้อบังคับในแต่ละระดับ นับจากกฎจริงในฐานข้อมูล (ถ้าแก้กฎ ตัวเลขในการ์ดเปลี่ยนตามเอง) ถ้าโหลดไม่ได้ก็ใช้ค่าที่พิมพ์ไว้ในการ์ด
@@ -1320,6 +1350,12 @@ details>summary::-webkit-details-marker{display:none}
     }
     // ROOMS-END>>>
 
+    const HERO_TONES = { good: 'from-pink-500 via-rose-500 to-fuchsia-600', mid: 'from-amber-400 via-orange-500 to-rose-500', low: 'from-rose-500 via-red-500 to-red-700' };
+    function setHeroTone(tone) {
+      const el = document.getElementById('stat-hero'); if (!el) return;
+      Object.values(HERO_TONES).forEach(c => c.split(' ').forEach(k => el.classList.remove(k)));
+      HERO_TONES[tone].split(' ').forEach(k => el.classList.add(k));
+    }
     function loadDashboardStats() {
       const myToken = ++dashboardLoadToken;
       loadRoomStats();   // รีเฟรชผลตรวจรายห้องพร้อมตัวเลขหน้าแรกเสมอ
@@ -1335,15 +1371,15 @@ details>summary::-webkit-details-marker{display:none}
         const ring = document.getElementById('stat-ring');
         const pctLabel = document.getElementById('stat-pct');
         if (pct === null) {
-          ring.style.background = 'conic-gradient(#f3f4f6 0% 100%)';
+          ring.style.background = 'conic-gradient(rgba(255,255,255,.28) 0% 100%)';
           pctLabel.innerText = '–';
-          pctLabel.className = 'text-2xl font-black text-gray-300 tabular';
+          pctLabel.className = 'text-2xl font-black text-gray-300 tabular'; setHeroTone('good');
         } else {
-          const ringColor = pct >= 80 ? '#ec4899' : (pct >= 50 ? '#f59e0b' : '#f43f5e');
+          const ringColor = '#ffffff'; setHeroTone(pct >= 80 ? 'good' : (pct >= 50 ? 'mid' : 'low'));   // วงแหวนสีขาวบนแถบหัว: เปลี่ยนสีแถบตามอัตราผ่านแทน
           pctLabel.className = 'text-2xl font-black text-gray-800 tabular';
           const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (reduce) {
-            ring.style.background = `conic-gradient(${ringColor} 0% ${pct}%, #f3f4f6 ${pct}% 100%)`;
+            ring.style.background = `conic-gradient(${ringColor} 0% ${pct}%, rgba(255,255,255,.28) ${pct}% 100%)`;
             pctLabel.innerText = pct + '%';
           } else {
             // กวาดวงแหวนจาก 0 ไปถึง % จริง พร้อมกับตัวเลขตรงกลางที่ไต่ขึ้นพร้อมกัน
@@ -1355,33 +1391,27 @@ details>summary::-webkit-details-marker{display:none}
               let p = Math.min((now - start) / dur, 1);
               p = 1 - Math.pow(1 - p, 3);
               const cur = pct * p;
-              ring.style.background = `conic-gradient(${ringColor} 0% ${cur}%, #f3f4f6 ${cur}% 100%)`;
+              ring.style.background = `conic-gradient(${ringColor} 0% ${cur}%, rgba(255,255,255,.28) ${cur}% 100%)`;
               pctLabel.innerText = Math.round(cur) + '%';
               if (p < 1) requestAnimationFrame(sweep);
             })(start);
           }
         }
 
-        const cell = (val, tone, label, delay) => `
-          <div class="rise bg-white/70 border border-${tone}-100 rounded-xl px-3 py-3 text-center" style="--d:${delay}s">
-            <div class="font-black text-lg text-${tone}-600 tabular" data-count="${val}">0</div>
-            <div class="text-[10px] text-${tone}-400 font-bold uppercase tracking-wide">${label}</div>
+        const tile = (val, icon, tone, label, delay) => `
+          <div class="stat-tile rise bg-white rounded-2xl shadow-lg shadow-pink-200/40 border border-white px-3 py-3.5 text-center" style="--d:${delay}s">
+            <div class="mx-auto w-9 h-9 rounded-xl bg-${tone}-100 text-lg flex items-center justify-center">${icon}</div>
+            <div class="font-black text-2xl text-gray-800 tabular mt-1.5 leading-none" data-count="${val}">0</div>
+            <div class="text-[10px] text-gray-400 font-bold mt-1.5">${label}</div>
           </div>`;
-        let statsHtml = `
-          <div class="rise bg-white/70 border border-gray-100 rounded-xl px-3 py-3 text-center" style="--d:0.05s">
-            <div class="font-black text-lg text-gray-800 tabular" data-count="${stats.totalStudents}">0</div>
-            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">นักเรียนทั้งหมด</div>
-          </div>
-          ${cell(stats.passedToday, 'green', 'ผ่านเดือนนี้', 0.12)}
-          ${cell(stats.failedToday, 'rose', 'ไม่ผ่านเดือนนี้', 0.19)}
-          ${cell(stats.absentToday, 'sky', 'ขาดเรียนวันนี้', 0.26)}`;
+        let statsHtml = tile(stats.totalStudents, '👥', 'slate', 'นักเรียนทั้งหมด', 0.05) + tile(stats.passedToday, '✅', 'emerald', 'ผ่านเดือนนี้', 0.12) + tile(stats.failedToday, '⚠️', 'rose', 'ไม่ผ่านเดือนนี้', 0.19) + tile(stats.absentToday, '🚪', 'sky', 'ขาดเรียนวันนี้', 0.26);
         const box = document.getElementById('stats-container');
         box.innerHTML = statsHtml;
         // เริ่มนับหลังแปะ DOM เสร็จแล้ว (ต้องมี element จริงก่อนถึงจะนับได้)
         box.querySelectorAll('[data-count]').forEach(el => animateCount(el, parseInt(el.dataset.count) || 0));
       }).catch(() => {
         if (myToken !== dashboardLoadToken) return; // คำขอเก่าที่ล้มเหลว ไม่ควรมาลบข้อมูลใหม่ที่โหลดสำเร็จแล้วทิ้ง
-        document.getElementById('stats-container').innerHTML = `<div class="col-span-2 text-center text-red-400 text-sm font-medium py-6 border-2 border-dashed border-red-100 rounded-2xl">❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองรีเฟรชหน้าใหม่</div>`;
+        document.getElementById('stats-container').innerHTML = `<div class="col-span-2 sm:col-span-4 md:col-span-2 lg:col-span-4 bg-white rounded-2xl shadow-lg px-4 py-6 text-center"><div class="text-4xl mb-2">📡</div><div class="text-red-500 font-extrabold">โหลดข้อมูลไม่สำเร็จ</div><div class="text-xs text-gray-400 font-medium mt-1">ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง</div><button type="button" onclick="loadDashboardStats()" class="mt-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl shadow-md">↻ ลองใหม่</button></div>`;
       });
     }
 
@@ -2171,14 +2201,12 @@ details>summary::-webkit-details-marker{display:none}
     // ==================== ส่วนนักเรียน ====================
     function showStudentView() {
       showView('view-student');
+      const gr = document.getElementById('student-greeting'); if (gr) gr.classList.add('hidden');
       document.getElementById('student-class-label').innerText = 'เลือกห้องและชื่อของตัวเองเพื่อดูผลการตรวจ';
       document.getElementById('studentResultContainer').innerHTML = '';
       const classSelect = document.getElementById('studentSearchClass');
-      const nameSelect = document.getElementById('studentSearchName');
-      if (classSelect) {
-        classSelect.innerHTML = '<option value="" disabled selected>-- เลือกห้องเรียน --</option>' + ALL_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
-      }
-      if (nameSelect) nameSelect.innerHTML = '<option value="" disabled selected>-- เลือกห้องก่อน --</option>';
+      if (classSelect) classSelect.innerHTML = '<option value="" disabled selected>-- เลือกห้องเรียน --</option>' + ALL_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
+      renderClassChips(); resetStudentNames();
     }
 
     // ==================== รายงานนักเรียนรายบุคคล (ฝ่ายปกครอง) ====================
@@ -2296,18 +2324,73 @@ details>summary::-webkit-details-marker{display:none}
       }).catch(() => MySwal.fire('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error'));
     }
 
+    // <<<STUDENTUI-BEGIN
+    // ==================== หน้านักเรียน: เลือกห้องด้วยปุ่ม + ค้นหาชื่อ ====================
+    // ช่อง select เดิม (#studentSearchClass / #studentSearchName) ยังอยู่ (ซ่อนจากสายตา) เป็นแหล่งค่าจริงของ searchStudent()
+    // ปุ่มห้องและรายชื่อทำหน้าที่แค่ตั้งค่าให้มัน จึงใช้ระบบค้นหาเดิมได้ทั้งหมด
+    function nameInitial(n) { return String(n || '').replace(/^(นางสาว|เด็กหญิง|เด็กชาย|นาง|นาย)\s*/, '').replace(/^[เแโใไ]+/, '').charAt(0) || '👤'; }   // ตัวอักษรแรกของชื่อ (ไม่ใช้เลขลำดับ กันเข้าใจผิดว่าเป็นเลขที่)
+    function gradeOf(cls) { const m = String(cls).match(/ม\.(\d+)/); return m ? +m[1] : 0; }
+    function markClassChip(cls) {
+      document.querySelectorAll('#student-class-chips .stu-class-chip').forEach(b => { const on = b.dataset.cls === cls; b.dataset.on = on ? '1' : '0'; b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      const lab = document.getElementById('stu-class-picked'); if (lab) lab.textContent = cls ? 'ห้อง ' + cls : '';
+    }
+    function renderClassChips() {
+      const box = document.getElementById('student-class-chips'); if (!box) return;
+      const grades = [...new Set(ALL_CLASSES.map(gradeOf))].sort((a, b) => a - b);
+      box.innerHTML = grades.map(g => `<div class="flex items-center gap-2"><span class="w-12 flex-shrink-0 text-[11px] font-black text-pink-500 bg-pink-50 border border-pink-100 rounded-lg py-2 text-center">ม.${g}</span><div class="grid grid-cols-4 gap-2 flex-1 min-w-0">${ALL_CLASSES.filter(c => gradeOf(c) === g).map(c => `<button type="button" data-cls="${c}" data-on="0" aria-pressed="false" onclick="pickStudentClass('${c}')" class="stu-class-chip py-2.5 rounded-xl border-2 border-gray-100 bg-white text-gray-600 font-extrabold text-sm tabular hover:border-pink-300 hover:bg-pink-50 transition">${c.replace('ม.', '')}</button>`).join('')}</div></div>`).join('');
+    }
+    function pickStudentClass(cls) {
+      const sel = document.getElementById('studentSearchClass'); if (!sel) return;
+      sel.value = cls; studentSearchLoadNames();
+    }
+    function setSearchButtonReady(on) {
+      const b = document.getElementById('btn-student-search'); if (!b) return;
+      b.classList.toggle('opacity-60', !on); b.setAttribute('aria-disabled', on ? 'false' : 'true');
+    }
+    function resetStudentNames(keepClass) {
+      const sel = document.getElementById('studentSearchName'); if (sel) sel.innerHTML = '<option value="" disabled selected>-- เลือกห้องก่อน --</option>';
+      const list = document.getElementById('student-name-list'); if (list) list.innerHTML = '<div class="text-center text-gray-300 py-8 font-bold">เลือกห้องก่อน</div>';
+      const f = document.getElementById('studentNameFilter'); if (f) f.value = '';
+      const nl = document.getElementById('stu-name-picked'); if (nl) nl.textContent = '';
+      setSearchButtonReady(false);
+      if (!keepClass) markClassChip('');
+    }
+    function renderNameList(students) {
+      const list = document.getElementById('student-name-list'); if (!list) return;
+      if (!students.length) { list.innerHTML = '<div class="text-center text-gray-300 py-8 font-bold">ไม่พบรายชื่อในห้องนี้</div>'; return; }
+      list.innerHTML = students.map((s, i) => `<button type="button" data-name="${escHtml(s.name)}" data-on="0" onclick="pickStudentName(this.dataset.name)" class="stu-name w-full flex items-center gap-3 px-3.5 py-3 rounded-xl border-2 border-gray-100 bg-white hover:border-pink-200 hover:bg-pink-50/50 text-left transition"><span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-300 to-rose-400 text-white font-black flex items-center justify-center flex-shrink-0 text-sm">${escHtml(nameInitial(s.name))}</span><span class="font-bold text-gray-700 break-words flex-1">${escHtml(s.name)}</span><span class="stu-check text-pink-500 font-black">✓</span></button>`).join('') + '<div id="student-name-empty" class="hidden text-center text-gray-300 py-6 font-bold">ไม่พบชื่อที่ค้นหา</div>';
+    }
+    function pickStudentName(name) {
+      const sel = document.getElementById('studentSearchName'); if (sel) sel.value = name;
+      document.querySelectorAll('#student-name-list .stu-name').forEach(b => { b.dataset.on = b.dataset.name === name ? '1' : '0'; });
+      const nl = document.getElementById('stu-name-picked'); if (nl) nl.textContent = name;
+      setSearchButtonReady(true);
+    }
+    function filterStudentNames(q) {
+      const k = String(q || '').trim().toLowerCase(); let shown = 0;
+      document.querySelectorAll('#student-name-list .stu-name').forEach(b => { const ok = !k || b.dataset.name.toLowerCase().includes(k); b.classList.toggle('hidden', !ok); if (ok) shown++; });
+      const em = document.getElementById('student-name-empty'); if (em) em.classList.toggle('hidden', shown > 0);
+    }
+    // STUDENTUI-END>>>
+
     function studentSearchLoadNames() {
       const cls = document.getElementById('studentSearchClass').value;
       const nameSelect = document.getElementById('studentSearchName');
       if (!nameSelect) return;
+      markClassChip(cls); resetStudentNames(true);
       nameSelect.innerHTML = '<option value="" disabled selected>-- กำลังโหลดรายชื่อ... --</option>';
+      const list = document.getElementById('student-name-list');
+      if (list) list.innerHTML = '<div class="space-y-2">' + '<div class="skeleton h-12 rounded-xl"></div>'.repeat(5) + '</div>';
       callAPI('getStudentsByClass', { className: cls }).then(students => {
         const target = document.getElementById('studentSearchName');
-        if (!target) return; // เปลี่ยนหน้าไปแล้วก่อนโหลดเสร็จ
-        target.innerHTML = '<option value="" disabled selected>-- เลือกชื่อของตัวเอง --</option>' + students.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+        if (!target || document.getElementById('studentSearchClass').value !== cls) return; // เปลี่ยนหน้า/เปลี่ยนห้องไปแล้วก่อนโหลดเสร็จ
+        target.innerHTML = '<option value="" disabled selected>-- เลือกชื่อของตัวเอง --</option>' + students.map(s => `<option value="${escHtml(s.name)}">${escHtml(s.name)}</option>`).join('');
+        renderNameList(students);
       }).catch(() => {
         const target = document.getElementById('studentSearchName');
         if (target) target.innerHTML = '<option value="" disabled selected>-- โหลดไม่สำเร็จ ลองเลือกห้องใหม่อีกครั้ง --</option>';
+        const l = document.getElementById('student-name-list');
+        if (l) l.innerHTML = `<div class="text-center py-8"><div class="text-red-400 font-bold text-sm">โหลดรายชื่อไม่สำเร็จ</div><button type="button" onclick="pickStudentClass('${cls}')" class="mt-2 text-pink-500 font-extrabold underline text-sm">ลองใหม่</button></div>`;
       });
     }
 
@@ -2322,6 +2405,7 @@ details>summary::-webkit-details-marker{display:none}
           MySwal.fire({ icon: 'error', title: 'ไม่พบข้อมูล', text: res.message || 'ไม่พบข้อมูลนักเรียนคนนี้ กรุณาลองใหม่', confirmButtonColor: '#ec4899' });
           return;
         }
+        { const gr = document.getElementById('student-greeting'); if (gr) gr.classList.remove('hidden'); }
         document.getElementById('student-class-label').innerHTML = `สวัสดี <span class="font-black text-pink-600">${res.studentName}</span> ห้อง <span class="font-black text-pink-600">${res.studentClass}</span>`;
         renderStudentResult(res.inspectResult, res.conductResult, res.studentName, res.attendanceSummary, undefined, res.studentClass);
       }).catch(() => {
@@ -2580,21 +2664,26 @@ details>summary::-webkit-details-marker{display:none}
 
       let monthlyHtml = '<div class="flex items-center gap-3 mb-5 mt-8 ml-2"><h3 class="font-extrabold text-gray-800 text-2xl">📅 ประวัติการตรวจรายเดือน</h3><hr class="flex-grow border-pink-200 border-2 rounded-full"></div>';
       records.forEach(rec => {
-        let hasBrokenThisMonth = rec.brokenRules.length > 0;
-        let borderColor = hasBrokenThisMonth ? 'border-red-400' : 'border-green-400';
-        let statusBadge = hasBrokenThisMonth ? `<div class="bg-red-50 text-red-700 px-4 py-3 rounded-xl text-sm mb-5 border border-red-200"><strong>จุดที่ต้องแก้ไข:</strong> <span class="font-medium">${rec.brokenRules.join(', ')}</span></div>` : `<div class="bg-green-50 text-green-700 px-4 py-3 rounded-xl text-base mb-5 border border-green-200 flex items-center gap-2"><strong>สถานะ:</strong> ผ่านระเบียบเรียบร้อย 💖</div>`;
-        let card = `<div class="glass-card rounded-3xl p-6 md:p-8 mb-6 border-l-8 ${borderColor} shadow-md">`;
-        card += `<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-5 gap-3"><h4 class="font-extrabold text-gray-800 text-xl">เดือน: ${rec['เดือน'] || 'ไม่มีข้อมูล'}${rec['ปี'] ? ' ' + rec['ปี'] : ''}</h4><span class="text-[11px] font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">${fmtStamp(rec['Timestamp'])}</span></div>`;
-        card += statusBadge;
-        card += `<div class="grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-3 text-sm">`;
-        ruleItems.forEach(rule => {
+        const broken = rec.brokenRules.length > 0, mname = rec['เดือน'] || 'ไม่มีข้อมูล';
+        let nPass = 0, nFail = 0, nWait = 0;
+        const chips = ruleItems.map(rule => {
           let status = rec[rule]; if (!status || status === 'undefined') status = 'ไม่ต้องใส่';
-          let statusColor = status === 'ผ่าน' ? 'text-green-600 font-bold bg-green-50/80 border-green-100' : (status === 'ไม่ผ่าน' ? 'text-red-600 font-bold bg-red-50/80 border-red-100' : (status === 'ยังไม่ตรวจ' ? 'text-amber-600 font-bold bg-amber-50/80 border-amber-100' : 'text-gray-500 font-bold bg-gray-50/80 border-gray-100'));
-          let icon = status === 'ผ่าน' ? '✅' : (status === 'ไม่ผ่าน' ? '❌' : (status === 'ยังไม่ตรวจ' ? '⏳' : '➖'));
-          card += `<div class="p-3 rounded-xl border shadow-sm flex items-center justify-between ${statusColor}"><span class="text-gray-700 font-bold">${rule}</span> <span>${icon}</span></div>`;
-        });
-        card += `</div></div>`;
-        monthlyHtml += card;
+          if (status === 'ผ่าน') nPass++; else if (status === 'ไม่ผ่าน') nFail++; else if (status === 'ยังไม่ตรวจ') nWait++;
+          const tone = status === 'ผ่าน' ? 'text-emerald-700 bg-emerald-50 border-emerald-100' : (status === 'ไม่ผ่าน' ? 'text-rose-700 bg-rose-50 border-rose-200' : (status === 'ยังไม่ตรวจ' ? 'text-amber-700 bg-amber-50 border-amber-100' : 'text-gray-400 bg-gray-50 border-gray-100'));
+          const icon = status === 'ผ่าน' ? '✅' : (status === 'ไม่ผ่าน' ? '❌' : (status === 'ยังไม่ตรวจ' ? '⏳' : '➖'));
+          return `<div class="px-3 py-2.5 rounded-xl border flex items-center justify-between gap-2 ${tone}"><span class="font-bold text-gray-700 text-[13px]">${rule}</span><span>${icon}</span></div>`;
+        }).join('');
+        monthlyHtml += `<div class="month-card glass-card rounded-3xl overflow-hidden mb-5 shadow-md border ${broken ? 'border-rose-100' : 'border-emerald-100'}">
+          <div class="flex items-center gap-4 px-5 md:px-6 py-4 bg-gradient-to-r ${broken ? 'from-rose-50' : 'from-emerald-50'} to-white">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${broken ? 'from-rose-400 to-red-500' : 'from-emerald-400 to-green-500'} text-white flex flex-col items-center justify-center shadow-md flex-shrink-0 leading-none"><span class="text-[9px] font-bold opacity-90">${rec['ปี'] || ''}</span><span class="text-base font-black mt-1">${monthShort(mname)}</span></div>
+            <div class="min-w-0 flex-1"><h4 class="font-extrabold text-gray-800 text-lg leading-tight">เดือน: ${mname}${rec['ปี'] ? ' ' + rec['ปี'] : ''}</h4><div class="text-[11px] font-bold text-gray-400 mt-0.5">บันทึกเมื่อ ${fmtStamp(rec['Timestamp'])}</div></div>
+            <span class="text-xs font-extrabold px-3 py-1.5 rounded-full whitespace-nowrap ${broken ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${broken ? '✕ ไม่ผ่าน ' + rec.brokenRules.length + ' ข้อ' : '✓ ผ่านครบ'}</span>
+          </div>
+          <div class="px-5 md:px-6 pb-5 pt-3">
+            ${broken ? `<div class="bg-rose-50 text-rose-700 px-4 py-3 rounded-xl text-sm mb-4 border border-rose-100"><strong>จุดที่ต้องแก้ไข:</strong> <span class="font-medium">${rec.brokenRules.join(', ')}</span></div>` : `<div class="bg-emerald-50 text-emerald-700 px-4 py-3 rounded-xl text-sm mb-4 border border-emerald-100 font-bold">ผ่านระเบียบเรียบร้อย 💖</div>`}
+            <div class="flex flex-wrap gap-2 text-[11px] font-extrabold mb-3"><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">ผ่าน ${nPass}</span><span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-100">ไม่ผ่าน ${nFail}</span>${nWait ? `<span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">ยังไม่ตรวจ ${nWait}</span>` : ''}</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 text-sm">${chips}</div>
+          </div></div>`;
       });
       container.innerHTML += monthlyHtml;
     }
