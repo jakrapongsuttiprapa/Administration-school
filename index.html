@@ -1566,11 +1566,58 @@ body{background-color:#fbf5f2}
 .ft-logo{color:#831843;background:linear-gradient(150deg,#fffbeb,#fcd34d 50%,#d97706);border:0;box-shadow:0 10px 18px -10px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.8)}
 .ft-line{background:linear-gradient(90deg,rgba(252,211,77,0),#fcd34d,rgba(252,211,77,0));opacity:.7}
 .ft-top{color:#831843;background:linear-gradient(180deg,#fffdf6,#fff2d6);box-shadow:0 8px 16px -10px rgba(0,0,0,.6),inset 0 0 0 1px rgba(217,119,6,.35)}
+/* ===== ภาพพื้นหลังหน้าเว็บ — เฉพาะจอคอม (กว้าง ≥1024px) ฝ่ายปกครองตั้งได้จากหน้าเว็บ (bg-/bgx-) ===== */
+.bg-fixed-layer{overflow:hidden}
+.bg-photo,.bg-veil{position:absolute;inset:0;display:none;pointer-events:none}
+.bg-photo{z-index:0;background:no-repeat 50% 50%/cover;will-change:transform}
+.bg-veil{z-index:1}
+.bg-fixed-layer::after{z-index:2;transition:opacity .4s}
+@media (min-width:1024px){
+.bg-fixed-layer.bg-on .bg-photo,.bg-fixed-layer.bg-on .bg-veil{display:block}
+.bg-fixed-layer.bg-on::after{opacity:0}
+html.bgp-on body{background-color:transparent}
+html.bgp-glass .site-hdr{background:rgba(255,252,249,.72)}
+html.bgp-glass .hero-panel{background:radial-gradient(90% 70% at 0% 0%,rgba(253,242,248,.6) 0%,rgba(253,242,248,0) 60%),linear-gradient(160deg,rgba(255,255,255,.8) 0%,rgba(255,251,245,.78) 60%,rgba(250,245,255,.78) 100%)}
+html.bgp-glass .glass-card{background:rgba(255,255,255,.86)}
+}
+.hero-edit-btn.bg-edit-btn{top:54px}
+@media (max-width:1023.98px){.bg-edit-btn{display:none!important}}
+div:where(.swal2-container) .swal2-popup.he-pop.bg-pop{width:min(1060px,96vw)!important}
+.bgx-head-r{display:flex;gap:6px;flex-wrap:wrap}
+.bgx-wrap{background:transparent}
+.bgx-stage{position:absolute;top:0;left:0;transform-origin:0 0;overflow:hidden;border-radius:22px;box-shadow:0 0 0 2px rgba(131,24,67,.14),0 24px 50px -26px rgba(76,5,25,.55);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;background-color:#fbf5f2}
+.bgx-stage.bgx-drag{cursor:grabbing}
+.bgx-stage:not(.bgx-has){cursor:default}
+.bgx-photo{position:absolute;inset:0;z-index:0;background:no-repeat 50% 50%/cover;pointer-events:none}
+.bgx-veil{position:absolute;inset:0;z-index:1;pointer-events:none}
+.bgx-page{position:absolute;inset:0;z-index:3;pointer-events:none;transition:opacity .25s}
+.bgx-stage[data-ui="0"] .bgx-page{opacity:0}
+.bgx-hdr{position:absolute;left:0;right:0;top:0;background:rgba(255,252,249,.88);border-bottom:1px solid rgba(217,119,6,.22);box-shadow:0 10px 26px -22px rgba(76,5,25,.55)}
+.bgx-glass .bgx-hdr{background:rgba(255,252,249,.72)}
+.bgx-logo{position:absolute;width:48px;height:48px;border-radius:999px;background:#fff;box-shadow:0 0 0 1px #f1e7e2,0 4px 10px -4px rgba(76,5,25,.3)}
+.bgx-logo::after{content:"";position:absolute;inset:11px 12px 9px;border-radius:7px 7px 14px 14px;background:linear-gradient(160deg,#7f1d1d,#b91c1c);box-shadow:inset 0 0 0 2px #d4a017}
+.bgx-hdr b,.bgx-hero b{position:absolute;display:block;border-radius:9px}
+.bgx-hdr b{height:17px;background:#831843;opacity:.85}.bgx-hdr b+b{height:10px;background:#c9b2a6;opacity:1}
+.bgx-hero{position:absolute;overflow:hidden;border-radius:40px;background:radial-gradient(90% 70% at 0% 0%,rgba(253,242,248,.9) 0%,rgba(253,242,248,0) 60%),linear-gradient(160deg,rgba(255,255,255,.94) 0%,rgba(255,251,245,.93) 60%,rgba(250,245,255,.93) 100%);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 44px 70px -48px rgba(76,5,25,.5),0 0 0 1px rgba(217,119,6,.22)}
+.bgx-glass .bgx-hero{background:radial-gradient(90% 70% at 0% 0%,rgba(253,242,248,.6) 0%,rgba(253,242,248,0) 60%),linear-gradient(160deg,rgba(255,255,255,.8) 0%,rgba(255,251,245,.78) 60%,rgba(250,245,255,.78) 100%)}
+.bgx-hi{position:absolute;right:0;top:0;height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 35%);mask-image:linear-gradient(to right,transparent 0%,#000 35%)}
+.bgx-hi img{position:absolute;max-width:none}
+.bgx-hero b{height:38px;background:#4c0519;opacity:.82}.bgx-hero b+b{height:24px;background:#eadcd4;opacity:1}
+.bgx-hero i{position:absolute;display:block;border-radius:28px;box-shadow:0 18px 30px -20px rgba(76,5,25,.7),inset 0 0 0 1px rgba(255,255,255,.28)}
+.bgx-empty{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;pointer-events:none}
+.bgx-empty b{font-size:15px;font-weight:900;color:#9d174d;background:rgba(255,255,255,.94);border-radius:999px;padding:8px 16px;box-shadow:0 10px 24px -14px rgba(157,23,77,.55)}
+.bgx-empty span{font-size:11.5px;font-weight:800;color:#8a6d5d;background:rgba(255,255,255,.88);border-radius:999px;padding:4px 12px}
+.bgx-sl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:7px}
+.bgx-sl .he-zoomrow{min-width:0}
+.bgx-sl .he-zoomrow b{min-width:44px}
+.bgx-lb{font-size:12px;font-weight:900;color:#6b7280;white-space:nowrap}
+.bgx-off{opacity:.45;pointer-events:none}
+@media (max-width:760px){.bgx-sl{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
 
-  <div class="bg-fixed-layer"></div>
+  <div class="bg-fixed-layer"><div class="bg-photo" id="bg-photo"></div><div class="bg-veil" id="bg-veil"></div></div>
   <div class="fixed inset-0 bg-white/10 pointer-events-none z-[-1]"></div>
 
   <!-- Header -->
@@ -1633,6 +1680,7 @@ body{background-color:#fbf5f2}
         </div>
 
         <button type="button" id="hero-edit-btn" onclick="openHeroEditor()" class="hero-edit-btn hidden no-print" aria-label="แก้ไขรูปหน้าแรก">🖼️ แก้รูปหน้าแรก</button>
+        <button type="button" id="bg-edit-btn" onclick="openBgEditor()" class="hero-edit-btn bg-edit-btn hidden no-print" aria-label="ใส่ภาพพื้นหลังหน้าเว็บ (คอมพิวเตอร์)">🖥️ ภาพพื้นหลัง</button>
         <!-- เนื้อหาฝั่งซ้าย -->
         <div class="relative z-20 w-full lg:w-[60%] mt-[270px] sm:mt-[290px] lg:mt-0">
           <div class="text-center lg:text-left mb-6 lg:mb-8">
@@ -5477,8 +5525,11 @@ body{background-color:#fbf5f2}
           <button type="button" class="st-pw" onclick="exportBackup(this)"><span class="st-pwi bg-sky-100" aria-hidden="true">📥</span><span class="flex-1 text-left"><b>ดาวน์โหลดไฟล์สำรอง (.xlsx)</b><span>นักเรียน · เช็คชื่อ · ตรวจแต่งกาย · พฤติกรรม · เกณฑ์ · ประวัติ</span></span><span class="st-go">ดาวน์โหลด ›</span></button>
         </section>
         <section class="st-card">
-          <div class="st-h"><span class="st-ico bg-pink-100" aria-hidden="true">🖼️</span><div><h3>รูปหน้าแรก</h3><p>เปลี่ยนรูปและจัดมุมมองแยกคอมพิวเตอร์/มือถือ · ลากวางได้</p></div></div>
-          <button type="button" class="st-pw" onclick="openHeroEditor()"><span class="st-pwi bg-pink-100" aria-hidden="true">🎨</span><span class="flex-1 text-left"><b>แก้ไขรูปหน้าแรก</b><span>อัปโหลดรูป · ลากจัดมุม · ซูม · ย้ายกล่องข้อความ</span></span><span class="st-go">เปิด ›</span></button>
+          <div class="st-h"><span class="st-ico bg-pink-100" aria-hidden="true">🖼️</span><div><h3>รูปหน้าแรก และภาพพื้นหลัง</h3><p>เปลี่ยนรูปและจัดมุมมองได้จากหน้าเว็บ · ลากวางได้ · ภาพพื้นหลังแสดงเฉพาะบนจอคอมพิวเตอร์</p></div></div>
+          <div class="space-y-2">
+            <button type="button" class="st-pw" onclick="openHeroEditor()"><span class="st-pwi bg-pink-100" aria-hidden="true">🎨</span><span class="flex-1 text-left"><b>แก้ไขรูปหน้าแรก</b><span>อัปโหลดรูป · ลากจัดมุม · ซูม · ย้ายกล่องข้อความ</span></span><span class="st-go">เปิด ›</span></button>
+            <button type="button" class="st-pw" onclick="openBgEditor()"><span class="st-pwi bg-violet-100" aria-hidden="true">🖥️</span><span class="flex-1 text-left"><b>ภาพพื้นหลังหน้าเว็บ (คอมพิวเตอร์)</b><span>อัปโหลดรูป · ลากจัดมุม · ซูม · เบลอ · ความจาง</span></span><span class="st-go">เปิด ›</span></button>
+          </div>
         </section>
         <section class="st-card">
           <div class="st-h"><span class="st-ico bg-amber-100" aria-hidden="true">📋</span><div><h3>เกณฑ์ตัดคะแนนพฤติกรรม</h3><p>รายการความผิดและคะแนนที่ใช้ตอนบันทึกพฤติกรรม</p></div></div>
@@ -6170,7 +6221,7 @@ function renderClassroomOverview(res) {
       clearTimeout(heroResizeT);
       heroResizeT = setTimeout(() => { const v = heroVariant(); if (v !== heroLastVariant) { heroLastVariant = v; heroBoot(); } else heroLayout(); }, 150);
     });
-    function heroEditBtnSync() { const b = document.getElementById('hero-edit-btn'); if (b) b.classList.toggle('hidden', !currentDisciplineAuth); }
+    function heroEditBtnSync() { ['hero-edit-btn', 'bg-edit-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.classList.toggle('hidden', !currentDisciplineAuth); }); }
     try { heroBoot(); } catch (e) {}
 
     // ---------- หน้าต่างแก้ไข ----------
@@ -6382,6 +6433,308 @@ function renderClassroomOverview(res) {
       }
     }
     function heOnResize() { if (heEd) { heScale(); heRender(); } }
+
+    // ==================== ภาพพื้นหลังหน้าเว็บ (เฉพาะจอคอม กว้าง ≥1024px) ====================
+    // ฝ่ายปกครองตั้งจากหน้าเว็บ: รูป + จุดโฟกัส x/y (%) + ซูม + เบลอ (px) + ความจาง (%) + กล่องโปร่งแสง
+    // มือถือไม่โหลดเลย (ประหยัดเน็ตนักเรียน) · เครื่องที่เคยโหลดแล้วจำรูปไว้ เซิร์ฟเวอร์ส่งรูปซ้ำเฉพาะตอนเปลี่ยน
+    const BG_DEF = { x: 50, y: 50, zoom: 1, blur: 0, veil: 20, glass: true };
+    const BG_KEY = 'oomsin_bg_desktop';
+    const bgSt = { booted: false };
+    function bgClamp(n, lo, hi, d) { n = parseFloat(n); return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d; }
+    function bgNorm(c) {
+      c = c || {};
+      return { x: bgClamp(c.x, 0, 100, 50), y: bgClamp(c.y, 0, 100, 50), zoom: bgClamp(c.zoom, 1, 4, 1), blur: bgClamp(c.blur, 0, 24, 0), veil: bgClamp(c.veil, 0, 90, 20), glass: c.glass !== false && c.glass !== 'false' };
+    }
+    // รับเฉพาะรูป data:image (JPG/PNG/WEBP) หรือลิงก์ https — กติกาเดียวกับฝั่งเซิร์ฟเวอร์ (กันข้อความแปลก ๆ หลุดเข้า url("..."))
+    function bgSafeSrc(s) { s = String(s || '').trim(); return (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s) || /^https:\/\/[^\s"'<>()\\]+$/.test(s)) ? s : ''; }
+    // วาดรูปแบบ cover + จุดโฟกัส + ซูมรอบจุดโฟกัส (ใช้ทั้งหน้าเว็บจริงและหน้าต่างแก้ไข จึงตรงกันเป๊ะ) · เบลอแล้วขยายขอบออกไปกันขอบจาง
+    function bgPaint(photo, veil, src, cfg) {
+      const c = bgNorm(cfg), b = c.blur, s = bgSafeSrc(src);
+      if (photo) Object.assign(photo.style, {
+        backgroundImage: s ? 'url("' + s + '")' : 'none', backgroundPosition: c.x + '% ' + c.y + '%',
+        top: (-2 * b) + 'px', right: (-2 * b) + 'px', bottom: (-2 * b) + 'px', left: (-2 * b) + 'px', transformOrigin: c.x + '% ' + c.y + '%', transform: 'scale(' + c.zoom + ')', filter: b ? 'blur(' + b + 'px)' : 'none'
+      });
+      if (veil) veil.style.background = 'rgba(251,245,242,' + (c.veil / 100) + ')';
+      return c;
+    }
+    function bgApply(src, cfg) {
+      const layer = document.querySelector('.bg-fixed-layer'), s = bgSafeSrc(src);
+      if (!layer) return;
+      const c = bgPaint(document.getElementById('bg-photo'), document.getElementById('bg-veil'), s, cfg);
+      layer.classList.toggle('bg-on', !!s);
+      document.documentElement.classList.toggle('bgp-on', !!s);   // body ปกติทึบสีงาช้าง ต้องโปร่งเพื่อให้เห็นภาพ (เฉพาะจอคอม ดู CSS)
+      document.documentElement.classList.toggle('bgp-glass', !!s && c.glass);
+    }
+    function bgCacheGet() { try { return JSON.parse(localStorage.getItem(BG_KEY) || 'null'); } catch (e) { return null; } }
+    function bgCacheSet(d) { try { if (d) localStorage.setItem(BG_KEY, JSON.stringify(d)); else localStorage.removeItem(BG_KEY); } catch (e) { try { localStorage.removeItem(BG_KEY); } catch (_) {} } }
+    function bgBoot() {
+      if (bgSt.booted || heroVariant() !== 'desktop') return;
+      bgSt.booted = true;
+      const cached = bgCacheGet(), has = !!(cached && bgSafeSrc(cached.src));
+      if (has) bgApply(cached.src, cached.cfg);
+      callAPI('getBgConfig', { known: has && cached.v ? String(cached.v) : '' }).then(res => {
+        if (!res || !res.success) { bgSt.booted = false; return; }
+        if (!res.custom) { if (cached) bgCacheSet(null); bgApply('', null); return; }
+        const src = res.src || (has ? cached.src : '');
+        if (!bgSafeSrc(src)) return;
+        bgCacheSet({ v: res.v, cfg: res.cfg, src });
+        bgApply(src, res.cfg);
+      }).catch(() => { bgSt.booted = false; });
+    }
+    let bgResizeT = null;
+    window.addEventListener('resize', () => { clearTimeout(bgResizeT); bgResizeT = setTimeout(() => { try { bgBoot(); } catch (e) {} if (bgEd) bgxFit(); }, 180); });
+
+    // ---------- หน้าต่างแก้ไขภาพพื้นหลัง ----------
+    let bgEd = null;
+    async function bgShrink(file) {   // ย่อให้กว้างไม่เกิน 1920px และไฟล์ไม่เกิน ~480KB (WEBP ถ้าเบราว์เซอร์ทำได้ ไม่งั้น JPG)
+      const url = URL.createObjectURL(file);
+      try {
+        const im = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
+        if (!im.naturalWidth) throw new Error('empty');
+        const s = Math.min(1, 1920 / im.naturalWidth, 1280 / im.naturalHeight);
+        const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(im.naturalWidth * s)); cv.height = Math.max(1, Math.round(im.naturalHeight * s));
+        const g = cv.getContext('2d'); g.fillStyle = '#fbf5f2'; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(im, 0, 0, cv.width, cv.height);
+        let q = 0.84, out = cv.toDataURL('image/webp', q);
+        const type = out.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
+        if (type === 'image/jpeg') out = cv.toDataURL(type, q);
+        while (out.length > 650000 && q > 0.42) { q -= 0.08; out = cv.toDataURL(type, q); }
+        return out;
+      } finally { URL.revokeObjectURL(url); }
+    }
+    // ขนาดจอจำลอง = หน้าต่างจริงถ้าเปิดบนคอม (ไม่งั้นใช้ 1440×900) + ตำแหน่งแถบหัวเว็บ/กล่องหน้าแรก ไว้วาดโครงหน้าเว็บทับให้เห็นว่าภาพจะโผล่ตรงไหน
+    function bgxDims() {
+      const live = heroVariant() === 'desktop';
+      const W = live ? window.innerWidth : 1440, H = live ? window.innerHeight : 900;
+      const hdr = document.querySelector('.site-hdr'), main = document.querySelector('main'), hp = document.querySelector('.hero-panel'), logo = hdr && hdr.querySelector('img');
+      const hh = live && hdr && hdr.offsetHeight ? hdr.offsetHeight : 73;
+      let col = { l: Math.max(16, (W - 1152) / 2 + 16), w: Math.min(W - 32, 1120) };
+      if (live && main) { const r = main.getBoundingClientRect(); if (r.width > 200) col = { l: r.left + 16, w: r.width - 32 }; }
+      let heroH = 1262;
+      if (live && hp) { const r = hp.getBoundingClientRect(); if (r.width > 200 && r.height > 200) heroH = r.height; }
+      let logoL = Math.max(12, (W - (W >= 1536 ? 1536 : W >= 1280 ? 1280 : 1024)) / 2 + 12);
+      if (live && logo) { const r = logo.getBoundingClientRect(); if (r.width > 0) logoL = r.left; }
+      return { W, H, hh, col, hero: { t: hh + 40, h: heroH }, logoL };
+    }
+    function bgxPageHtml(D) {
+      const Wc = D.col.w, tw = Math.min(624, Math.round(Wc * 0.56)), cw = Math.round((tw - 16) / 2), hw = Math.round(Wc * 0.65);
+      const tiles = ['#7e22ce,#d946ef', '#9f1239,#f43f5e', '#3730a3,#818cf8', '#115e59,#2dd4bf'].map((g, i) =>
+        `<i style="left:${40 + (i % 2) * (cw + 16)}px;top:${192 + Math.floor(i / 2) * 198}px;width:${cw}px;height:182px;background:linear-gradient(135deg,${g})"></i>`).join('');
+      return `<div class="bgx-page" aria-hidden="true">
+          <div class="bgx-hdr" style="height:${D.hh}px"><span class="bgx-logo" style="left:${D.logoL}px;top:${Math.round((D.hh - 48) / 2)}px"></span><b style="left:${D.logoL + 60}px;top:${Math.round(D.hh / 2 - 15)}px;width:220px"></b><b style="left:${D.logoL + 60}px;top:${Math.round(D.hh / 2 + 7)}px;width:130px"></b></div>
+          <div class="bgx-hero" style="left:${D.col.l}px;top:${D.hero.t}px;width:${Wc}px;height:${D.hero.h}px">
+            <div class="bgx-hi" style="width:${hw}px"></div>
+            <b style="left:40px;top:44px;width:${Math.min(330, Wc - 80)}px"></b><b style="left:40px;top:100px;width:${Math.min(290, Wc - 80)}px"></b>
+            ${tiles}
+            <i style="left:40px;top:643px;width:${tw}px;height:74px;background:linear-gradient(90deg,#831843,#db2777)"></i>
+          </div>
+        </div>`;
+    }
+    function bgxFit() {
+      const wrap = document.getElementById('bgx-wrap'), st = document.getElementById('bgx-stage');
+      if (!wrap || !st || !bgEd) return;
+      const D = bgEd.D, maxH = Math.max(200, window.innerHeight * 0.5);
+      const k = Math.min(wrap.clientWidth / D.W, maxH / D.H, 1);
+      st.style.transform = 'scale(' + k + ')'; wrap.style.height = Math.round(D.H * k) + 'px';
+      st.style.left = Math.max(0, (wrap.clientWidth - D.W * k) / 2) + 'px';
+      bgEd.k = k;
+    }
+    // ระยะที่รูปล้นกรอบ (ติดลบ) ตามขนาดรูปจริง/ซูม/เบลอ — ใช้แปลงระยะลากเป็นเปอร์เซ็นต์จุดโฟกัส
+    function bgxGeom() {
+      const c = bgEd.cfg, n = bgEd.nat, b = c.blur, W = bgEd.D.W + 4 * b, H = bgEd.D.H + 4 * b;
+      const s = Math.max(W / n.w, H / n.h) * c.zoom;
+      return { ox: W - n.w * s, oy: H - n.h * s };
+    }
+    function bgxHas() { return !!(bgEd && !bgEd.reset && bgSafeSrc(bgEd.src)); }
+    function bgxRender() {
+      if (!bgEd) return;
+      const g = (id) => document.getElementById(id), st = g('bgx-stage'), c = bgEd.cfg, has = bgxHas();
+      if (!st) return;
+      bgPaint(g('bgx-img'), g('bgx-fog'), has ? bgEd.src : '', c);
+      st.classList.toggle('bgx-has', has);
+      st.classList.toggle('bgx-glass', has && c.glass);
+      st.dataset.ui = bgEd.ui ? '1' : '0';
+      if (g('bgx-empty')) g('bgx-empty').style.display = has ? 'none' : '';
+      const set = (id, val, txt) => { const el = g(id); if (el) el.value = val; const t = g(id + '-v'); if (t) t.textContent = txt; };
+      set('bgx-zoom', Math.round(c.zoom * 100), Math.round(c.zoom * 100) + '%');
+      set('bgx-blur', c.blur, c.blur + 'px');
+      set('bgx-veil', c.veil, c.veil + '%');
+      if (g('bgx-glass')) g('bgx-glass').checked = !!c.glass;
+      if (g('bgx-ui')) g('bgx-ui').checked = !!bgEd.ui;
+      ['bgx-sl', 'bgx-glass-l', 'bgx-center'].forEach(id => { const el = g(id); if (el) el.classList.toggle('bgx-off', !has); });
+      const rs = g('bgx-reset'); if (rs) rs.classList.toggle('bgx-off', !has && !(bgEd.custom && !bgEd.reset));
+      const note = g('bgx-note');
+      if (note) note.textContent = bgEd.busy ? bgEd.busy
+        : bgEd.bad ? '⚠️ เปิดรูปนี้ไม่ได้ — ลองเลือกรูปหรือลิงก์อื่น'
+        : bgEd.reset ? 'จะนำภาพพื้นหลังออก แล้วกลับไปใช้พื้นหลังเดิมของระบบ'
+        : bgEd.srcChanged ? 'รูปใหม่ (ยังไม่บันทึก)'
+        : bgEd.custom ? (bgEd.dirty ? 'ภาพที่ตั้งไว้ · ปรับแล้ว (ยังไม่บันทึก)' : 'ภาพที่ตั้งไว้ตอนนี้')
+        : 'ยังไม่มีภาพพื้นหลัง (ตอนนี้ใช้พื้นหลังเดิมของระบบ)';
+      const sv = g('bgx-save'); if (sv) { sv.disabled = !bgEd.dirty; sv.textContent = bgEd.reset ? '🗑️ บันทึก (นำภาพออก)' : '💾 บันทึก'; }
+    }
+    function bgxDirty() { if (bgEd) { bgEd.dirty = true; bgxRender(); } }
+    function bgxLoad() {   // อ่านขนาดจริงของรูป (ต้องใช้คำนวณการลาก) และเช็คว่ารูปเปิดได้
+      if (!bgEd) return;
+      const src = bgxHas() ? bgEd.src : '', tok = (bgEd.tok = (bgEd.tok || 0) + 1);
+      bgEd.nat = null; bgEd.bad = false;
+      if (src) {
+        const im = new Image();
+        im.onload = () => { if (bgEd && bgEd.tok === tok) { bgEd.nat = { w: im.naturalWidth || 1, h: im.naturalHeight || 1 }; bgxRender(); } };
+        im.onerror = () => { if (bgEd && bgEd.tok === tok) { bgEd.bad = true; bgxRender(); } };
+        im.src = src;
+      }
+      bgxRender();
+    }
+    function bgxSetSrc(src) {
+      if (!bgEd) return;
+      Object.assign(bgEd, { src, srcChanged: true, reset: false, dirty: true, busy: '' });
+      Object.assign(bgEd.cfg, { x: 50, y: 50, zoom: 1 });
+      Swal.resetValidationMessage && Swal.resetValidationMessage();
+      bgxLoad();
+    }
+    async function bgxUseFile(f) {
+      if (!f || !/^image\//.test(f.type)) { Swal.showValidationMessage('กรุณาเลือกไฟล์รูปภาพ (JPG, PNG, WEBP)'); return; }
+      const ed = bgEd; if (!ed) return;
+      ed.busy = 'กำลังย่อขนาดรูป...'; bgxRender();
+      try { const src = await bgShrink(f); if (bgEd === ed) bgxSetSrc(src); }
+      catch (e) { if (bgEd === ed) { ed.busy = ''; bgxRender(); Swal.showValidationMessage('อ่านไฟล์รูปไม่ได้ ลองรูปอื่น'); } }
+    }
+    function bgxMount() {
+      const host = document.getElementById('bgx-frame'); if (!host || !bgEd) return;
+      const D = bgEd.D;
+      host.innerHTML = `<div class="he-wrap bgx-wrap" id="bgx-wrap"><div class="bgx-stage" id="bgx-stage" data-ui="1" style="width:${D.W}px;height:${D.H}px"><div class="bgx-photo" id="bgx-img"></div><div class="bgx-veil" id="bgx-fog"></div>${bgxPageHtml(D)}</div>
+          <div class="bgx-empty" id="bgx-empty"><b>🖼️ ยังไม่มีภาพพื้นหลัง</b><span>กด “📁 เลือกรูป” หรือลากไฟล์รูปมาวางตรงนี้</span></div></div><div class="he-drop">📥 วางไฟล์รูปที่นี่</div>`;
+      const st = document.getElementById('bgx-stage');
+      try { st.style.backgroundColor = getComputedStyle(document.documentElement).backgroundColor; } catch (e) {}   // สีพื้นเดิมของระบบ (ตรงกับหน้าเว็บจริงเสมอ)
+      try {   // รูปหน้าแรกจริงในโครงหน้าเว็บ
+        const box = st.querySelector('.bgx-hi'), hs = (heroCfg.desktop && heroCfg.desktop.src) || HERO_DEFAULT.desktop.src;
+        if (box && hs) { const im = new Image(); im.alt = ''; im.onload = () => { heroPlaceImg(im, parseFloat(box.style.width), D.hero.h, heroCfg.desktop); box.appendChild(im); }; im.src = hs; }
+      } catch (e) {}
+      bgxFit(); bgxBind(); bgxLoad();
+    }
+    function bgxBind() {
+      const st = document.getElementById('bgx-stage'), host = document.getElementById('bgx-frame');
+      let drag = null;
+      st.addEventListener('pointerdown', (e) => {
+        if (!bgxHas() || !bgEd.nat) return;
+        e.preventDefault();
+        drag = { x0: e.clientX, y0: e.clientY, c0: Object.assign({}, bgEd.cfg), g: bgxGeom() };
+        try { st.setPointerCapture(e.pointerId); } catch (_) {}
+        st.classList.add('bgx-drag');
+      });
+      st.addEventListener('pointermove', (e) => {
+        if (!drag || !bgEd) return;
+        const k = bgEd.k || 1, dx = (e.clientX - drag.x0) / k, dy = (e.clientY - drag.y0) / k, c = bgEd.cfg;
+        if (drag.g.ox < -0.5) c.x = Math.max(0, Math.min(100, drag.c0.x + dx * 100 / drag.g.ox));
+        if (drag.g.oy < -0.5) c.y = Math.max(0, Math.min(100, drag.c0.y + dy * 100 / drag.g.oy));
+        bgxDirty();
+      });
+      const end = () => { if (drag) { drag = null; st.classList.remove('bgx-drag'); } };
+      ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(t => st.addEventListener(t, end));
+      st.addEventListener('wheel', (e) => {
+        if (!bgxHas()) return;
+        e.preventDefault();
+        const c = bgEd.cfg; c.zoom = Math.max(1, Math.min(3, Math.round((c.zoom - Math.sign(e.deltaY) * 0.08) * 100) / 100)); bgxDirty();
+      }, { passive: false });
+      ['dragenter', 'dragover'].forEach(t => host.addEventListener(t, (e) => { e.preventDefault(); host.classList.add('he-over'); }));
+      ['dragleave', 'drop'].forEach(t => host.addEventListener(t, (e) => { e.preventDefault(); if (t === 'dragleave' && host.contains(e.relatedTarget)) return; host.classList.remove('he-over'); }));
+      host.addEventListener('drop', (e) => { const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) bgxUseFile(f); });
+    }
+    let bgxOpening = false;
+    async function openBgEditor() {
+      if (!currentDisciplineAuth) { MySwal.fire('ต้องเข้าสู่ระบบก่อน', 'กรุณาเข้าเมนูฝ่ายปกครองด้วยรหัสผ่านก่อน', 'info'); return; }
+      if (bgxOpening) return;   // กันกดปุ่มซ้ำระหว่างกำลังโหลด
+      bgxOpening = true;
+      Swal.fire({ title: 'กำลังเปิดตัวแก้ไขภาพพื้นหลัง...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      let r = null;
+      try { r = await callAPI('getBgConfig', {}); } catch (e) { r = { message: e.message }; }
+      bgxOpening = false;
+      if (!r || !r.success) {
+        const miss = !!(r && r.error && /ไม่รู้จัก action/.test(r.error));
+        MySwal.fire(miss ? 'ยังไม่ได้ติดตั้งส่วนเสริมฐานข้อมูล' : 'เปิดตัวแก้ไขไม่สำเร็จ', miss ? 'กรุณารันไฟล์ supabase-patch11.sql ใน Supabase (SQL Editor) ก่อน แล้วลองใหม่' : ((r && (r.message || r.error)) || 'ลองใหม่อีกครั้ง'), 'error');
+        return;
+      }
+      const custom = !!(r.custom && bgSafeSrc(r.src));
+      const ed = bgEd = { D: bgxDims(), k: 1, cfg: Object.assign({}, BG_DEF, custom ? bgNorm(r.cfg) : {}), src: custom ? r.src : '', custom, srcChanged: false, reset: false, dirty: false, bad: false, busy: '', nat: null, ui: true, tok: 0 };
+      const small = heroVariant() !== 'desktop';
+      const res = await Swal.fire({
+        html: `<div class="he-head"><div><div class="he-kicker">🖥️ ภาพพื้นหลัง · เฉพาะจอคอมพิวเตอร์</div><div class="he-title">ใส่ภาพพื้นหลังหน้าเว็บ</div></div>
+            <div class="bgx-head-r"><label class="he-check"><input type="checkbox" id="bgx-ui"> แสดงโครงหน้าเว็บ</label></div></div>
+          <div class="he-hint">✋ ลากภาพเพื่อเลื่อนมุม · หมุนล้อเมาส์/ใช้แถบเพื่อซูม · ลากไฟล์รูปมาวางได้ · ${small ? '📱 ตอนนี้เปิดบนจอเล็ก — ' : ''}ภาพนี้แสดงเฉพาะจอกว้างตั้งแต่ 1024px (มือถือใช้พื้นหลังเดิม)</div>
+          <div class="he-frame" id="bgx-frame"></div>
+          <div class="he-src"><span id="bgx-note" class="he-src-note"></span></div>
+          <div class="he-tools">
+            <label class="he-btn he-btn-main"><input type="file" accept="image/*" id="bgx-file" hidden>📁 เลือกรูป</label>
+            <button type="button" class="he-btn" id="bgx-link">🔗 ลิงก์รูป</button>
+            <button type="button" class="he-btn" id="bgx-hero">🖼️ ใช้รูปหน้าแรก</button>
+            <label class="he-check" id="bgx-glass-l" title="ให้เห็นภาพพื้นหลังจาง ๆ ผ่านกล่องหน้าแรกและแถบหัวเว็บ"><input type="checkbox" id="bgx-glass"> กล่องโปร่งแสง</label>
+            <button type="button" class="he-btn he-btn-soft" id="bgx-center">↺ จัดกึ่งกลาง</button>
+            <button type="button" class="he-btn he-btn-soft" id="bgx-reset">🗑️ ไม่ใช้ภาพพื้นหลัง</button>
+          </div>
+          <div class="bgx-sl" id="bgx-sl">
+            <div class="he-zoomrow"><span class="bgx-lb">🔍 ซูม</span><input type="range" id="bgx-zoom" min="100" max="300" step="5" aria-label="ซูม"><b id="bgx-zoom-v">100%</b></div>
+            <div class="he-zoomrow"><span class="bgx-lb">💧 เบลอ</span><input type="range" id="bgx-blur" min="0" max="20" step="1" aria-label="ความเบลอ"><b id="bgx-blur-v">0px</b></div>
+            <div class="he-zoomrow"><span class="bgx-lb">🌫️ จาง</span><input type="range" id="bgx-veil" min="0" max="80" step="5" aria-label="ความจาง"><b id="bgx-veil-v">20%</b></div>
+          </div>`,
+        showCancelButton: true, confirmButtonText: '💾 บันทึก', cancelButtonText: 'ยกเลิก', buttonsStyling: false, focusConfirm: false, allowOutsideClick: false,
+        customClass: { popup: 'he-pop bg-pop', confirmButton: 'he-save', cancelButton: 'pw-cancel he-cancel', actions: 'he-actions', validationMessage: 'pw-valid' },
+        didOpen: (el) => {
+          const root = el || document, g = (id) => root.querySelector('#' + id);
+          const sv = root.querySelector('.he-save'); if (sv) sv.id = 'bgx-save';
+          g('bgx-file').addEventListener('change', (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) bgxUseFile(f); });
+          g('bgx-link').addEventListener('click', () => {
+            const u = (window.prompt('วางลิงก์รูป (ต้องขึ้นต้นด้วย https://)', '') || '').trim(); if (!u) return;
+            if (!bgSafeSrc(u)) { Swal.showValidationMessage('ลิงก์ต้องขึ้นต้นด้วย https:// และไม่มีช่องว่างหรือเครื่องหมายคำพูด'); return; }
+            bgxSetSrc(u);
+          });
+          g('bgx-hero').addEventListener('click', async () => {
+            const ed2 = bgEd; if (!ed2 || ed2.busy) return;
+            ed2.busy = 'กำลังดึงรูปหน้าแรก...'; bgxRender();
+            let hs = '';
+            try { const h = await callAPI('getHeroConfig', { variant: 'desktop' }); hs = h && h.custom && h.src ? h.src : HERO_DEFAULT.desktop.src; } catch (e) { hs = (heroCfg.desktop && heroCfg.desktop.src) || HERO_DEFAULT.desktop.src; }
+            if (bgEd !== ed2) return;
+            ed2.busy = '';
+            if (!bgSafeSrc(hs)) { bgxRender(); Swal.showValidationMessage('ใช้รูปหน้าแรกเป็นพื้นหลังไม่ได้ ลองเลือกรูปเอง'); return; }
+            bgxSetSrc(hs);
+          });
+          g('bgx-zoom').addEventListener('input', (e) => { bgEd.cfg.zoom = (+e.target.value) / 100; bgxDirty(); });
+          g('bgx-blur').addEventListener('input', (e) => { bgEd.cfg.blur = +e.target.value; bgxDirty(); });
+          g('bgx-veil').addEventListener('input', (e) => { bgEd.cfg.veil = +e.target.value; bgxDirty(); });
+          g('bgx-glass').addEventListener('change', (e) => { bgEd.cfg.glass = e.target.checked; bgxDirty(); });
+          g('bgx-ui').addEventListener('change', (e) => { bgEd.ui = e.target.checked; bgxRender(); });
+          g('bgx-center').addEventListener('click', () => { Object.assign(bgEd.cfg, { x: 50, y: 50, zoom: 1 }); bgxDirty(); });
+          g('bgx-reset').addEventListener('click', () => {
+            if (bgEd.custom) Object.assign(bgEd, { reset: true, srcChanged: false, dirty: true });
+            else Object.assign(bgEd, { src: '', srcChanged: false, reset: false, dirty: false });
+            Swal.resetValidationMessage && Swal.resetValidationMessage();
+            bgxLoad();
+          });
+          bgxMount();
+        },
+        preConfirm: async () => {
+          if (!bgEd.dirty) { Swal.showValidationMessage('ยังไม่ได้เปลี่ยนอะไร'); return false; }
+          let payload;
+          if (bgEd.reset) payload = { reset: true };
+          else {
+            if (!bgSafeSrc(bgEd.src)) { Swal.showValidationMessage('กรุณาเลือกรูปก่อน'); return false; }
+            if (bgEd.bad) { Swal.showValidationMessage('เปิดรูปนี้ไม่ได้ กรุณาใช้รูปอื่น'); return false; }
+            const c = bgNorm(bgEd.cfg);
+            payload = { src: bgEd.srcChanged ? bgEd.src : '', x: Math.round(c.x * 100) / 100, y: Math.round(c.y * 100) / 100, zoom: Math.round(c.zoom * 1000) / 1000, blur: c.blur, veil: c.veil, glass: c.glass };
+          }
+          let r2;
+          try { r2 = await callAPI('saveBgConfig', Object.assign({ password: currentDisciplineAuth }, payload)); } catch (e) { r2 = { message: e.message }; }
+          if (!r2 || !r2.success) { Swal.showValidationMessage((r2 && (r2.message || r2.error)) || 'บันทึกไม่สำเร็จ'); return false; }
+          return { v: r2.v, reset: !!payload.reset, cfg: payload.reset ? null : bgNorm(bgEd.cfg), src: bgEd.src };
+        }
+      });
+      if (bgEd === ed) bgEd = null;
+      if (res && res.isConfirmed && res.value) {
+        const o = res.value;
+        if (o.reset) { bgCacheSet(null); bgApply('', null); }
+        else if (heroVariant() === 'desktop') { bgCacheSet({ v: o.v, cfg: o.cfg, src: o.src }); bgApply(o.src, o.cfg); bgSt.booted = true; }
+        MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: o.reset ? 'นำภาพพื้นหลังออกแล้ว' : 'บันทึกภาพพื้นหลังแล้ว', showConfirmButton: false, timer: 2200, timerProgressBar: true });
+      }
+    }
+    try { bgBoot(); } catch (e) {}
 
   </script>
   <div id="semester-chip" class="hidden max-sm:hidden fixed left-3 bottom-3 z-40 px-3 py-1.5 rounded-full bg-white/90 border border-pink-200 text-pink-600 text-xs font-extrabold shadow-md pointer-events-none select-none"></div>
