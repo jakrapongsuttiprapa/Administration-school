@@ -1644,6 +1644,27 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
 @keyframes mpShineT{0%,55%{transform:translateX(0)}100%{transform:translateX(475%)}}
 @keyframes dotPing{0%{transform:scale(1);opacity:1}100%{transform:scale(3);opacity:0}}
 @keyframes acShineH{from{background-position:150% 0}to{background-position:-60% 0}}
+/* ===== รายงานภาพรวมพฤติกรรม: ปุ่มบนหัวการ์ด + หน้าต่างเลือกขอบเขต (rp-) ===== */
+.cd-pill-rep{color:#7f1d1d;background:linear-gradient(135deg,#fffbeb,#fde68a);border-color:#fcd34d;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.cd-pill-rep:hover{background:linear-gradient(135deg,#fff,#fcd34d)}
+.rp-lbl{font-size:12px;font-weight:900;color:#6b7280}
+.rp-all{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:18px;border:2px solid #eef0f4;background:#fff;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s,box-shadow .15s}
+.rp-all b{display:block;font-size:15px;font-weight:900;color:#1f2937}
+.rp-all small{display:block;font-size:11.5px;font-weight:700;color:#9ca3af;margin-top:1px}
+.rp-all-ico{width:42px;height:42px;flex-shrink:0;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:21px;background:linear-gradient(180deg,#fffdf6,#fff7e6);border:1px solid #f3d48a}
+.rp-tick{width:24px;height:24px;flex-shrink:0;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:transparent;border:2px solid #e5e7eb}
+.rp-all:hover{border-color:var(--c3)}
+.rp-all[data-on="1"]{border-color:var(--c2);box-shadow:0 10px 20px -14px var(--c1)}
+.rp-all[data-on="1"] .rp-tick{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.rp-or{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:900;color:#9ca3af}
+.rp-or::before,.rp-or::after{content:"";flex:1;height:1px;background:#eef0f4}
+.rp-incl{font-size:12px;font-weight:700;color:#6b7280;background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:10px 12px;line-height:1.65}
+.rp-incl b{color:#92400e;font-weight:900;margin-right:4px}
+.rp-sum{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:4px}
+.rp-sum span{font-size:12.5px;font-weight:800;color:#4b5563;background:#f8fafc;border:1px solid #eef2f7;border-radius:999px;padding:5px 11px}
+/* จอมือถือแคบ: ชื่อ "ภาพรวมพฤติกรรม" ไม่ให้ไปมุดใต้วงคะแนน */
+@media (max-width:420px){.cd-hero h2{font-size:clamp(1.4rem,6.6vw,1.9rem)}.cd-ring{width:68px;height:68px}}
+.rp-warn{margin-top:10px;font-size:12px;font-weight:800;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 10px}
 </style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
@@ -3807,7 +3828,7 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
             var head = o.header && i === 0;
             return new D.TableRow({ tableHeader: !!head, cantSplit: true, children: r.map(function (c, j) {
               var mid = head || (o.center && o.center.indexOf(j) >= 0);
-              return cell(c, widths[j], { bold: head, size: head ? 30 : 28, align: mid ? C : undefined });
+              return cell(c, widths[j], { bold: head || !!(o.boldRows && o.boldRows.indexOf(i) >= 0), size: head ? 30 : 28, align: mid ? C : undefined });
             }) });
           }) });
       }
@@ -3981,7 +4002,114 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
         return doc(kids.concat(signBlocks()));
       }
 
-      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, buildSemesterSummary: buildSemesterSummary, thDigits: thDigits };
+      // 5) รายงานภาพรวมคะแนนความประพฤติ (ทุกห้อง หรือรายห้อง) — ข้อมูลรวบรวมโดย cdReportData()
+      function buildConductOverview(d) {
+        function n0(v) { return Number(v) || 0; }
+        function pct(a, b) { return b > 0 ? (Math.round(a * 1000 / b) / 10).toFixed(1) : '0.0'; }
+        function line(text, o) { o = o || {}; return para(text, { size: o.size || 30, indent: { left: 360 }, after: o.after === undefined ? 40 : o.after, bold: o.bold }); }
+        var no = 0;
+        function h(text) { no += 1; return para(no + '. ' + text, { bold: true, before: 220, keepNext: true }); }
+        function sub(text) { return para(text, { size: 30, bold: true, before: 140, after: 60, indent: { left: 360 }, keepNext: true }); }
+        function none(text) { return para('- ' + text + ' -', { align: C, size: 28 }); }
+        var S = d.summary, T = d.tiers, one = !!d.className, TL = { minor: 'เล็กน้อย', mid: 'ปานกลาง', severe: 'ร้ายแรง' };
+        var kids = [
+          para('รายงานภาพรวมคะแนนความประพฤตินักเรียน', { bold: true, align: C, after: 0 }),
+          para((one ? 'ชั้น ' + d.className : 'ระดับชั้นมัธยมศึกษาตอนปลาย (ม.4 - ม.6)') + '  ปีการศึกษา ' + d.academicYear, { bold: true, align: C, after: 0 }),
+          para('โรงเรียนธนาคารออมสิน', { align: C, after: 0 }),
+          para('ข้อมูล ณ วันที่ ' + thShortDate(d.generated), { size: 28, align: C, after: 160 }),
+          h('ภาพรวม'),
+          line('คะแนนความประพฤติเต็มคนละ 100 คะแนน นับสะสมทั้งปีการศึกษา'),
+          line('นักเรียนทั้งหมด ' + S.total + ' คน   ยังมีคะแนนเต็ม ' + S.full + ' คน (ร้อยละ ' + pct(S.full, S.total) + ')'),
+          line('ถูกตัดคะแนน ' + S.withIssues + ' คน (ร้อยละ ' + pct(S.withIssues, S.total) + ')   รวม ' + S.records + ' ครั้ง ' + S.points + ' คะแนน'),
+          line('คะแนนเฉลี่ย ' + S.avg + ' คะแนน' + (one ? '   (เฉลี่ยทั้งระดับชั้น ' + d.overallAvg + ' คะแนน)' : '')),
+          line('คะแนนต่ำกว่า 80 จำนวน ' + S.below80 + ' คน   ในจำนวนนี้ต่ำกว่า 60 จำนวน ' + S.below60 + ' คน'),
+          line('ออกหนังสือว่ากล่าวตักเตือน ' + T.warning + ' ฉบับ   หนังสือทำทัณฑ์บน ' + T.probation + ' ฉบับ', { after: 120 })
+        ];
+        if (!one) {
+          kids.push(h('คะแนนความประพฤติรายห้อง'));
+          var crows = [['ห้อง', 'นักเรียน', 'ถูกตัด (คน)', 'ครั้ง', 'คะแนนที่ตัด', 'เฉลี่ย', 'ต่ำกว่า 80', 'ต่ำกว่า 60']];
+          d.classes.forEach(function (c) { crows.push([c.cls, String(c.total), String(c.withIssues), String(c.records), String(c.points), c.avg, String(c.below80), String(c.below60)]); });
+          crows.push(['รวม', String(S.total), String(S.withIssues), String(S.records), String(S.points), S.avg, String(S.below80), String(S.below60)]);
+          kids.push(table(crows, [1050, 1250, 1200, 900, 1300, 1100, 1150, 1150], { header: true, center: [0, 1, 2, 3, 4, 5, 6, 7], boldRows: [crows.length - 1] }));
+        }
+        kids.push(h('การถูกตัดคะแนนแยกตามระดับความผิด'));
+        var trows = [['ระดับ', 'ตัดครั้งละ', 'จำนวนครั้ง', 'นักเรียน (คน)', 'คะแนนที่ตัดรวม']];
+        [['minor', 'ต่ำกว่า 10 คะแนน'], ['mid', '10 - 39 คะแนน'], ['severe', '40 คะแนนขึ้นไป']].forEach(function (t) {
+          var x = T[t[0]] || {}; trows.push([TL[t[0]], t[1], String(n0(x.count)), String(n0(x.students)), String(n0(x.points))]);
+        });
+        trows.push(['รวม', '', String(S.records), S.withIssues + ' (ไม่นับซ้ำ)', String(S.points)]);
+        kids.push(table(trows, [1500, 2300, 1700, 2000, 1900], { header: true, center: [0, 1, 2, 3, 4], boldRows: [trows.length - 1] }));
+
+        var top = d.rules.slice(0, 10), rest = d.rules.slice(10);
+        kids.push(h('ข้อบังคับที่ถูกตัดคะแนนบ่อย' + (rest.length ? ' 10 อันดับแรก' : '')));
+        if (!top.length) kids.push(none('ยังไม่มีการตัดคะแนน'));
+        else {
+          var rrows = [['อันดับ', 'ข้อบังคับ', 'ระดับ', 'ครั้ง', 'คน', 'คะแนนรวม']];
+          top.forEach(function (r, i) { rrows.push([String(i + 1), r.rule, TL[r.tier], String(r.count), String(r.students), String(r.points)]); });
+          kids.push(table(rrows, [1000, 3700, 1250, 850, 850, 1450], { header: true, center: [0, 2, 3, 4, 5] }));
+          if (rest.length) {
+            var rc = 0, rp = 0; rest.forEach(function (r) { rc += r.count; rp += r.points; });
+            kids.push(para('ข้อบังคับอื่น ๆ อีก ' + rest.length + ' ข้อ รวม ' + rc + ' ครั้ง ' + rp + ' คะแนน', { size: 28, indent: { left: 360 }, before: 60 }));
+          }
+        }
+
+        kids.push(h('จำนวนการถูกตัดคะแนนรายเดือน'));
+        if (!d.months.length) kids.push(none('ไม่มีข้อมูล'));
+        else {
+          var mrows = [['เดือน', 'จำนวนครั้ง', 'นักเรียน (คน)', 'คะแนนที่ตัด']];
+          d.months.forEach(function (m) { mrows.push([m.label, String(m.count), String(m.students), String(m.points)]); });
+          mrows.push(['รวม', String(S.records), '', String(S.points)]);
+          kids.push(table(mrows, [2800, 2100, 2200, 2300], { header: true, center: [1, 2, 3], boldRows: [mrows.length - 1] }));
+        }
+
+        kids.push(h('นักเรียนที่ต้องติดตาม (คะแนนต่ำกว่า 80)'));
+        if (!d.watch.length) kids.push(none('ไม่มีนักเรียนที่คะแนนต่ำกว่า 80'));
+        else [[d.watch.filter(function (x) { return x.score < 60; }), 'คะแนนต่ำกว่า 60 (เฝ้าระวังสูง)'],
+              [d.watch.filter(function (x) { return x.score >= 60; }), 'คะแนน 60 - 79 (เฝ้าระวัง)']].forEach(function (g) {
+          if (!g[0].length) return;
+          kids.push(sub(g[1] + '  ' + g[0].length + ' คน'));
+          var wrows = [one ? ['ลำดับ', 'ชื่อ-สกุล', 'คะแนน', 'ครั้ง', 'ข้อที่ถูกตัดคะแนน'] : ['ลำดับ', 'ชื่อ-สกุล', 'ชั้น', 'คะแนน', 'ครั้ง', 'ข้อที่ถูกตัดคะแนน']];
+          g[0].forEach(function (x, i) { var r = [String(i + 1), x.name]; if (!one) r.push(x.className); r.push(String(x.score), String(x.incidents), x.rules); wrows.push(r); });
+          kids.push(table(wrows, one ? [900, 2700, 1100, 800, 3900] : [900, 2500, 900, 1100, 800, 3200], { header: true, center: one ? [0, 2, 3] : [0, 2, 3, 4] }));
+        });
+
+        if (one) {
+          var c0 = d.classes[0] || { students: [] };
+          kids.push(h('คะแนนความประพฤติรายบุคคล'));
+          if (!c0.students.length) kids.push(none('ไม่มีรายชื่อนักเรียน'));
+          else {
+            var srows = [['ลำดับ', 'ชื่อ-สกุล', 'ครั้ง', 'คะแนนที่ถูกตัด', 'คะแนนคงเหลือ', 'หมายเหตุ']];
+            c0.students.forEach(function (x, i) { srows.push([String(i + 1), x.name, String(x.incidents), String(x.deducted), String(x.score), x.score < 60 ? 'ต่ำกว่า 60' : (x.score < 80 ? 'ต่ำกว่า 80' : '')]); });
+            kids.push(table(srows, [900, 3400, 900, 1400, 1400, 1400], { header: true, center: [0, 2, 3, 4, 5] }));
+          }
+        } else {
+          kids.push(h('รายชื่อนักเรียนที่ถูกตัดคะแนน แยกรายห้อง'));
+          var clean = [];
+          d.classes.forEach(function (c) {
+            var bad = c.students.filter(function (x) { return x.incidents > 0; });
+            if (!bad.length) { clean.push(c.cls); return; }
+            kids.push(sub('ห้อง ' + c.cls + '  ถูกตัด ' + bad.length + ' จาก ' + c.total + ' คน'));
+            var lrows = [['ลำดับ', 'ชื่อ-สกุล', 'ครั้ง', 'คะแนนที่ถูกตัด', 'คะแนนคงเหลือ']];
+            bad.forEach(function (x, i) { lrows.push([String(i + 1), x.name, String(x.incidents), String(x.deducted), String(x.score)]); });
+            kids.push(table(lrows, [900, 4200, 1300, 1500, 1500], { header: true, center: [0, 2, 3, 4] }));
+          });
+          if (!d.classes.length) kids.push(none('ไม่มีรายชื่อนักเรียน'));
+          else if (clean.length) kids.push(para('ห้องที่นักเรียนทุกคนยังมีคะแนนเต็ม 100: ' + clean.join(', '), { size: 28, indent: { left: 360 }, before: 120 }));
+        }
+
+        var notes = [];
+        if (d.excluded > 0) notes.push('มีบันทึก ' + d.excluded + ' รายการของนักเรียนที่ไม่อยู่ในรายชื่อปัจจุบัน (เช่น ย้ายสถานศึกษา) ไม่ได้นับรวมในรายงานนี้');
+        if (!d.complete) notes.push('บันทึกพฤติกรรมมีจำนวนมากเกินกว่าที่ระบบดึงได้ในครั้งเดียว ตัวเลขแยกตามข้อบังคับและรายเดือนอาจไม่ครบ');
+        if (notes.length) kids.push(para('หมายเหตุ: ' + notes.join(' / '), { size: 28, before: 200 }));
+        if (one) {
+          kids.push(para('', { after: 240 }));
+          kids.push(table([['ลงชื่อ.............................ครูประจำชั้น', 'ลงชื่อ.............................ครูประจำชั้น'],
+                           ['(.................................)', '(.................................)']], [4700, 4700], { noBorder: true, center: [0, 1] }));
+        }
+        return doc(kids.concat(signBlocks()));
+      }
+
+      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, buildSemesterSummary: buildSemesterSummary, buildConductOverview: buildConductOverview, thDigits: thDigits };
     }
 
     var DOCX_CDN = 'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js';
@@ -5202,7 +5330,7 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
     function renderConductOverview(res) {
       const { summary, byClass } = res, esc = escHtml;
       const container = document.getElementById('conduct-overview-container');
-      cdState.recent = res.recentRecords || []; cdState.recordCount = res.recordCount || 0;
+      cdState.recent = res.recentRecords || []; cdState.recordCount = res.recordCount || 0; cdState.ov = res;
       const fullPct = summary.total > 0 ? Math.round((summary.total - summary.withIssues) / summary.total * 100) : 100;
       const tile = (ico, bg, val, color, label) => `<div class="cd-tile"><div class="cd-tile-ico ${bg}" aria-hidden="true">${ico}</div><div class="font-black text-2xl ${color} tabular leading-none mt-1.5">${val}</div><div class="text-[11px] text-gray-400 font-bold mt-1">${label}</div></div>`;
       const hero = `<div class="glass-card rounded-3xl overflow-hidden mb-5 shadow-lg relative">
@@ -5215,12 +5343,13 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
               <h2 class="font-black text-[1.9rem] sm:text-4xl leading-none mt-1.5 tracking-tight whitespace-nowrap">ภาพรวมพฤติกรรม</h2>
               <p class="text-sm font-semibold opacity-90 mt-2">เต็ม 100 คะแนน · นับทั้งปีการศึกษา</p>
             </div>
-            <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0" title="นักเรียนที่ยังมีคะแนนเต็ม">
+            <div class="cd-ring relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0" title="นักเรียนที่ยังมีคะแนนเต็ม">
               <div class="w-full h-full rounded-full" style="background:conic-gradient(#fff 0% ${fullPct}%, rgba(255,255,255,.25) ${fullPct}% 100%)"></div>
               <div class="absolute inset-[6px] bg-white rounded-full flex flex-col items-center justify-center shadow-inner"><span class="font-black text-lg md:text-xl text-gray-800 tabular leading-none">${fullPct}%</span><span class="text-[9px] font-bold text-gray-400 mt-0.5">คะแนนเต็ม</span></div>
             </div>
           </div>
           <div class="relative flex flex-wrap gap-2 mt-3 no-print">
+            <button type="button" onclick="openConductReport()" class="cd-pill cd-pill-rep">📄 ออกรายงาน</button>
             <button type="button" onclick="showConductHistory()" class="cd-pill">🕘 ประวัติการแก้ไข${res.editCount ? ` <b>${res.editCount}</b>` : ''}</button>
             <button type="button" onclick="openConductRules()" class="cd-pill">📋 เกณฑ์คะแนน</button>
             <button type="button" onclick="openAdminSettings()" class="cd-pill">⚙️ ตั้งค่าระบบ</button>
@@ -5322,12 +5451,136 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
       }).catch(() => { if (myToken === cdState.token && list) list.innerHTML = '<div class="cd-empty text-rose-500">❌ โหลดไม่สำเร็จ กรุณาลองใหม่</div>'; });
     }
 
+
+    // ==================== รายงานภาพรวมพฤติกรรม (ไฟล์ Word) ====================
+    // ใช้ข้อมูลชุดเดียวกับหน้าภาพรวม (getConductOverview) + บันทึกทุกรายการของปีการศึกษา (getConductRecords) — ไม่ต้องแก้ฐานข้อมูล
+    function cdTier(p) { p = Number(p) || 0; return p >= 40 ? 'severe' : p >= 10 ? 'mid' : 'minor'; }
+    function cdRepError(msg) { const e = new Error(msg); e.cdRep = true; return e; }
+    async function cdFetchAllRecords(cls, classes) {
+      const one = async (c) => {
+        const r = await callAPI('getConductRecords', { password: currentDisciplineAuth, className: c, limit: 500 });
+        if (!r || !r.success) throw cdRepError((r && r.message) || 'โหลดบันทึกพฤติกรรมไม่สำเร็จ');
+        return r;
+      };
+      const first = await one(cls || ''), got = first.records || [];
+      if ((first.total || 0) <= got.length) return { records: got, complete: true };
+      if (cls) return { records: got, complete: false };
+      const parts = await Promise.all(classes.map(one));   // ทั้งปีเกิน 500 รายการ: ดึงทีละห้องแทน
+      return { records: parts.flatMap(r => r.records || []), complete: parts.every(r => (r.total || 0) <= (r.records || []).length) };
+    }
+    function cdReportData(ov, recs, cls, complete) {
+      const by = ov.byClass || {}, num = (v) => Number(v) || 0, key = (c, n) => c + '|' + n;
+      const order = ALL_CLASSES.filter(c => by[c]).concat(Object.keys(by).filter(c => ALL_CLASSES.indexOf(c) < 0).sort(thSort));
+      const avgOf = (list) => list.length ? (Math.round(list.reduce((a, x) => a + num(x.score), 0) / list.length * 10) / 10).toFixed(1) : '-';
+      const classes = (cls ? order.filter(c => c === cls) : order).map(c => {
+        const st = (by[c] || []).map(x => ({ name: x.name, className: c, score: num(x.score), deducted: num(x.deducted), incidents: num(x.incidents) }));
+        return { cls: c, students: st, total: st.length, withIssues: st.filter(x => x.incidents > 0).length,
+          records: st.reduce((a, x) => a + x.incidents, 0), points: st.reduce((a, x) => a + x.deducted, 0),
+          avg: avgOf(st), below80: st.filter(x => x.score < 80).length, below60: st.filter(x => x.score < 60).length };
+      });
+      const students = classes.flatMap(c => c.students);
+      const known = new Set(students.map(x => key(x.className, x.name)));
+      const inScope = cls ? recs.filter(r => r.className === cls) : recs;
+      const used = inScope.filter(r => known.has(key(r.className, r.name)));   // นับเฉพาะนักเรียนที่อยู่ในรายชื่อ (ตรงกับหน้าภาพรวม)
+      const bucket = () => ({ count: 0, points: 0, st: new Set() });
+      const tiers = { minor: bucket(), mid: bucket(), severe: bucket() }, rules = new Map(), months = new Map(), perSt = new Map();
+      used.forEach(r => {
+        const p = num(r.points), k = key(r.className, r.name), rn = String(r.rule || '').trim() || '(ไม่ระบุข้อ)', ym = String(r.date || '').slice(0, 7);
+        [tiers[cdTier(p)], rules.get(rn) || rules.set(rn, Object.assign(bucket(), { rule: rn })).get(rn), months.get(ym) || months.set(ym, bucket()).get(ym)]
+          .forEach(b => { b.count++; b.points += p; b.st.add(k); });
+        const ps = perSt.get(k) || perSt.set(k, new Map()).get(k); ps.set(rn, (ps.get(rn) || 0) + 1);
+      });
+      // เดือนของปีการศึกษา (พ.ค. → เม.ย.) ตัดเดือนที่ยังมาไม่ถึงออก
+      const now = new Date(), p2 = (n) => String(n).padStart(2, '0'), y = (Number(currentAY) || now.getFullYear() + 543) - 543;
+      const nowYM = now.getFullYear() + '-' + p2(now.getMonth() + 1);
+      const monthList = MONTH_ORDER.map((name, i) => {
+        const m = (4 + i) % 12, yy = y + (4 + i >= 12 ? 1 : 0), ym = yy + '-' + p2(m + 1), b = months.get(ym);
+        return { ym, label: name + ' ' + (yy + 543), count: b ? b.count : 0, points: b ? b.points : 0, students: b ? b.st.size : 0 };
+      });
+      while (monthList.length && monthList[monthList.length - 1].ym > nowYM && !monthList[monthList.length - 1].count) monthList.pop();
+      const ruleText = (k) => {
+        const m = perSt.get(k); if (!m) return '-';
+        const arr = [...m.entries()].sort((a, b) => b[1] - a[1] || thSort(a[0], b[0]));
+        return arr.slice(0, 3).map(([r, n]) => r + (n > 1 ? ' (' + n + ' ครั้ง)' : '')).join(', ') + (arr.length > 3 ? ' และอื่น ๆ อีก ' + (arr.length - 3) + ' ข้อ' : '');
+      };
+      const byScore = (a, b) => a.score - b.score || thSort(a.className, b.className) || thSort(a.name, b.name);
+      classes.forEach(c => c.students.sort(cls ? (a, b) => thSort(a.name, b.name) : byScore));   // รายห้อง = เรียงตามชื่อ / ทุกห้อง = คะแนนน้อยขึ้นก่อน
+      const tierOut = {};
+      Object.keys(tiers).forEach(k => { tierOut[k] = { count: tiers[k].count, points: tiers[k].points, students: tiers[k].st.size }; });
+      tierOut.warning = tiers.minor.count + tiers.mid.count; tierOut.probation = tiers.severe.count;
+      return {
+        academicYear: currentAY, generated: now.getFullYear() + '-' + p2(now.getMonth() + 1) + '-' + p2(now.getDate()), className: cls || '',
+        summary: { total: students.length, full: students.filter(x => x.deducted <= 0).length, withIssues: students.filter(x => x.incidents > 0).length,
+          records: used.length, points: used.reduce((a, r) => a + num(r.points), 0), avg: avgOf(students),
+          below80: students.filter(x => x.score < 80).length, below60: students.filter(x => x.score < 60).length },
+        classes, tiers: tierOut, months: monthList,
+        rules: [...rules.values()].map(r => ({ rule: r.rule, count: r.count, points: r.points, students: r.st.size, tier: cdTier(r.points / r.count) }))
+          .sort((a, b) => b.count - a.count || b.points - a.points || thSort(a.rule, b.rule)),
+        watch: students.filter(x => x.score < 80).sort(byScore).map(x => Object.assign({}, x, { rules: ruleText(key(x.className, x.name)) })),
+        excluded: inScope.length - used.length, complete: !!complete,
+        overallAvg: avgOf(order.flatMap(c => by[c] || []))
+      };
+    }
+    function cdReportPick() {
+      const ov = cdState.ov || {}, sm = ov.summary || {};
+      let pick = ALL_CLASSES.indexOf(cdState.cls) >= 0 ? cdState.cls : '';   // ถ้ากรองห้องไว้ในหน้า ให้เลือกห้องนั้นไว้ก่อน
+      const grades = [...new Set(ALL_CLASSES.map(c => (c.match(/^ม\.(\d+)\//) || [])[1]).filter(Boolean))];
+      const chips = grades.map(g => `<div class="pk-grade"><span class="pk-glabel">ม.${g}</span><div class="pk-grid">${ALL_CLASSES.filter(c => c.indexOf('ม.' + g + '/') === 0).map(c => `<button type="button" class="pk-chip" data-rp="${escHtml(c)}" data-on="${c === pick ? 1 : 0}">${escHtml(c.replace(/^ม\./, ''))}</button>`).join('')}</div></div>`).join('');
+      const incl = (c) => c
+        ? `<b>ห้อง ${escHtml(c)}</b> สรุปของห้อง (เทียบค่าเฉลี่ยทั้งระดับ) · ระดับความผิด · ข้อที่ถูกตัดบ่อย · รายเดือน · นักเรียนที่ต้องติดตาม · คะแนนรายบุคคลทุกคน · ช่องลงชื่อครูประจำชั้น`
+        : `<b>ทุกห้อง</b> สรุปภาพรวม · ตารางรายห้อง · ระดับความผิด · ข้อที่ถูกตัดบ่อย · รายเดือน · นักเรียนที่ต้องติดตาม · รายชื่อที่ถูกตัดแยกห้อง`;
+      return edFire('rep', {
+        html: edHero('📄', 'รายงานภาพรวมพฤติกรรม', 'ไฟล์ Word พร้อมพิมพ์ · ปีการศึกษา ' + escHtml(currentAY)) + `<div class="ed-body">
+            <div class="rp-lbl">เลือกขอบเขตของรายงาน</div>
+            <button type="button" class="rp-all" data-rp="" data-on="${pick ? 0 : 1}"><span class="rp-all-ico" aria-hidden="true">🏫</span><span class="flex-1 min-w-0"><b>ทุกห้อง (ม.4–ม.6)</b><small>${sm.total != null ? `นักเรียน ${+sm.total || 0} คน · ถูกตัด ${+sm.withIssues || 0} คน` : 'ทั้งระดับชั้น'}</small></span><span class="rp-tick" aria-hidden="true">✓</span></button>
+            <div class="rp-or">หรือเลือกเป็นรายห้อง</div>
+            <div>${chips}</div>
+            <div class="rp-incl" id="rp-incl">${incl(pick)}</div>
+          </div>`,
+        confirmButtonText: '📄 สร้างไฟล์ Word',
+        didOpen: (el) => {
+          const root = el || document;
+          root.querySelectorAll('[data-rp]').forEach(b => b.addEventListener('click', () => {
+            pick = b.dataset.rp;
+            root.querySelectorAll('[data-rp]').forEach(x => { x.dataset.on = x.dataset.rp === pick ? '1' : '0'; });
+            const inc = root.querySelector('#rp-incl'); if (inc) inc.innerHTML = incl(pick);
+          }));
+        },
+        preConfirm: () => ({ cls: pick })
+      }).then(r => (r && r.isConfirmed && r.value) ? r.value : null);
+    }
+    let cdRepBusy = false;
+    async function openConductReport() {
+      if (!currentDisciplineAuth) { MySwal.fire('ต้องเข้าสู่ระบบก่อน', 'กรุณาเข้าเมนูฝ่ายปกครองด้วยรหัสผ่านก่อน', 'info'); return; }
+      if (cdRepBusy) return;   // กันกดซ้ำระหว่างกำลังสร้าง
+      cdRepBusy = true;
+      try {
+        const choice = await cdReportPick(); if (!choice) return;
+        const cls = choice.cls || '';
+        MySwal.fire({ title: 'กำลังสร้างรายงาน...', html: 'รวบรวมคะแนนความประพฤติ' + (cls ? ' ห้อง ' + escHtml(cls) : 'ทุกห้อง') + ' ปีการศึกษา ' + escHtml(currentAY), allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const ov = await callAPI('getConductOverview', { password: currentDisciplineAuth });
+        if (!ov || !ov.success) throw cdRepError((ov && ov.message) || 'โหลดข้อมูลไม่สำเร็จ');
+        const rc = await cdFetchAllRecords(cls, ALL_CLASSES.concat(Object.keys(ov.byClass || {}).filter(c => ALL_CLASSES.indexOf(c) < 0)));
+        const data = cdReportData(ov, rc.records, cls, rc.complete), sm = data.summary;
+        if (cls && !data.classes.length) throw cdRepError('ไม่พบรายชื่อนักเรียนห้อง ' + cls);
+        const intro = `<div class="text-sm text-gray-500 font-semibold">${cls ? 'ห้อง ' + escHtml(cls) : 'ทุกห้อง'} · ปีการศึกษา ${escHtml(currentAY)}</div>
+          <div class="rp-sum"><span>👥 ${sm.total} คน</span><span>📝 ถูกตัด ${sm.withIssues} คน</span><span>⚠️ ต่ำกว่า 80: ${sm.below80}</span><span>🚨 ต่ำกว่า 60: ${sm.below60}</span></div>`
+          + (data.complete ? '' : '<div class="rp-warn">⚠️ บันทึกมีมากเกิน 500 รายการต่อห้อง ตัวเลขแยกตามข้อและรายเดือนอาจไม่ครบ</div>');
+        const B = await loadDocx();
+        const p = data.generated.split('-');
+        await presentDocx(B.buildConductOverview(data), `รายงานภาพรวมพฤติกรรม_${cls || 'ทุกห้อง'}_ปีการศึกษา${currentAY}_ข้อมูล ${+p[2]}-${+p[1]}-${+p[0] + 543}`, intro);
+      } catch (err) {
+        MySwal.fire('สร้างรายงานไม่สำเร็จ', (err && (err.cdRep || err.docx)) ? err.message : 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+      } finally { cdRepBusy = false; }
+    }
+
     // ---------- หน้าต่างแบบเดียวกับหน้าใส่รหัส (สีตามธีม) ----------
     const ED_THEMES = {
       edit:   ['#9f1239', '#be123c', '#fda4af'],
       del:    ['#7f1d1d', '#991b1b', '#f87171'],
       hist:   ['#3730a3', '#4f46e5', '#a5b4fc'],
-      pw:     ['#334155', '#475569', '#a5b4fc']
+      pw:     ['#334155', '#475569', '#a5b4fc'],
+      rep:    ['#7f1d1d', '#b91c1c', '#f59e0b']
     };
     function edHero(icon, title, sub) {
       return `<div class="pw-hero pk-hero"><span class="pw-orb pw-orb1" aria-hidden="true"></span><span class="pw-orb pw-orb2" aria-hidden="true"></span>
