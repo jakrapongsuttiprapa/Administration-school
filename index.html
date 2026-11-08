@@ -1656,6 +1656,13 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
 .rp-all:hover{border-color:var(--c3)}
 .rp-all[data-on="1"]{border-color:var(--c2);box-shadow:0 10px 20px -14px var(--c1)}
 .rp-all[data-on="1"] .rp-tick{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.rp-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rp-seg button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:10px 12px;border-radius:15px;border:2px solid #eef0f4;background:#fff;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s,box-shadow .15s}
+.rp-seg b{font-size:13.5px;font-weight:900;color:#1f2937}
+.rp-seg small{font-size:11px;font-weight:700;color:#9ca3af}
+.rp-seg button:hover{border-color:var(--c3)}
+.rp-seg button[data-on="1"]{border-color:var(--c2);background:#fff7f7;box-shadow:0 10px 20px -14px var(--c1)}
+.rp-seg button[data-on="1"] b{color:var(--c1)}
 .rp-or{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:900;color:#9ca3af}
 .rp-or::before,.rp-or::after{content:"";flex:1;height:1px;background:#eef0f4}
 .rp-incl{font-size:12px;font-weight:700;color:#6b7280;background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:10px 12px;line-height:1.65}
@@ -4012,6 +4019,42 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
         function sub(text) { return para(text, { size: 30, bold: true, before: 140, after: 60, indent: { left: 360 }, keepNext: true }); }
         function none(text) { return para('- ' + text + ' -', { align: C, size: 28 }); }
         var S = d.summary, T = d.tiers, one = !!d.className, TL = { minor: 'เล็กน้อย', mid: 'ปานกลาง', severe: 'ร้ายแรง' };
+        // ช่องตารางหลายบรรทัด: lines = [[ข้อความ, {size, bold}], ...]
+        function cellX(lines, w, o) {
+          o = o || {};
+          return new D.TableCell({ width: { size: w, type: D.WidthType.DXA }, verticalAlign: D.VerticalAlign.CENTER, rowSpan: o.rowSpan,
+            margins: { top: 30, bottom: 30, left: 70, right: 70 },
+            children: lines.map(function (l) { var x = l[1] || {}; return para(l[0], { size: x.size || o.size || 24, bold: x.bold, align: o.align, after: 0, keepNext: o.keepNext }); }) });
+        }
+        // รายละเอียดรายบุคคล: คะแนนคงเหลือของทุกคน + ทุกเรื่องที่ถูกหัก (วันที่ · เรื่อง · คะแนน) เรียงตามวันที่ — ชื่อ/คงเหลือรวมช่องตามจำนวนครั้ง
+        function ledger(list) {
+          var W = [550, 2700, 1250, 3600, 550, 750], rows = [];
+          rows.push(new D.TableRow({ tableHeader: true, cantSplit: true, children: ['ที่', 'ชื่อ-สกุล', 'วันที่', 'เรื่องที่ถูกหักคะแนน', 'หัก', 'เหลือ'].map(function (t, j) { return cellX([[t, { bold: true, size: 26 }]], W[j], { align: C }); }) }));
+          list.forEach(function (x, i) {
+            var recs = x.recs || [], n = Math.max(1, recs.length), flag = x.score < 60 ? 'เฝ้าระวังสูง' : (x.score < 80 ? 'เฝ้าระวัง' : '');
+            var nameL = [[x.name]]; if (recs.length > 1) nameL.push(['หักรวม ' + x.deducted + ' คะแนน (' + recs.length + ' ครั้ง)', { size: 20 }]);
+            var scoreL = [[String(x.score), { bold: true }]]; if (flag) scoreL.push([flag, { size: 18 }]);
+            for (var k = 0; k < n; k++) {
+              var r = recs[k], kn = k < n - 1, cs = [];
+              if (k === 0) cs.push(cellX([[String(i + 1)]], W[0], { align: C, rowSpan: n, keepNext: n > 1 }), cellX(nameL, W[1], { rowSpan: n, keepNext: n > 1 }));
+              if (r) {
+                var ruleL = [[r.rule]]; if (r.note) ruleL.push(['(' + r.note + ')', { size: 20 }]);
+                cs.push(cellX([[r.date]], W[2], { align: C, keepNext: kn }), cellX(ruleL, W[3], { keepNext: kn }), cellX([[String(r.points)]], W[4], { align: C, keepNext: kn }));
+              } else cs.push(cellX([['–']], W[2], { align: C }), cellX([['–']], W[3], { align: C }), cellX([['–']], W[4], { align: C }));
+              if (k === 0) cs.push(cellX(scoreL, W[5], { align: C, rowSpan: n, keepNext: n > 1 }));
+              rows.push(new D.TableRow({ cantSplit: true, children: cs }));
+            }
+          });
+          return new D.Table({ width: { size: 9400, type: D.WidthType.DXA }, columnWidths: W, rows: rows });
+        }
+        // แบบย่อ: คนที่ไม่ถูกหัก (คงเหลือ 100) แสดงเป็นรายชื่อต่อท้ายตาราง
+        function fullList(list) {
+          return para('คะแนนคงเหลือ 100 (ไม่ถูกหัก) ' + list.length + ' คน: ' + list.map(function (x) { return x.name; }).join(', '), { size: 26, indent: { left: 360 }, before: 80, after: 100 });
+        }
+        var onlyIssues = d.detail === 'issues';
+        var detailNote = onlyIssues
+          ? 'ตารางแสดงเฉพาะนักเรียนที่ถูกหักคะแนน เรื่องที่ถูกหักเรียงตามวันที่ · เหลือ = คะแนนคงเหลือ · นักเรียนที่ไม่ถูกหักมีคะแนนคงเหลือ 100 แสดงเป็นรายชื่อใต้ตาราง'
+          : 'นักเรียนทุกคน เรียงตามชื่อ · เรื่องที่ถูกหักเรียงตามวันที่ · เหลือ = คะแนนคงเหลือ (100 หักด้วยคะแนนที่ถูกหักทั้งหมด)';
         var kids = [
           para('รายงานภาพรวมคะแนนความประพฤตินักเรียน', { bold: true, align: C, after: 0 }),
           para((one ? 'ชั้น ' + d.className : 'ระดับชั้นมัธยมศึกษาตอนปลาย (ม.4 - ม.6)') + '  ปีการศึกษา ' + d.academicYear, { bold: true, align: C, after: 0 }),
@@ -4073,28 +4116,28 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
           kids.push(table(wrows, one ? [900, 2700, 1100, 800, 3900] : [900, 2500, 900, 1100, 800, 3200], { header: true, center: one ? [0, 2, 3] : [0, 2, 3, 4] }));
         });
 
+        // ตารางทุกคน = ทุกคนมีแถวของตัวเอง · แบบย่อ = ตารางเฉพาะคนที่ถูกหัก + รายชื่อคนคงเหลือ 100
+        function classDetail(st) {
+          if (!st.length) return [none('ไม่มีรายชื่อนักเรียน')];
+          if (!onlyIssues) return [ledger(st)];
+          var bad = st.filter(function (x) { return x.incidents > 0; }), good = st.filter(function (x) { return !(x.incidents > 0); }), out = [];
+          if (bad.length) out.push(ledger(bad));
+          if (good.length) out.push(fullList(good));
+          return out;
+        }
         if (one) {
           var c0 = d.classes[0] || { students: [] };
-          kids.push(h('คะแนนความประพฤติรายบุคคล'));
-          if (!c0.students.length) kids.push(none('ไม่มีรายชื่อนักเรียน'));
-          else {
-            var srows = [['ลำดับ', 'ชื่อ-สกุล', 'ครั้ง', 'คะแนนที่ถูกตัด', 'คะแนนคงเหลือ', 'หมายเหตุ']];
-            c0.students.forEach(function (x, i) { srows.push([String(i + 1), x.name, String(x.incidents), String(x.deducted), String(x.score), x.score < 60 ? 'ต่ำกว่า 60' : (x.score < 80 ? 'ต่ำกว่า 80' : '')]); });
-            kids.push(table(srows, [900, 3400, 900, 1400, 1400, 1400], { header: true, center: [0, 2, 3, 4, 5] }));
-          }
+          kids.push(h('รายละเอียดคะแนนรายบุคคล'));
+          kids.push(para(detailNote, { size: 26, indent: { left: 360 }, after: 80, keepNext: true }));
+          kids.push.apply(kids, classDetail(c0.students));
         } else {
-          kids.push(h('รายชื่อนักเรียนที่ถูกตัดคะแนน แยกรายห้อง'));
-          var clean = [];
-          d.classes.forEach(function (c) {
-            var bad = c.students.filter(function (x) { return x.incidents > 0; });
-            if (!bad.length) { clean.push(c.cls); return; }
-            kids.push(sub('ห้อง ' + c.cls + '  ถูกตัด ' + bad.length + ' จาก ' + c.total + ' คน'));
-            var lrows = [['ลำดับ', 'ชื่อ-สกุล', 'ครั้ง', 'คะแนนที่ถูกตัด', 'คะแนนคงเหลือ']];
-            bad.forEach(function (x, i) { lrows.push([String(i + 1), x.name, String(x.incidents), String(x.deducted), String(x.score)]); });
-            kids.push(table(lrows, [900, 4200, 1300, 1500, 1500], { header: true, center: [0, 2, 3, 4] }));
-          });
+          kids.push(h('รายละเอียดคะแนนรายบุคคล แยกรายห้อง'));
+          kids.push(para(detailNote, { size: 26, indent: { left: 360 }, after: 40 }));
           if (!d.classes.length) kids.push(none('ไม่มีรายชื่อนักเรียน'));
-          else if (clean.length) kids.push(para('ห้องที่นักเรียนทุกคนยังมีคะแนนเต็ม 100: ' + clean.join(', '), { size: 28, indent: { left: 360 }, before: 120 }));
+          d.classes.forEach(function (c) {
+            kids.push(sub('ห้อง ' + c.cls + '   นักเรียน ' + c.total + ' คน · ถูกหัก ' + c.withIssues + ' คน · เฉลี่ย ' + c.avg + ' คะแนน'));
+            kids.push.apply(kids, classDetail(c.students));
+          });
         }
 
         var notes = [];
@@ -5468,7 +5511,7 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
       const parts = await Promise.all(classes.map(one));   // ทั้งปีเกิน 500 รายการ: ดึงทีละห้องแทน
       return { records: parts.flatMap(r => r.records || []), complete: parts.every(r => (r.total || 0) <= (r.records || []).length) };
     }
-    function cdReportData(ov, recs, cls, complete) {
+    function cdReportData(ov, recs, cls, complete, detail) {
       const by = ov.byClass || {}, num = (v) => Number(v) || 0, key = (c, n) => c + '|' + n;
       const order = ALL_CLASSES.filter(c => by[c]).concat(Object.keys(by).filter(c => ALL_CLASSES.indexOf(c) < 0).sort(thSort));
       const avgOf = (list) => list.length ? (Math.round(list.reduce((a, x) => a + num(x.score), 0) / list.length * 10) / 10).toFixed(1) : '-';
@@ -5490,6 +5533,15 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
           .forEach(b => { b.count++; b.points += p; b.st.add(k); });
         const ps = perSt.get(k) || perSt.set(k, new Map()).get(k); ps.set(rn, (ps.get(rn) || 0) + 1);
       });
+      // เรื่องที่ถูกหักของแต่ละคน เรียงตามวันที่/เวลา
+      const shortTH = (iso) => { const q = String(iso || '').split('-'); return q.length < 3 ? '–' : (+q[2]) + ' ' + TH_MON_SHORT[(+q[1]) - 1] + ' ' + String(+q[0] + 543).slice(-2); };
+      const recsOf = new Map();
+      used.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)) || String(a.time || '').localeCompare(String(b.time || '')) || (num(a.id) - num(b.id)))
+        .forEach(r => {
+          const k = key(r.className, r.name), note = String(r.description || '').replace(/\s+/g, ' ').trim();
+          (recsOf.get(k) || recsOf.set(k, []).get(k)).push({ date: shortTH(r.date), rule: String(r.rule || '').trim() || '(ไม่ระบุข้อ)', points: num(r.points), note: note.length > 160 ? note.slice(0, 157) + '…' : note });
+        });
+      classes.forEach(c => c.students.forEach(x => { x.recs = recsOf.get(key(x.className, x.name)) || []; }));
       // เดือนของปีการศึกษา (พ.ค. → เม.ย.) ตัดเดือนที่ยังมาไม่ถึงออก
       const now = new Date(), p2 = (n) => String(n).padStart(2, '0'), y = (Number(currentAY) || now.getFullYear() + 543) - 543;
       const nowYM = now.getFullYear() + '-' + p2(now.getMonth() + 1);
@@ -5504,12 +5556,12 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
         return arr.slice(0, 3).map(([r, n]) => r + (n > 1 ? ' (' + n + ' ครั้ง)' : '')).join(', ') + (arr.length > 3 ? ' และอื่น ๆ อีก ' + (arr.length - 3) + ' ข้อ' : '');
       };
       const byScore = (a, b) => a.score - b.score || thSort(a.className, b.className) || thSort(a.name, b.name);
-      classes.forEach(c => c.students.sort(cls ? (a, b) => thSort(a.name, b.name) : byScore));   // รายห้อง = เรียงตามชื่อ / ทุกห้อง = คะแนนน้อยขึ้นก่อน
+      classes.forEach(c => c.students.sort((a, b) => thSort(a.name, b.name)));   // รายละเอียดรายบุคคลเรียงตามชื่อ (หาชื่อง่าย)
       const tierOut = {};
       Object.keys(tiers).forEach(k => { tierOut[k] = { count: tiers[k].count, points: tiers[k].points, students: tiers[k].st.size }; });
       tierOut.warning = tiers.minor.count + tiers.mid.count; tierOut.probation = tiers.severe.count;
       return {
-        academicYear: currentAY, generated: now.getFullYear() + '-' + p2(now.getMonth() + 1) + '-' + p2(now.getDate()), className: cls || '',
+        academicYear: currentAY, generated: now.getFullYear() + '-' + p2(now.getMonth() + 1) + '-' + p2(now.getDate()), className: cls || '', detail: detail === 'issues' ? 'issues' : 'all',
         summary: { total: students.length, full: students.filter(x => x.deducted <= 0).length, withIssues: students.filter(x => x.incidents > 0).length,
           records: used.length, points: used.reduce((a, r) => a + num(r.points), 0), avg: avgOf(students),
           below80: students.filter(x => x.score < 80).length, below60: students.filter(x => x.score < 60).length },
@@ -5526,27 +5578,42 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
       let pick = ALL_CLASSES.indexOf(cdState.cls) >= 0 ? cdState.cls : '';   // ถ้ากรองห้องไว้ในหน้า ให้เลือกห้องนั้นไว้ก่อน
       const grades = [...new Set(ALL_CLASSES.map(c => (c.match(/^ม\.(\d+)\//) || [])[1]).filter(Boolean))];
       const chips = grades.map(g => `<div class="pk-grade"><span class="pk-glabel">ม.${g}</span><div class="pk-grid">${ALL_CLASSES.filter(c => c.indexOf('ม.' + g + '/') === 0).map(c => `<button type="button" class="pk-chip" data-rp="${escHtml(c)}" data-on="${c === pick ? 1 : 0}">${escHtml(c.replace(/^ม\./, ''))}</button>`).join('')}</div></div>`).join('');
-      const incl = (c) => c
-        ? `<b>ห้อง ${escHtml(c)}</b> สรุปของห้อง (เทียบค่าเฉลี่ยทั้งระดับ) · ระดับความผิด · ข้อที่ถูกตัดบ่อย · รายเดือน · นักเรียนที่ต้องติดตาม · คะแนนรายบุคคลทุกคน · ช่องลงชื่อครูประจำชั้น`
-        : `<b>ทุกห้อง</b> สรุปภาพรวม · ตารางรายห้อง · ระดับความผิด · ข้อที่ถูกตัดบ่อย · รายเดือน · นักเรียนที่ต้องติดตาม · รายชื่อที่ถูกตัดแยกห้อง`;
+      let detail = 'all';
+      const incl = (c) => {
+        const per = detail === 'issues' ? 'รายละเอียดรายบุคคลแบบย่อ' : 'ตารางรายบุคคลทุกคน';
+        return (c ? `<b>ห้อง ${escHtml(c)}</b> สรุปของห้อง (เทียบค่าเฉลี่ยทั้งระดับ) · ระดับความผิด · ข้อที่ถูกตัดบ่อย · รายเดือน · นักเรียนที่ต้องติดตาม`
+                  : `<b>ทุกห้อง</b> สรุปภาพรวม · ตารางรายห้อง · ระดับความผิด · ข้อที่ถูกตัดบ่อย · รายเดือน · นักเรียนที่ต้องติดตาม`)
+          + ` · <b>${per}</b> คะแนนคงเหลือ + ถูกหักเรื่องอะไร วันไหน กี่คะแนน` + (c ? ' · ช่องลงชื่อครูประจำชั้น' : '');
+      };
       return edFire('rep', {
         html: edHero('📄', 'รายงานภาพรวมพฤติกรรม', 'ไฟล์ Word พร้อมพิมพ์ · ปีการศึกษา ' + escHtml(currentAY)) + `<div class="ed-body">
             <div class="rp-lbl">เลือกขอบเขตของรายงาน</div>
             <button type="button" class="rp-all" data-rp="" data-on="${pick ? 0 : 1}"><span class="rp-all-ico" aria-hidden="true">🏫</span><span class="flex-1 min-w-0"><b>ทุกห้อง (ม.4–ม.6)</b><small>${sm.total != null ? `นักเรียน ${+sm.total || 0} คน · ถูกตัด ${+sm.withIssues || 0} คน` : 'ทั้งระดับชั้น'}</small></span><span class="rp-tick" aria-hidden="true">✓</span></button>
             <div class="rp-or">หรือเลือกเป็นรายห้อง</div>
             <div>${chips}</div>
+            <div class="rp-lbl">รายละเอียดรายบุคคล</div>
+            <div class="rp-seg">
+              <button type="button" data-rd="all" data-on="1"><b>👥 ตารางทุกคน</b><small>ทุกคนมีแถวคะแนนของตัวเอง</small></button>
+              <button type="button" data-rd="issues" data-on="0"><b>📝 แบบย่อ</b><small>ตารางเฉพาะคนที่ถูกหัก · คนคะแนนเต็มเป็นรายชื่อ</small></button>
+            </div>
             <div class="rp-incl" id="rp-incl">${incl(pick)}</div>
           </div>`,
         confirmButtonText: '📄 สร้างไฟล์ Word',
         didOpen: (el) => {
           const root = el || document;
+          const sync = () => { const inc = root.querySelector('#rp-incl'); if (inc) inc.innerHTML = incl(pick); };
           root.querySelectorAll('[data-rp]').forEach(b => b.addEventListener('click', () => {
             pick = b.dataset.rp;
             root.querySelectorAll('[data-rp]').forEach(x => { x.dataset.on = x.dataset.rp === pick ? '1' : '0'; });
-            const inc = root.querySelector('#rp-incl'); if (inc) inc.innerHTML = incl(pick);
+            sync();
+          }));
+          root.querySelectorAll('[data-rd]').forEach(b => b.addEventListener('click', () => {
+            detail = b.dataset.rd;
+            root.querySelectorAll('[data-rd]').forEach(x => { x.dataset.on = x.dataset.rd === detail ? '1' : '0'; });
+            sync();
           }));
         },
-        preConfirm: () => ({ cls: pick })
+        preConfirm: () => ({ cls: pick, detail })
       }).then(r => (r && r.isConfirmed && r.value) ? r.value : null);
     }
     let cdRepBusy = false;
@@ -5561,14 +5628,14 @@ html.bgp-glass .glass-card{background:rgba(255,255,255,.9)}
         const ov = await callAPI('getConductOverview', { password: currentDisciplineAuth });
         if (!ov || !ov.success) throw cdRepError((ov && ov.message) || 'โหลดข้อมูลไม่สำเร็จ');
         const rc = await cdFetchAllRecords(cls, ALL_CLASSES.concat(Object.keys(ov.byClass || {}).filter(c => ALL_CLASSES.indexOf(c) < 0)));
-        const data = cdReportData(ov, rc.records, cls, rc.complete), sm = data.summary;
+        const data = cdReportData(ov, rc.records, cls, rc.complete, choice.detail), sm = data.summary;
         if (cls && !data.classes.length) throw cdRepError('ไม่พบรายชื่อนักเรียนห้อง ' + cls);
         const intro = `<div class="text-sm text-gray-500 font-semibold">${cls ? 'ห้อง ' + escHtml(cls) : 'ทุกห้อง'} · ปีการศึกษา ${escHtml(currentAY)}</div>
           <div class="rp-sum"><span>👥 ${sm.total} คน</span><span>📝 ถูกตัด ${sm.withIssues} คน</span><span>⚠️ ต่ำกว่า 80: ${sm.below80}</span><span>🚨 ต่ำกว่า 60: ${sm.below60}</span></div>`
           + (data.complete ? '' : '<div class="rp-warn">⚠️ บันทึกมีมากเกิน 500 รายการต่อห้อง ตัวเลขแยกตามข้อและรายเดือนอาจไม่ครบ</div>');
         const B = await loadDocx();
         const p = data.generated.split('-');
-        await presentDocx(B.buildConductOverview(data), `รายงานภาพรวมพฤติกรรม_${cls || 'ทุกห้อง'}_ปีการศึกษา${currentAY}_ข้อมูล ${+p[2]}-${+p[1]}-${+p[0] + 543}`, intro);
+        await presentDocx(B.buildConductOverview(data), `รายงานภาพรวมพฤติกรรม_${cls || 'ทุกห้อง'}${data.detail === 'issues' ? '_แบบย่อ' : ''}_ปีการศึกษา${currentAY}_ข้อมูล ${+p[2]}-${+p[1]}-${+p[0] + 543}`, intro);
       } catch (err) {
         MySwal.fire('สร้างรายงานไม่สำเร็จ', (err && (err.cdRep || err.docx)) ? err.message : 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
       } finally { cdRepBusy = false; }
