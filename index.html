@@ -1728,16 +1728,6 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 @keyframes jwOkPop{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.swal2-popup.swal2-toast::before,.swal2-popup.swal2-toast::after{animation:none}.jw-tick{animation:none;stroke-dashoffset:0}}
 /* ===== หน้าแรกแบบอลังการ (hx-): กรอบทองคู่ · มุมลายทอง · ป้ายคำขวัญไวน์แดงขอบทอง · หัวเรื่องแสงทอง · การ์ดแสงวาบ ===== */
-.hx::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;z-index:25;
-  background:linear-gradient(135deg,#fde68a 0%,#d97706 20%,#fff7d6 42%,#b45309 64%,#fcd34d 82%,#d97706 100%);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.hx::after{inset:9px;border:1px solid rgba(217,119,6,.42);outline:1px solid rgba(217,119,6,.2);outline-offset:-6px;z-index:1}
-.hx-corner{position:absolute;width:70px;height:70px;color:#c48a12;z-index:5;pointer-events:none;filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 0 6px rgba(253,224,71,.45))}
-.hx-corner svg{display:block;width:100%;height:100%}
-.hx-tl{left:0;top:0}.hx-tr{right:0;top:0;transform:scaleX(-1)}.hx-bl{left:0;bottom:0;transform:scaleY(-1)}.hx-br{right:0;bottom:0;transform:scale(-1,-1)}
-.hx-clasp{position:absolute;left:50%;width:12px;height:12px;margin-left:-6px;z-index:26;pointer-events:none;transform:rotate(45deg);border-radius:2px;
-  background:linear-gradient(135deg,#fffbeb 0%,#fcd34d 40%,#d97706 100%);box-shadow:0 0 0 2px #fffaf0,0 0 0 3px rgba(180,83,9,.55),0 0 12px rgba(245,158,11,.7)}
-.hx-clasp-t{top:3px}.hx-clasp-b{bottom:3px}
 .hx-glow{position:absolute;left:50%;top:248px;width:min(520px,130%);height:260px;transform:translateX(-50%);z-index:0;pointer-events:none;
   background:radial-gradient(closest-side,rgba(253,230,138,.55),rgba(253,230,138,.18) 55%,rgba(253,230,138,0))}
 .hx-spark{position:absolute;z-index:3;pointer-events:none;color:#f59e0b;line-height:1;text-shadow:0 0 8px rgba(253,224,71,.95),0 0 2px #fff;animation:ftTw 3.2s ease-in-out infinite}
@@ -1758,32 +1748,26 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 .hx-orn i{flex:1;height:1.5px;border-radius:2px;background:linear-gradient(90deg,rgba(217,119,6,0),#d97706)}
 .hx-orn i:last-child{transform:scaleX(-1)}
 .hx-orn b{width:9px;height:9px;flex-shrink:0;transform:rotate(45deg);border-radius:1.5px;background:linear-gradient(135deg,#fffbeb,#fcd34d 45%,#d97706);box-shadow:0 0 0 2px #fffaf0,0 0 0 3px rgba(180,83,9,.45),0 0 10px rgba(245,158,11,.6)}
-/* แถบเลือกภาคเรียน: แคปซูลงาช้างขอบทอง */
-#view-home .hx .sem-bar{display:inline-flex;padding:5px 7px 5px 14px;border-radius:999px;border:1.5px solid transparent;
-  background:linear-gradient(180deg,#fffefb,#fff7ea) padding-box,linear-gradient(120deg,#fde68a,#d97706 35%,#fff7d6 55%,#b45309 80%,#fcd34d) border-box;
-  box-shadow:0 12px 22px -16px rgba(146,64,14,.8),inset 0 1px 0 #fff}
-#view-home .hx .sem-seg{border-radius:999px;border:0;box-shadow:inset 0 0 0 1.5px rgba(217,119,6,.45),0 4px 10px -6px rgba(146,64,14,.6)}
-#view-home .hx .sem-seg button{border-radius:999px;min-width:44px}
-#view-home .hx .sem-on{color:#4c0519;background:radial-gradient(circle at 35% 25%,#fffdf2 0%,#fde68a 35%,#f59e0b 75%,#d97706 100%);box-shadow:inset 0 -2px 4px rgba(146,64,14,.35),inset 0 2px 3px rgba(255,255,255,.8),0 3px 8px -3px rgba(180,83,9,.7)}
-#view-home .hx .sem-l{color:#7c2d12;font-weight:700}
+/* แถบเลือกภาคเรียน: กล่องขาวมน · ปุ่มเทอมที่เลือกสีไวน์เข้ม · ปีการศึกษาในป้ายสีครีม */
+#view-home .hx .sem-bar{display:inline-flex;flex-wrap:nowrap;align-items:center;gap:7px;padding:5px 6px 5px 13px;border:0;border-radius:999px;background:#fff;
+  box-shadow:0 12px 26px -18px rgba(76,5,25,.55),0 0 0 1px rgba(131,24,67,.1)}
+#view-home .hx .sem-seg{display:inline-flex;gap:2px;padding:3px;border:0;border-radius:999px;background:#f8f1f3;box-shadow:none}
+#view-home .hx .sem-seg button{border-radius:999px;min-width:38px;padding:3px 12px;transition:background .25s,color .25s,box-shadow .25s}
+#view-home .hx .sem-off{background:transparent;color:#831843}#view-home .hx .sem-off:hover{background:#fff}
+#view-home .hx .sem-on{background:linear-gradient(135deg,#831843,#be185d);color:#fff;box-shadow:0 5px 12px -4px rgba(131,24,67,.6)}
+#view-home .hx .sem-l{font-weight:600;color:#7a5a4c;white-space:nowrap}
+#view-home .hx #semester-ay{background:#fdf6ec;color:#7c2d12;font-weight:800;border-radius:999px;padding:4px 10px;font-size:13px}
 #view-home .hx .sem-hint{margin-top:7px}
 /* ป้ายคำขวัญ: กระจกขาวโทนเดิม + ขอบทองบาง + เหรียญทอง “ */
-.hq{padding:12px 20px 13px;border-radius:22px;color:#1f2937;
+.hq{padding:12px 20px 13px;border-radius:22px;color:#1f2937;border:1px solid rgba(255,255,255,.5);
   background:linear-gradient(150deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.38) 60%,rgba(255,255,255,.5) 100%);
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-  box-shadow:0 14px 28px -16px rgba(120,53,15,.4),0 0 0 4px rgba(255,255,255,.3),inset 0 1px 0 rgba(255,255,255,.9)}
-.hq::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
-  background:linear-gradient(130deg,#fde68a 0%,#e0a526 28%,#fffbeb 50%,#c98a12 74%,#fcd34d 100%);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+  box-shadow:0 12px 26px -14px rgba(76,5,25,.3),inset 0 1px 0 rgba(255,255,255,.9)}
 #hero-d-quote.hq,#hero-m-quote.hq{background-color:transparent}
 .hq-txt{margin:0;font-size:24px;font-weight:800;line-height:1.36;letter-spacing:.02em;color:#1f2937;text-shadow:0 1px 0 rgba(255,255,255,.85),0 2px 10px rgba(255,255,255,.6)}
 .hq-gold{color:#db2777}
-.hq-mark{position:absolute;z-index:2;top:-15px;left:-11px;width:34px;height:34px;border-radius:999px;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;
-  font-family:Georgia,'Times New Roman',serif;font-size:31px;font-weight:900;line-height:1;color:#be185d;
-  background:radial-gradient(circle at 32% 26%,#fffdf2 0%,#fde68a 34%,#f59e0b 72%,#c2780c 100%);
-  box-shadow:0 0 0 2px #fff,0 0 0 3.5px rgba(201,138,18,.5),0 8px 14px -6px rgba(120,53,15,.5)}
 .hq-line{display:block;width:44px;height:4px;margin-top:9px;border-radius:4px;background:linear-gradient(90deg,#f472b6,#e11d48 55%,#f59e0b)}
-.hq-d{text-align:right}.hq-d .hq-mark{left:auto;right:-11px}.hq-d .hq-line{margin-left:auto;background:linear-gradient(270deg,#f472b6,#e11d48 55%,#f59e0b)}
+.hq-d{text-align:right}.hq-d .hq-line{margin-left:auto;background:linear-gradient(270deg,#f472b6,#e11d48 55%,#f59e0b)}
 .hq-d .hq-gold{color:#1f2937}
 /* ตัวแก้ไขรูปหน้าแรก: กล่องคำขวัญจำลองหน้าตาเดียวกับหน้าจริง */
 .he-quote.hq{border-radius:22px}
@@ -1836,10 +1820,6 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 
       <!-- Hero Banner -->
       <div class="rise hero-panel hx p-6 md:p-10 rounded-[2.5rem] relative overflow-hidden w-full min-h-[420px] flex items-center" style="--d:0.04s">
-        <!-- ลายประดับกรอบ (มุมทอง · หมุดทองกลางขอบ · ประกาย) -->
-        <span class="hx-corner hx-tl" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span><span class="hx-corner hx-tr" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span>
-        <span class="hx-corner hx-bl" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span><span class="hx-corner hx-br" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span>
-        <span class="hx-clasp hx-clasp-t" aria-hidden="true"></span><span class="hx-clasp hx-clasp-b" aria-hidden="true"></span>
         <span class="hx-glow" aria-hidden="true"></span>
         <span class="hx-spark hx-sp1" aria-hidden="true">✦</span><span class="hx-spark hx-sp2" aria-hidden="true">✧</span><span class="hx-spark hx-sp3" aria-hidden="true">✦</span><span class="hx-spark hx-sp4" aria-hidden="true">✧</span><span class="hx-spark hx-sp5" aria-hidden="true">✦</span>
         <!-- Mobile image -->
@@ -1848,7 +1828,6 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         </div>
         <!-- Mobile quote -->
         <div id="hero-m-quote" class="hq hq-m absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
-          <span class="hq-mark" aria-hidden="true">“</span>
           <h3 class="hq-txt">สร้างวินัย<br>พัฒนาตน<br><span class="hq-gold">สู่อนาคตที่ดี</span></h3>
           <span class="hq-line" aria-hidden="true"></span>
         </div>
@@ -1872,7 +1851,6 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         </script>
         <!-- Desktop quote -->
         <div id="hero-d-quote" class="hq hq-d absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10">
-          <span class="hq-mark" aria-hidden="true">“</span>
           <h3 class="hq-txt">สร้างวินัย<br>พัฒนาตน<br><span class="hq-gold">สู่อนาคตที่ดี</span></h3>
           <span class="hq-line" aria-hidden="true"></span>
         </div>
