@@ -1727,6 +1727,88 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 @keyframes jwTick{to{stroke-dashoffset:0}}
 @keyframes jwOkPop{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.swal2-popup.swal2-toast::before,.swal2-popup.swal2-toast::after{animation:none}.jw-tick{animation:none;stroke-dashoffset:0}}
+/* ===== หน้าแรกแบบอลังการ (hx-): กรอบทองคู่ · มุมลายทอง · ป้ายคำขวัญไวน์แดงขอบทอง · หัวเรื่องแสงทอง · การ์ดแสงวาบ ===== */
+.hx::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;z-index:25;
+  background:linear-gradient(135deg,#fde68a 0%,#d97706 20%,#fff7d6 42%,#b45309 64%,#fcd34d 82%,#d97706 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.hx::after{inset:9px;border:1px solid rgba(217,119,6,.42);outline:1px solid rgba(217,119,6,.2);outline-offset:-6px;z-index:1}
+.hx-corner{position:absolute;width:70px;height:70px;color:#c48a12;z-index:5;pointer-events:none;filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 0 6px rgba(253,224,71,.45))}
+.hx-corner svg{display:block;width:100%;height:100%}
+.hx-tl{left:0;top:0}.hx-tr{right:0;top:0;transform:scaleX(-1)}.hx-bl{left:0;bottom:0;transform:scaleY(-1)}.hx-br{right:0;bottom:0;transform:scale(-1,-1)}
+.hx-clasp{position:absolute;left:50%;width:12px;height:12px;margin-left:-6px;z-index:26;pointer-events:none;transform:rotate(45deg);border-radius:2px;
+  background:linear-gradient(135deg,#fffbeb 0%,#fcd34d 40%,#d97706 100%);box-shadow:0 0 0 2px #fffaf0,0 0 0 3px rgba(180,83,9,.55),0 0 12px rgba(245,158,11,.7)}
+.hx-clasp-t{top:3px}.hx-clasp-b{bottom:3px}
+.hx-glow{position:absolute;left:50%;top:248px;width:min(520px,130%);height:260px;transform:translateX(-50%);z-index:0;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(253,230,138,.55),rgba(253,230,138,.18) 55%,rgba(253,230,138,0))}
+.hx-spark{position:absolute;z-index:3;pointer-events:none;color:#f59e0b;line-height:1;text-shadow:0 0 8px rgba(253,224,71,.95),0 0 2px #fff;animation:ftTw 3.2s ease-in-out infinite}
+.hx-sp1{left:12%;top:300px;font-size:15px}
+.hx-sp2{right:10%;top:318px;font-size:12px;animation-delay:.9s}
+.hx-sp3{right:7%;top:46px;font-size:13px;animation-delay:1.7s;color:#fde68a}
+.hx-sp4{left:46%;top:22px;font-size:10px;animation-delay:2.3s;color:#fde68a}
+.hx-sp5{left:8%;top:236px;font-size:10px;animation-delay:.4s;color:#fde68a}
+.hx-kick{display:flex;align-items:center;justify-content:center;gap:9px;margin:0 0 4px;font-size:11px;font-weight:800;letter-spacing:.22em;color:#b45309;white-space:nowrap}
+.hx-kick i{display:block;width:30px;height:1.5px;border-radius:2px;background:linear-gradient(90deg,rgba(217,119,6,0),#d97706)}
+.hx-kick i:last-child{transform:scaleX(-1)}
+#view-home .hx-title{font-size:clamp(1.8rem,7.8vw,2.15rem);font-weight:900;line-height:1.25;letter-spacing:-.005em;margin-bottom:2px;padding:0 2px;
+  background:linear-gradient(100deg,#4c0519 0%,#881337 26%,#be123c 42%,#fbbf24 49%,#fff4c2 50%,#fbbf24 51%,#be123c 58%,#881337 74%,#4c0519 100%);background-size:260% 100%;background-position:0 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 1.5px 0 rgba(255,255,255,.9)) drop-shadow(0 8px 18px rgba(190,18,60,.18));animation:hxSweep 2.4s .6s cubic-bezier(.45,0,.2,1) both}
+@keyframes hxSweep{from{background-position:100% 0}to{background-position:0 0}}
+.hx-orn{display:flex;align-items:center;justify-content:center;gap:9px;width:210px;max-width:70%;margin:4px auto 14px}
+.hx-orn i{flex:1;height:1.5px;border-radius:2px;background:linear-gradient(90deg,rgba(217,119,6,0),#d97706)}
+.hx-orn i:last-child{transform:scaleX(-1)}
+.hx-orn b{width:9px;height:9px;flex-shrink:0;transform:rotate(45deg);border-radius:1.5px;background:linear-gradient(135deg,#fffbeb,#fcd34d 45%,#d97706);box-shadow:0 0 0 2px #fffaf0,0 0 0 3px rgba(180,83,9,.45),0 0 10px rgba(245,158,11,.6)}
+/* แถบเลือกภาคเรียน: แคปซูลงาช้างขอบทอง */
+#view-home .hx .sem-bar{display:inline-flex;padding:5px 7px 5px 14px;border-radius:999px;border:1.5px solid transparent;
+  background:linear-gradient(180deg,#fffefb,#fff7ea) padding-box,linear-gradient(120deg,#fde68a,#d97706 35%,#fff7d6 55%,#b45309 80%,#fcd34d) border-box;
+  box-shadow:0 12px 22px -16px rgba(146,64,14,.8),inset 0 1px 0 #fff}
+#view-home .hx .sem-seg{border-radius:999px;border:0;box-shadow:inset 0 0 0 1.5px rgba(217,119,6,.45),0 4px 10px -6px rgba(146,64,14,.6)}
+#view-home .hx .sem-seg button{border-radius:999px;min-width:44px}
+#view-home .hx .sem-on{color:#4c0519;background:radial-gradient(circle at 35% 25%,#fffdf2 0%,#fde68a 35%,#f59e0b 75%,#d97706 100%);box-shadow:inset 0 -2px 4px rgba(146,64,14,.35),inset 0 2px 3px rgba(255,255,255,.8),0 3px 8px -3px rgba(180,83,9,.7)}
+#view-home .hx .sem-l{color:#7c2d12;font-weight:700}
+#view-home .hx .sem-hint{margin-top:7px}
+/* ป้ายคำขวัญ: กระจกขาวโทนเดิม + ขอบทองบาง + เหรียญทอง “ */
+.hq{padding:12px 20px 13px;border-radius:22px;color:#1f2937;
+  background:linear-gradient(150deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.38) 60%,rgba(255,255,255,.5) 100%);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  box-shadow:0 14px 28px -16px rgba(120,53,15,.4),0 0 0 4px rgba(255,255,255,.3),inset 0 1px 0 rgba(255,255,255,.9)}
+.hq::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
+  background:linear-gradient(130deg,#fde68a 0%,#e0a526 28%,#fffbeb 50%,#c98a12 74%,#fcd34d 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+#hero-d-quote.hq,#hero-m-quote.hq{background-color:transparent}
+.hq-txt{margin:0;font-size:24px;font-weight:800;line-height:1.36;letter-spacing:.02em;color:#1f2937;text-shadow:0 1px 0 rgba(255,255,255,.85),0 2px 10px rgba(255,255,255,.6)}
+.hq-gold{color:#db2777}
+.hq-mark{position:absolute;z-index:2;top:-15px;left:-11px;width:34px;height:34px;border-radius:999px;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;
+  font-family:Georgia,'Times New Roman',serif;font-size:31px;font-weight:900;line-height:1;color:#be185d;
+  background:radial-gradient(circle at 32% 26%,#fffdf2 0%,#fde68a 34%,#f59e0b 72%,#c2780c 100%);
+  box-shadow:0 0 0 2px #fff,0 0 0 3.5px rgba(201,138,18,.5),0 8px 14px -6px rgba(120,53,15,.5)}
+.hq-line{display:block;width:44px;height:4px;margin-top:9px;border-radius:4px;background:linear-gradient(90deg,#f472b6,#e11d48 55%,#f59e0b)}
+.hq-d{text-align:right}.hq-d .hq-mark{left:auto;right:-11px}.hq-d .hq-line{margin-left:auto;background:linear-gradient(270deg,#f472b6,#e11d48 55%,#f59e0b)}
+.hq-d .hq-gold{color:#1f2937}
+/* ตัวแก้ไขรูปหน้าแรก: กล่องคำขวัญจำลองหน้าตาเดียวกับหน้าจริง */
+.he-quote.hq{border-radius:22px}
+/* เมนูหลัก: แสงวาบวิ่งผ่านการ์ดเป็นระลอก (เลื่อนด้วย transform อย่างเดียว ไม่หนักเครื่อง) */
+.jw-glint{position:absolute;top:-25%;bottom:-25%;left:0;width:36%;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,rgba(255,248,225,0) 0%,rgba(255,248,225,.34) 50%,rgba(255,248,225,0) 100%);
+  transform:translateX(-170%) skewX(-16deg);animation:jwGlint 7.5s cubic-bezier(.45,0,.2,1) 1.4s infinite}
+.hx-tile:nth-child(2) .jw-glint{animation-delay:1.65s}.hx-tile:nth-child(3) .jw-glint{animation-delay:1.9s}.hx-tile:nth-child(4) .jw-glint{animation-delay:2.15s}
+@keyframes jwGlint{0%{transform:translateX(-170%) skewX(-16deg)}16%,100%{transform:translateX(440%) skewX(-16deg)}}
+.hx-tile{box-shadow:0 22px 34px -20px var(--c1),0 6px 12px -8px rgba(0,0,0,.18),0 0 0 1.5px rgba(253,230,138,.55),0 0 0 4px rgba(255,255,255,.55),inset 0 1px 0 rgba(255,255,255,.3)}
+.hx-tile .jw-medal{box-shadow:0 0 0 2px rgba(255,251,235,.85),0 0 0 3.5px rgba(180,83,9,.45),0 10px 16px -10px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.9)}
+/* หัวข้อแบ่งหมวดในหน้าแรก: ริบบิ้นทอง + เส้นคู่ปลายเพชร */
+#view-home .hx .jw-sec-l{border:1.5px solid transparent;background:linear-gradient(180deg,#fffdf6,#fff4dc) padding-box,linear-gradient(120deg,#fde68a,#d97706 40%,#fff7d6 60%,#b45309) border-box;box-shadow:0 6px 14px -10px rgba(146,64,14,.75),inset 0 1px 0 #fff}
+#view-home .hx .jw-sec-line{position:relative;height:5px;border-radius:0;background:linear-gradient(90deg,#e8b23a,rgba(232,178,58,0)) 0 0/100% 1.5px no-repeat,linear-gradient(90deg,rgba(232,178,58,.6),rgba(232,178,58,0)) 0 100%/100% 1px no-repeat}
+#view-home .hx .jw-sec-line::before{content:"";position:absolute;left:-3px;top:50%;width:7px;height:7px;margin-top:-3.5px;transform:rotate(45deg);border-radius:1px;background:linear-gradient(135deg,#fffbeb,#f59e0b);box-shadow:0 0 0 1.5px rgba(180,83,9,.4)}
+@media (min-width:1024px){
+  .hx-glow{left:30%;top:50%;transform:translate(-50%,-62%);width:640px;height:420px}
+  .hx-sp1{left:4%;top:12%}.hx-sp2{left:56%;right:auto;top:8%}.hx-sp5{left:40%;top:64%}
+  .hx-kick{justify-content:flex-start}.hx-kick i:first-child{display:none}
+  #view-home .hx-title{font-size:2.9rem;padding:0}
+  .hx-orn{margin:6px 0 16px;justify-content:flex-start;width:240px}.hx-orn i:first-child{flex:0 0 0;display:none}
+}
+.hero-panel.anim-off .hx-spark,.hero-panel.anim-off .jw-glint{animation-play-state:paused}   /* เลื่อนพ้นจอ: หยุดพักทุกขนาดจอ */
+@media (max-width:360px){.hx-kick{font-size:10px;letter-spacing:.16em}.hq-txt{font-size:21px}}
+@media (prefers-reduced-motion:reduce){.hx-spark,.jw-glint{animation:none;opacity:.8}.jw-glint{display:none}#view-home .hx-title{animation:none}}
 </style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
@@ -1753,20 +1835,22 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     <div id="view-home" class="flex flex-col space-y-6 mt-2 md:mt-6">
 
       <!-- Hero Banner -->
-      <div class="rise hero-panel p-6 md:p-10 rounded-[2.5rem] relative overflow-hidden w-full min-h-[420px] flex items-center" style="--d:0.04s">
-        <div class="absolute right-0 top-0 opacity-[0.03] w-64 h-64 pointer-events-none -mt-10 -mr-10 z-0">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"></path></svg>
-        </div>
+      <div class="rise hero-panel hx p-6 md:p-10 rounded-[2.5rem] relative overflow-hidden w-full min-h-[420px] flex items-center" style="--d:0.04s">
+        <!-- ลายประดับกรอบ (มุมทอง · หมุดทองกลางขอบ · ประกาย) -->
+        <span class="hx-corner hx-tl" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span><span class="hx-corner hx-tr" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span>
+        <span class="hx-corner hx-bl" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span><span class="hx-corner hx-br" aria-hidden="true"><svg viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 64V40A24 24 0 0 1 40 16h24" stroke-width="1.6"/><path d="M22 58V42a18 18 0 0 1 18-18h16" stroke-width=".9" opacity=".55"/><path d="M23 18.2 27.8 23 23 27.8 18.2 23z" fill="currentColor" stroke="none"/><circle cx="16" cy="64" r="1.8" fill="currentColor" stroke="none"/><circle cx="64" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg></span>
+        <span class="hx-clasp hx-clasp-t" aria-hidden="true"></span><span class="hx-clasp hx-clasp-b" aria-hidden="true"></span>
+        <span class="hx-glow" aria-hidden="true"></span>
+        <span class="hx-spark hx-sp1" aria-hidden="true">✦</span><span class="hx-spark hx-sp2" aria-hidden="true">✧</span><span class="hx-spark hx-sp3" aria-hidden="true">✦</span><span class="hx-spark hx-sp4" aria-hidden="true">✧</span><span class="hx-spark hx-sp5" aria-hidden="true">✦</span>
         <!-- Mobile image -->
         <div id="hero-m-box" class="block lg:hidden absolute top-0 left-0 w-full h-[360px] pointer-events-none z-0 overflow-hidden" style="-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);">
           <img id="hero-m-img" data-hero-mobile="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_20%] opacity-95">
         </div>
         <!-- Mobile quote -->
-        <div id="hero-m-quote" class="absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
-          <div class="text-6xl text-pink-500 font-black mb-0 leading-none drop-shadow-md opacity-90">"</div>
-          <h3 class="text-2xl font-extrabold text-gray-800 leading-snug tracking-wide drop-shadow-lg bg-white/30 backdrop-blur-sm px-5 py-3 rounded-2xl border border-white/40 shadow-md relative -mt-3">
-           สร้างวินัย<br>พัฒนาตน<br><span class="text-pink-600">สู่อนาคตที่ดี</span>
-          </h3>
+        <div id="hero-m-quote" class="hq hq-m absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
+          <span class="hq-mark" aria-hidden="true">“</span>
+          <h3 class="hq-txt">สร้างวินัย<br>พัฒนาตน<br><span class="hq-gold">สู่อนาคตที่ดี</span></h3>
+          <span class="hq-line" aria-hidden="true"></span>
         </div>
         <!-- Desktop image -->
         <div id="hero-d-box" class="hidden lg:block absolute top-0 right-0 h-full w-[65%] pointer-events-none z-0 overflow-hidden" style="-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);">
@@ -1787,16 +1871,18 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
           })();
         </script>
         <!-- Desktop quote -->
-        <div id="hero-d-quote" class="absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10 bg-white/25 backdrop-blur-sm p-5 rounded-3xl border border-white/30 shadow-lg">
-          <div class="text-4xl text-pink-500 font-black mb-1 leading-none -mr-2 drop-shadow-md opacity-80">"</div>
-          <h3 class="text-2xl font-extrabold text-gray-800 leading-snug tracking-wide drop-shadow-md">สร้างวินัย<br>พัฒนาตน<br>สู่อนาคตที่ดี</h3>
-          <div class="w-10 h-1.5 bg-gradient-to-r from-pink-400 to-rose-500 mt-3 float-right rounded-full shadow-md"></div>
+        <div id="hero-d-quote" class="hq hq-d absolute right-8 bottom-8 hidden lg:block text-right pointer-events-none z-10">
+          <span class="hq-mark" aria-hidden="true">“</span>
+          <h3 class="hq-txt">สร้างวินัย<br>พัฒนาตน<br><span class="hq-gold">สู่อนาคตที่ดี</span></h3>
+          <span class="hq-line" aria-hidden="true"></span>
         </div>
 
         <!-- เนื้อหาฝั่งซ้าย -->
         <div class="relative z-20 w-full lg:w-[60%] mt-[270px] sm:mt-[290px] lg:mt-0">
           <div class="text-center lg:text-left mb-6 lg:mb-8">
-            <h2 class="hero-hi text-3xl md:text-4xl font-extrabold mb-2">สวัสดีนักเรียนม.ปลาย</h2>
+            <div class="hx-kick" aria-hidden="true"><i></i>✦ WELCOME · ยินดีต้อนรับ ✦<i></i></div>
+            <h2 class="hero-hi hx-title text-3xl md:text-4xl font-extrabold mb-2">สวัสดีนักเรียนม.ปลาย</h2>
+            <div class="hx-orn" aria-hidden="true"><i></i><b></b><i></i></div>
             <div id="semester-bar" class="sem-bar inline-flex lg:flex flex-wrap items-center justify-center lg:justify-start gap-2 px-3 py-1.5 rounded-xl">
               <span class="sem-l text-sm md:text-base font-medium">ภาคเรียนที่</span>
               <div class="sem-seg inline-flex rounded-xl overflow-hidden" role="group" aria-label="เลือกภาคเรียน">
@@ -1810,26 +1896,26 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 
           <!-- เมนูหลัก: การ์ดอัญมณีขอบทอง (สีตามหน้าที่ของแต่ละเมนู) -->
           <div class="grid grid-cols-2 gap-3 md:gap-4">
-            <button type="button" onclick="showStudentView()" class="jw jw-tile jw-amethyst menu-tile rise" style="--d:0.08s">
-              <span class="jw-guil" data-guil aria-hidden="true"></span>
+            <button type="button" onclick="showStudentView()" class="jw jw-tile jw-amethyst menu-tile hx-tile rise" style="--d:0.08s">
+              <span class="jw-guil" data-guil aria-hidden="true"></span><span class="jw-glint" aria-hidden="true"></span>
               <span class="jw-top"><span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 7V5.6A2.6 2.6 0 0 1 11.1 3h1.8a2.6 2.6 0 0 1 2.6 2.6V7"/><rect x="4.5" y="7" width="15" height="14" rx="4"/><path d="M8.5 13.5h7v3.5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/><path d="M4.5 12h15"/></svg></span><span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></span>
               <span class="jw-t">สำหรับนักเรียน</span>
               <span class="jw-s">ดูผลตรวจ คะแนน และการมาเรียน</span>
             </button>
-            <button type="button" onclick="loginTeacher()" class="jw jw-tile jw-garnet menu-tile rise" style="--d:0.12s">
-              <span class="jw-guil" data-guil aria-hidden="true"></span>
+            <button type="button" onclick="loginTeacher()" class="jw jw-tile jw-garnet menu-tile hx-tile rise" style="--d:0.12s">
+              <span class="jw-guil" data-guil aria-hidden="true"></span><span class="jw-glint" aria-hidden="true"></span>
               <span class="jw-top"><span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4.5" width="14" height="17" rx="2.6"/><path d="M9 4.5v-.7a.8.8 0 0 1 .8-.8h4.4a.8.8 0 0 1 .8.8v.7"/><path d="m8.8 13.2 2.2 2.2 4.3-4.6"/></svg></span><span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></span>
               <span class="jw-t">สำหรับคุณครู</span>
               <span class="jw-s">ตรวจการแต่งกายรายห้อง</span>
             </button>
-            <button type="button" onclick="loginDiscipline()" class="jw jw-tile jw-sapphire menu-tile rise" style="--d:0.16s">
-              <span class="jw-guil" data-guil aria-hidden="true"></span>
+            <button type="button" onclick="loginDiscipline()" class="jw jw-tile jw-sapphire menu-tile hx-tile rise" style="--d:0.16s">
+              <span class="jw-guil" data-guil aria-hidden="true"></span><span class="jw-glint" aria-hidden="true"></span>
               <span class="jw-top"><span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5.6c0 4.5 3.1 8.1 7.5 9.4 4.4-1.3 7.5-4.9 7.5-9.4V6z"/><path d="m8.8 12 2.3 2.3 4.2-4.6"/></svg></span><span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></span>
               <span class="jw-t">ฝ่ายปกครอง</span>
               <span class="jw-s">รายงาน ศูนย์งานค้าง สรุปเทอม</span>
             </button>
-            <button type="button" onclick="loginAttendance()" class="jw jw-tile jw-aqua menu-tile rise" style="--d:0.20s">
-              <span class="jw-guil" data-guil aria-hidden="true"></span>
+            <button type="button" onclick="loginAttendance()" class="jw jw-tile jw-aqua menu-tile hx-tile rise" style="--d:0.20s">
+              <span class="jw-guil" data-guil aria-hidden="true"></span><span class="jw-glint" aria-hidden="true"></span>
               <span class="jw-top"><span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="m9 15.2 2 2 4-4.2"/></svg></span><span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></span>
               <span class="jw-t">เช็คชื่อเรียน</span>
               <span class="jw-s">บันทึกการมาเรียน ดูสถิติ</span>
@@ -7162,7 +7248,7 @@ function renderClassroomOverview(res) {
     (function () {
       if (!('IntersectionObserver' in window)) return;
       const io = new IntersectionObserver((es) => es.forEach(e => e.target.classList.toggle('anim-off', !e.isIntersecting)), { rootMargin: '120px 0px' });
-      document.querySelectorAll('.ft-card, .ac-card, #ov-live').forEach(el => io.observe(el));
+      document.querySelectorAll('.ft-card, .ac-card, #ov-live, .hero-panel').forEach(el => io.observe(el));
     })();
 
   </script>
