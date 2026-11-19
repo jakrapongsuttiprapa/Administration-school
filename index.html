@@ -1790,6 +1790,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
   #view-home .hx-title{font-size:2.9rem;padding:0}
   .hx-orn{margin:6px 0 16px;justify-content:flex-start;width:240px}.hx-orn i:first-child{flex:0 0 0;display:none}
 }
+/* จอคอมกว้าง: ขยายกล่องเนื้อหาให้กว้างขึ้น (เดิมกว้างสุด 1152px เหลือที่ว่างซ้ายขวาเยอะ) · หัวเว็บกว้างเท่ากันให้โลโก้ตรงแนว */
+@media (min-width:1280px){main.container.max-w-6xl,.site-hdr>.container{max-width:min(92vw,1760px)}.site-hdr>.container{padding-left:1rem;padding-right:1rem}}
 .hero-panel.anim-off .hx-spark,.hero-panel.anim-off .jw-glint{animation-play-state:paused}   /* เลื่อนพ้นจอ: หยุดพักทุกขนาดจอ */
 @media (max-width:360px){.hx-kick{font-size:10px;letter-spacing:.16em}.hq-txt{font-size:21px}}
 @media (prefers-reduced-motion:reduce){.hx-spark,.jw-glint{animation:none;opacity:.8}.jw-glint{display:none}#view-home .hx-title{animation:none}}
