@@ -1795,6 +1795,113 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 .hero-panel.anim-off .hx-spark,.hero-panel.anim-off .jw-glint{animation-play-state:paused}   /* เลื่อนพ้นจอ: หยุดพักทุกขนาดจอ */
 @media (max-width:360px){.hx-kick{font-size:10px;letter-spacing:.16em}.hq-txt{font-size:21px}}
 @media (prefers-reduced-motion:reduce){.hx-spark,.jw-glint{animation:none;opacity:.8}.jw-glint{display:none}#view-home .hx-title{animation:none}}
+/* ===== ใบตักเตือน / ใบทัณฑ์บน (slc- การ์ดพลิก · slx- หน้ารวม · sle- หน้าต่างกรอก) ===== */
+.jw-ember{--c1:#9a3412;--c2:#b45309;--c3:#fcd34d}
+.slx-sk{height:160px}
+.slc{position:relative;perspective:1400px;-webkit-perspective:1400px}
+.slc-in{display:grid;cursor:pointer;outline:none;border-radius:22px;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .65s cubic-bezier(.3,.85,.3,1);-webkit-tap-highlight-color:transparent}
+.slc-in:focus-visible{box-shadow:0 0 0 3px #fff,0 0 0 5.5px #f59e0b}
+.slc[data-flip="1"] .slc-in{transform:rotateY(180deg)}
+.slc-face{grid-area:1/1;position:relative;display:flex;flex-direction:column;gap:10px;min-width:0;padding:14px 14px 12px;border-radius:22px;background:#fff;border:1px solid var(--sb);
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 14px 26px -20px var(--sh),inset 0 1px 0 #fff}
+.slc-back{transform:rotateY(180deg);background:linear-gradient(165deg,#fffdf8 0%,#fff 60%)}
+.slc-front{background:linear-gradient(165deg,#fff 0%,#fff 58%,var(--tint) 100%)}
+.slc-w{--sa:#d97706;--sa2:#f59e0b;--sb:#fde7c2;--sh:rgba(180,83,9,.55);--tint:#fff7ed}
+.slc-p{--sa:#be123c;--sa2:#f43f5e;--sb:#fecdd3;--sh:rgba(159,18,57,.55);--tint:#fff1f2}
+.slc-ok{--sa:#059669;--sa2:#34d399;--sb:#d1fae5;--sh:rgba(5,150,105,.4);--tint:#ecfdf5}
+.slc-face::before{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,var(--sa),var(--sa2))}
+.slc-top{display:flex;align-items:center;gap:10px;min-width:0}
+.slc-av{flex:none;width:38px;height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--sa),var(--sa2));box-shadow:0 6px 12px -6px var(--sh)}
+.slc-id{flex:1;min-width:0;display:flex;flex-direction:column}
+.slc-id b{font-size:15px;font-weight:900;color:#1f2937;line-height:1.25;overflow-wrap:anywhere}
+.slc-id small{font-size:12px;font-weight:700;color:#9ca3af}
+.slc-id em{font-style:normal;color:#e11d48}
+.slc-turn{flex:none;width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--sa);background:var(--tint);border:1px solid var(--sb)}
+.slc-nums{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.slc-n{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 6px 8px;border-radius:16px;border:1px solid}
+.slc-n b{font-size:30px;font-weight:900;line-height:1}
+.slc-n small{margin-top:3px;font-size:11.5px;font-weight:800}
+.slc-nw{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+.slc-np{background:#fff1f2;border-color:#fecdd3;color:#be123c}
+.slc-zero{background:#f8fafc;border-color:#eef2f7;color:#94a3b8}
+.slc-hint{margin-top:auto;font-size:11.5px;font-weight:700;color:#9ca3af;text-align:center}
+.slc-bh{display:flex;align-items:center;gap:8px;min-width:0}
+.slc-bh b{flex:none;font-size:14px;font-weight:900;color:#1f2937}
+.slc-bn{flex:1;min-width:0;font-size:12px;font-weight:700;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slc-row{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:13px;border-left:4px solid}
+.slc-rw{background:#fff7ed;border-left-color:#f59e0b}.slc-rp{background:#fff1f2;border-left-color:#e11d48}
+.slc-rt{font-size:12.5px;font-weight:900;color:#374151}
+.slc-rd{font-size:13px;font-weight:600;color:#4b5563;line-height:1.45;overflow-wrap:anywhere}
+.slc-none{color:#9ca3af;font-style:italic}
+.slc-clean{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13.5px;font-weight:800;color:#047857;line-height:1.6;padding:6px}
+.slc-upd{margin-top:auto;font-size:11px;font-weight:700;color:#9ca3af;text-align:right}
+.slc-edit{margin-top:7px;width:100%;border:1.5px dashed #fdba74;background:#fffaf3;color:#9a3412;border-radius:13px;padding:7px 10px;font-size:13px;font-weight:900;cursor:pointer;font-family:inherit;transition:background .15s,border-color .15s}
+.slc-edit:hover{background:#fff1e0;border-color:#f97316}
+.slc-big .slc-face{padding:16px 16px 14px;border-radius:26px;gap:12px}
+.slc-big .slc-in{border-radius:26px}
+.slc-big .slc-n b{font-size:40px}
+.slc-big .slc-n small{font-size:12.5px}
+.slc-cap{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:900;color:var(--sa);letter-spacing:.01em}
+.slc-cap span:last-child{color:#9ca3af;font-weight:800}
+.sl-note{font-size:12.5px;font-weight:700;color:#7c2d12;background:#fff7ed;border:1px dashed #fdba74;border-radius:14px;padding:9px 12px;line-height:1.5}
+.slx-back{color:#9a3412;font-weight:800;background:#fff7ed;padding:8px 16px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;white-space:nowrap}
+.slx-back:hover{background:#ffedd5}
+.slx-btn{border:1px solid #fed7aa;background:#fff;color:#9a3412;padding:8px 14px;border-radius:12px;font-size:13.5px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 4px 10px -8px rgba(154,52,18,.6)}
+.slx-btn:hover{background:#fff7ed}
+#slx-actions{flex-wrap:nowrap}
+@media (max-width:420px){.slx-hide-sm{display:none}}
+.slx-btn-main{border:0;color:#fff;background:linear-gradient(135deg,#9a3412,#ea580c 60%,#f59e0b);box-shadow:0 10px 18px -10px rgba(154,52,18,.9)}
+.slx-btn-main:hover{background:linear-gradient(135deg,#7c2d12,#c2410c 60%,#d97706)}
+.slx-hero{position:relative;overflow:hidden;border-radius:28px;padding:22px 20px 18px;color:#fff;background:linear-gradient(135deg,#7c2d12 0%,#b45309 58%,#f59e0b 125%);box-shadow:0 26px 42px -28px rgba(124,45,18,.85)}
+.slx-orb{position:absolute;right:-70px;top:-80px;width:250px;height:250px;border-radius:999px;background:radial-gradient(circle,rgba(255,255,255,.24),rgba(255,255,255,0) 70%);pointer-events:none}
+.slx-kick{position:relative;font-size:11px;font-weight:900;letter-spacing:.14em;opacity:.85}
+.slx-title{position:relative;font-size:26px;font-weight:900;line-height:1.2;margin:4px 0 2px}
+.slx-sub{position:relative;font-size:13.5px;font-weight:600;opacity:.92}
+.slx-tiles{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.slx-tile{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:10px 6px;text-align:center}
+.slx-tile b{display:block;font-size:26px;font-weight:900;line-height:1.1}
+.slx-tile small{display:block;margin-top:2px;font-size:11px;font-weight:700;opacity:.92;line-height:1.3}
+.slx-tools{margin:14px 0;padding:12px;border-radius:20px;background:#fff;border:1px solid #f3e8e2;box-shadow:0 12px 24px -20px rgba(124,45,18,.5);display:flex;flex-direction:column;gap:10px}
+.slx-chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:thin}
+.slx-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;border:1.5px solid #f1e4dc;background:#fff;color:#7c2d12;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+.slx-chip i{font-style:normal;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ffedd5;color:#9a3412;font-size:11px;font-weight:900;display:inline-flex;align-items:center;justify-content:center}
+.slx-chip[data-on="1"]{border-color:transparent;color:#fff;background:linear-gradient(135deg,#9a3412,#d97706)}
+.slx-chip[data-on="1"] i{background:rgba(255,255,255,.25);color:#fff}
+.slx-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.slx-search{flex:1 1 200px;min-width:0;display:flex;align-items:center;gap:6px;border:1.5px solid #f1e4dc;border-radius:12px;padding:0 10px;background:#fffdfb}
+.slx-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;padding:8px 0;font-size:16px;font-weight:600;font-family:inherit;color:#1f2937}
+.slx-filters{display:flex;gap:6px;flex-wrap:wrap}
+.slx-f{border:1.5px solid #f1e4dc;background:#fff;color:#6b4a3a;border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+.slx-f b{color:#9a3412}
+.slx-f[data-on="1"]{background:#7c2d12;border-color:#7c2d12;color:#fff}.slx-f[data-on="1"] b{color:#fde68a}
+.slx-pick{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:#7c2d12}
+.slx-sel{border:1.5px solid #f1e4dc;border-radius:12px;padding:7px 12px;font-size:16px;font-weight:800;color:#7c2d12;background:#fff;font-family:inherit}
+.slx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;align-items:start}
+.slx-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:40px 16px;border-radius:24px;background:#fff;border:1px dashed #fed7aa;color:#7c2d12}
+.slx-empty b{font-size:15px;font-weight:900}.slx-empty span{font-size:12.5px;font-weight:600;color:#a8826e}
+.slx-err{border-color:#fecdd3;color:#be123c}
+.slx-foot{margin-top:12px;text-align:center;font-size:12px;font-weight:700;color:#a8826e}
+.sle-ref{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#7c2d12;background:#fff7ed;border:1px dashed #fdba74;border-radius:14px;padding:8px 10px}
+.sle-ref button{border:0;background:#9a3412;color:#fff;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+.sle-warn{font-size:12.5px;font-weight:800;color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:14px;padding:8px 10px}
+.sle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sle-box{display:flex;flex-direction:column;align-items:center;gap:6px;border-radius:18px;padding:10px 6px;border:1.5px solid}
+.sle-bw{background:#fff7ed;border-color:#fed7aa;color:#c2410c}.sle-bp{background:#fff1f2;border-color:#fecdd3;color:#be123c}
+.sle-lab{font-size:13px;font-weight:900}
+.sle-step{display:flex;align-items:center;gap:5px}
+.sle-step button{width:36px;height:36px;border-radius:12px;border:0;background:#fff;color:inherit;font-size:21px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 4px 10px -6px rgba(0,0,0,.35);font-family:inherit}
+.sle-step button:active{transform:scale(.94)}
+.sle-step button svg{width:18px;height:18px;display:block;margin:auto}
+.sle-step input{width:56px;height:46px;text-align:center;font-size:26px;font-weight:900;color:inherit;border:2px solid #fff;border-radius:13px;background:#fff;outline:none;font-family:inherit;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)}
+.sle-step input:focus{border-color:currentColor}
+.sle-was{font-size:11px;font-weight:700;opacity:.75}
+.sle-ta{resize:vertical;min-height:58px;font-size:16px;font-weight:600;line-height:1.45}
+.sle-sum{font-size:12.5px;font-weight:800;color:#9ca3af;text-align:center;padding:6px;border-radius:12px;background:#f8fafc}
+.sle-sum[data-on="1"]{color:#047857;background:#ecfdf5}
+@media (max-width:380px){.slc-n b{font-size:26px}.slc-big .slc-n b{font-size:34px}.slx-title{font-size:23px}.slx-tile b{font-size:22px}.sle-step button{width:32px;height:32px}.sle-step input{width:48px}}
+@media (min-width:768px){.slx-hero{padding:26px 28px 22px}.slx-title{font-size:30px}}
+@media (prefers-reduced-motion:reduce){.slc-in{transition:none}}
+@media print{.slc-in{transform:none!important}.slc-back{display:none}}
 </style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
@@ -1880,7 +1987,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
               <span class="jw-guil" data-guil aria-hidden="true"></span><span class="jw-glint" aria-hidden="true"></span>
               <span class="jw-top"><span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 7V5.6A2.6 2.6 0 0 1 11.1 3h1.8a2.6 2.6 0 0 1 2.6 2.6V7"/><rect x="4.5" y="7" width="15" height="14" rx="4"/><path d="M8.5 13.5h7v3.5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/><path d="M4.5 12h15"/></svg></span><span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></span>
               <span class="jw-t">สำหรับนักเรียน</span>
-              <span class="jw-s">ดูผลตรวจ คะแนน และการมาเรียน</span>
+              <span class="jw-s">ผลตรวจ คะแนน การมาเรียน ใบตักเตือน</span>
             </button>
             <button type="button" onclick="loginTeacher()" class="jw jw-tile jw-garnet menu-tile hx-tile rise" style="--d:0.12s">
               <span class="jw-guil" data-guil aria-hidden="true"></span><span class="jw-glint" aria-hidden="true"></span>
@@ -1930,6 +2037,12 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
               <span class="jw-guil" data-guil aria-hidden="true"></span>
               <span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 3.5h2.3l1.5 4.2-2 1.4a12.2 12.2 0 0 0 6.5 6.5l1.4-2 4.2 1.5v2.3a2 2 0 0 1-2.1 2A16.6 16.6 0 0 1 4.6 5.6a2 2 0 0 1 2-2.1z"/></svg></span>
               <span class="jw-txt"><span class="jw-t">สมุดโทรศัพท์</span><span class="jw-s">อัปเดตเบอร์นักเรียนและผู้ปกครอง</span></span>
+              <span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+            </button>
+            <button type="button" onclick="openSlips()" class="jw jw-row jw-ember menu-row rise sm:col-span-2" style="--d:0.34s">
+              <span class="jw-guil" data-guil aria-hidden="true"></span>
+              <span class="jw-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3h7.5l4.5 4.5V19a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v4.5h4.5"/><path d="M8.5 12h6M8.5 15.5h4"/><circle cx="16.5" cy="17.5" r="2.6"/></svg></span>
+              <span class="jw-txt"><span class="jw-t">ใบตักเตือน / ทัณฑ์บน</span><span class="jw-s">ครูดูทั้งห้อง · ฝ่ายปกครองกรอกจำนวนใบ</span></span>
               <span class="jw-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
             </button>
           </div>
@@ -2415,6 +2528,17 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       <div id="wc-container" class="space-y-5"></div>
     </div>
 
+    <!-- ใบตักเตือน / ใบทัณฑ์บน: ครูดูทั้งห้อง · ฝ่ายปกครองดูภาพรวมและกรอกจำนวน -->
+    <div id="view-slips" class="hidden">
+      <div class="flex justify-between items-center mb-4 no-print glass-card p-3 rounded-2xl gap-2 flex-wrap vbar">
+        <button type="button" onclick="goHome(true)" class="slx-back">← กลับหน้าแรก</button>
+        <div id="slx-actions" class="flex items-center gap-2 flex-wrap"></div>
+      </div>
+      <div id="slx-hero" class="slx-hero rise"></div>
+      <div id="slx-tools" class="slx-tools"></div>
+      <div id="slx-list" aria-live="polite"></div>
+    </div>
+
     <!-- 7. หน้าบันทึกพฤติกรรม (Dark Mode) -->
     <div id="view-conduct" class="hidden">
       <div class="flex justify-between items-center gap-2 mb-4 no-print glass-card p-3 rounded-2xl vbar">
@@ -2627,7 +2751,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     let currentSemester = 2;
     let currentAY = (new Date().getFullYear() + 543) - (new Date().getMonth() < 4 ? 1 : 0);
     // คำสั่งที่นับ/แสดงข้อมูลตามเทอม — callAPI แนบ semester และ academicYear ให้เองทุกครั้ง (หน้าเว็บที่เรียกไม่ต้องรู้เรื่องนี้)
-    const SEM_ACTIONS = new Set(['getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview','getSemesterProgress','getWorkCenter','getSemesterSummary','getConductRecords']);
+    const SEM_ACTIONS = new Set(['getSlip','getSlipClass','getSlipOverview','getSlipEdit','saveSlip','getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview','getSemesterProgress','getWorkCenter','getSemesterSummary','getConductRecords']);
     const discReportSort = (a, b) => a.className === b.className
       ? (a.month === b.month ? thSort(a.name, b.name) : MONTH_ORDER.indexOf(a.month) - MONTH_ORDER.indexOf(b.month))
       : thSort(a.className, b.className);
@@ -2844,7 +2968,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     }
     // SEM-END>>>
 
-    const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-verify-inspection','view-student','view-student-history','view-lock-manager','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison','view-overview','view-workcenter','view-admin-settings','view-conduct-rules'];
+    const ALL_VIEWS = ['view-home','view-teacher','view-discipline','view-verify-inspection','view-student','view-student-history','view-lock-manager','view-attendance-input','view-absence-stats','view-conduct','view-conduct-overview','view-contact','view-comparison','view-overview','view-workcenter','view-admin-settings','view-conduct-rules','view-slips'];
 
     function showView(id) {
       ALL_VIEWS.forEach(v => document.getElementById(v).classList.add('hidden'));
@@ -2975,6 +3099,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     // ==================== ศูนย์งานค้าง (ฝ่ายปกครอง) + สรุปรายภาคเรียน (Word) ====================
     const DISC_MENU = [
       { act: 'conduct', icon: '⚖️', title: 'คะแนนพฤติกรรม', desc: 'บันทึก · แก้ไข · ลบ · ดูภาพรวมทุกห้อง', grad: 'from-rose-500 to-orange-500' },
+      { act: 'slips', icon: '📜', title: 'ใบตักเตือน / ทัณฑ์บน', desc: 'กรอกจำนวนใบ · เรื่องที่โดน · ดูทุกห้อง', grad: 'from-orange-700 to-amber-500' },
       { act: 'report', icon: '📋', title: 'รายงานการทำผิดระเบียบ', desc: 'ทะเบียนนักเรียนที่ผิดระเบียบรายเดือน', grad: 'from-purple-500 to-indigo-500' },
       { act: 'verify', icon: '🔍', title: 'ตรวจแต่งกาย (ฝ่ายปกครอง)', desc: 'ตรวจสอบซ้ำได้ทุกข้อเหมือนครูประจำชั้น', grad: 'from-cyan-500 to-sky-500' },
       { act: 'work', icon: '📌', title: 'ศูนย์งานค้าง', desc: 'ห้องที่ยังไม่ตรวจ · ขาดติดกัน · พฤติกรรมต่ำ', grad: 'from-amber-500 to-orange-500' },
@@ -2982,7 +3107,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       { act: 'rules', icon: '📐', title: 'เกณฑ์ตัดคะแนนพฤติกรรม', desc: 'เพิ่ม · แก้ไข · ลบ · เรียงลำดับข้อความผิด', grad: 'from-orange-500 to-rose-500' },
       { act: 'settings', icon: '⚙️', title: 'ตั้งค่าระบบ', desc: 'รหัสผ่าน · เทอม · วันเปิด-ปิด · เดือนที่แสดง', grad: 'from-slate-600 to-indigo-600' }
     ];
-    const DISC_GRAD = { conduct: 'linear-gradient(135deg,#e11d48,#fb923c)', report: 'linear-gradient(135deg,#a855f7,#6366f1)', verify: 'linear-gradient(135deg,#06b6d4,#3b82f6)', work: 'linear-gradient(135deg,#f59e0b,#f97316)', summary: 'linear-gradient(135deg,#10b981,#14b8a6)', rules: 'linear-gradient(135deg,#f97316,#f43f5e)', settings: 'linear-gradient(135deg,#475569,#4f46e5)' };
+    const DISC_GRAD = { slips: 'linear-gradient(135deg,#9a3412,#f59e0b)', conduct: 'linear-gradient(135deg,#e11d48,#fb923c)', report: 'linear-gradient(135deg,#a855f7,#6366f1)', verify: 'linear-gradient(135deg,#06b6d4,#3b82f6)', work: 'linear-gradient(135deg,#f59e0b,#f97316)', summary: 'linear-gradient(135deg,#10b981,#14b8a6)', rules: 'linear-gradient(135deg,#f97316,#f43f5e)', settings: 'linear-gradient(135deg,#475569,#4f46e5)' };
     function discMenuHtml() {
       return '<div class="ar-body dm-body">' + DISC_MENU.map(m => `<button type="button" class="ar-card dm-card" data-act="${m.act}"><span class="ar-ico" style="background:${DISC_GRAD[m.act] || '#6366f1'}" aria-hidden="true">${m.icon}</span><span class="ar-txt"><span class="ar-t">${m.title}</span><span class="ar-s">${m.desc}</span></span><span class="ar-go dm-go" aria-hidden="true">›</span></button>`).join('') + '</div>';
     }
@@ -2994,6 +3119,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       else if (act === 'settings') openAdminSettings();
       else if (act === 'conduct') { conductPasswordVerified = true; loadConductOverview(); }
       else if (act === 'rules') openConductRules();
+      else if (act === 'slips') slxOpen('disc', '');
     }
     async function openDisciplineMenu() {
       const c = ['#3730a3', '#4f46e5', '#a5b4fc'];
@@ -3282,6 +3408,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     // ==================== หน้าต่างใส่รหัสผ่าน (ใช้ร่วมกันทุกจุดที่ต้องเข้าสู่ระบบ) ====================
     // คืนค่าแบบเดียวกับ Swal เดิม: { value: รหัสที่พิมพ์ } เมื่อกดเข้าสู่ระบบ, { value: undefined } เมื่อยกเลิก
     const PW_THEMES = {
+      slipTeacher: { c: ['#7c2d12', '#c2410c', '#fcd34d'], icon: '📜', kicker: 'TEACHER', title: 'ใบตักเตือน / ทัณฑ์บน', sub: 'ดูนักเรียนทั้งห้องของคุณครู', label: 'รหัสผ่านคุณครู', note: '🔒 ใช้รหัสผ่านคุณครูที่ฝ่ายปกครองแจ้งไว้' },
+      slipDisc:    { c: ['#7c2d12', '#c2410c', '#fcd34d'], icon: '📜', kicker: 'DISCIPLINE', title: 'ใบตักเตือน / ทัณฑ์บน', sub: 'ดูภาพรวมทุกห้อง · กรอกจำนวนใบ', label: 'รหัสผ่านฝ่ายปกครอง', note: '🔒 เฉพาะครูฝ่ายปกครองเท่านั้น' },
       teacher:    { c: ['#9f1239', '#be123c', '#fda4af'], icon: '📋', kicker: 'TEACHER',    title: 'สำหรับคุณครู',        sub: 'ยืนยันตัวตนเพื่อตรวจการแต่งกาย',            label: 'รหัสผ่านคุณครู',     note: '🔒 ใช้รหัสผ่านคุณครูที่ฝ่ายปกครองแจ้งไว้' },
       late:       { c: ['#9a3412', '#c2410c', '#fcd34d'], icon: '⏰', kicker: 'TEACHER',    title: 'บันทึกมาสายด่วน',     sub: 'ยืนยันตัวตนก่อนบันทึกนักเรียนมาสาย',       label: 'รหัสผ่านคุณครู',     note: '🔒 ใช้รหัสผ่านคุณครูที่ฝ่ายปกครองแจ้งไว้' },
       attTeacher: { c: ['#155e75', '#0e7490', '#67e8f9'], icon: '✅', kicker: 'TEACHER',    title: 'เช็คชื่อเรียน',        sub: 'ยืนยันตัวตนเพื่อบันทึกการมาเรียน',          label: 'รหัสผ่านคุณครู',     note: '🔒 ใช้รหัสผ่านคุณครูที่ฝ่ายปกครองแจ้งไว้' },
@@ -3368,7 +3496,9 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       teacher:    { c: PW_THEMES.teacher.c,    icon: '📋', kicker: 'UNIFORM CHECK', title: 'เลือกห้องและเดือนที่ตรวจ', sub: 'แตะเลือกห้อง แล้วเลือกเดือน', go: 'เริ่มตรวจกันเลย!' },
       verify:     { c: ['#3730a3', '#4f46e5', '#a5b4fc'], icon: '🔍', kicker: 'RE-CHECK', title: 'ตรวจสอบซ้ำ', sub: 'เลือกห้องและเดือนที่จะตรวจสอบซ้ำ', go: 'ดูผลตรวจ' },
       attendance: { c: PW_THEMES.attTeacher.c, icon: '✅', kicker: 'ATTENDANCE', title: 'เลือกห้องและวันที่เช็คชื่อ', sub: 'แตะเลือกห้อง แล้วเลือกวันที่', go: 'เริ่มเช็คชื่อ!' },
-      contact:    { c: PW_THEMES.contact.c,    icon: '📞', kicker: 'PHONE BOOK', title: 'สมุดโทรศัพท์', sub: 'เลือกห้องเพื่อดูข้อมูลติดต่อ', go: 'ดูข้อมูลติดต่อ' }
+      contact:    { c: PW_THEMES.contact.c,    icon: '📞', kicker: 'PHONE BOOK', title: 'สมุดโทรศัพท์', sub: 'เลือกห้องเพื่อดูข้อมูลติดต่อ', go: 'ดูข้อมูลติดต่อ' },
+      slip:       { c: PW_THEMES.slipTeacher.c, icon: '📜', kicker: 'WARNING SLIPS', title: 'ใบตักเตือน / ทัณฑ์บน', sub: 'เลือกห้องที่ต้องการดู', go: 'ดูทั้งห้อง' },
+      slipAdd:    { c: PW_THEMES.slipTeacher.c, icon: '📝', kicker: 'WARNING SLIPS', title: 'บันทึกใบให้นักเรียน', sub: 'เลือกห้องของนักเรียน', go: 'เลือกนักเรียนต่อ' }
     };
     function pickClassAnd(theme, mode, opt) {
       const t = PICK_THEMES[theme], o = opt || {};
@@ -4534,6 +4664,341 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     }
 
 
+    // <<<SLIPS-BEGIN
+    // ==================== ใบตักเตือน / ใบทัณฑ์บน (ฝ่ายปกครองกรอกจำนวนเอง) ====================
+    // นักเรียน: ดูของตัวเอง (การ์ดพลิกได้ในหน้าผลของตัวเอง) · ครู: ดูทั้งห้อง · ฝ่ายปกครอง: ภาพรวมทุกห้อง + กรอก/แก้จำนวน
+    const SLX_PATCH_MSG = 'ฐานข้อมูลยังไม่รองรับใบตักเตือน/ทัณฑ์บน กรุณารันไฟล์ supabase-patch12.sql ใน Supabase ก่อน';
+    function slxErr(res, fallback) { const m = (res && (res.message || res.error)) || ''; return /ไม่รู้จัก action/.test(m) ? SLX_PATCH_MSG : (m || fallback || 'โหลดข้อมูลไม่สำเร็จ'); }
+    const slx = { mode: 'teacher', cls: '', ay: null, rows: [], classes: [], filter: 'all', q: '', err: '' };
+    const slxNorm = (t) => String(t == null ? '' : t).replace(/[\r\n\t]+/g, ' ').trim();
+
+    // ---------- การ์ดพลิก (ใช้ร่วมกันทุกหน้า) ----------
+    function slipCardHtml(s, o) {
+      o = o || {};
+      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, any = w > 0 || p > 0 || !!s.warnNote || !!s.probNote;
+      const tone = p > 0 ? 'p' : w > 0 ? 'w' : 'ok';
+      const note = (t) => t ? esc(t) : '<span class="slc-none">ไม่ได้ระบุ</span>';
+      const cap = o.big ? `<span class="slc-cap"><span>📜 ใบตักเตือน / ทัณฑ์บน</span><span>ปีการศึกษา ${esc(o.ay || currentAY)}</span></span>` : '';
+      const front = `<span class="slc-face slc-front">${cap}
+          <span class="slc-top"><span class="slc-av" aria-hidden="true">${esc(nameInitial(s.name))}</span><span class="slc-id"><b>${esc(s.name)}</b><small>${esc(s.className)}${s.onRoster === false ? ' · <em>ไม่อยู่ในรายชื่อปัจจุบัน</em>' : ''}</small></span><span class="slc-turn" aria-hidden="true">↻</span></span>
+          <span class="slc-nums"><span class="slc-n slc-nw${w ? '' : ' slc-zero'}"><b class="tabular">${w}</b><small>ใบตักเตือน</small></span><span class="slc-n slc-np${p ? '' : ' slc-zero'}"><b class="tabular">${p}</b><small>ใบทัณฑ์บน</small></span></span>
+          <span class="slc-hint">${any ? 'แตะเพื่อดูว่าโดนเรื่องอะไร' : 'ยังไม่มีใบ · แตะเพื่อดูรายละเอียด'}</span></span>`;
+      const back = `<span class="slc-face slc-back" aria-hidden="true">
+          <span class="slc-bh"><b>รายละเอียด</b><span class="slc-bn">${esc(s.name)}</span><span class="slc-turn" aria-hidden="true">↺</span></span>
+          ${any ? `<span class="slc-row slc-rw"><span class="slc-rt">📄 ใบตักเตือน ${w} ใบ</span><span class="slc-rd">${w || s.warnNote ? 'โดน: ' + note(s.warnNote) : '–'}</span></span>
+          <span class="slc-row slc-rp"><span class="slc-rt">📜 ใบทัณฑ์บน ${p} ใบ</span><span class="slc-rd">${p || s.probNote ? 'โดน: ' + note(s.probNote) : '–'}</span></span>`
+          : '<span class="slc-clean">🌟 ยังไม่มีใบตักเตือนหรือใบทัณฑ์บนในปีการศึกษานี้<br>รักษาไว้นะ!</span>'}
+          <span class="slc-upd">${s.updatedAt ? 'อัปเดต ' + esc(thDateTime(s.updatedAt)) : ''}</span></span>`;
+      return `<div class="slc slc-${tone}${o.big ? ' slc-big' : ''}" data-flip="0" data-n="${esc(s.name)}" data-c="${esc(s.className)}">
+          <div class="slc-in" role="button" tabindex="0" aria-pressed="false" aria-label="${esc(s.name)} ${esc(s.className)} ใบตักเตือน ${w} ใบ ใบทัณฑ์บน ${p} ใบ แตะเพื่อพลิกดูรายละเอียด">${front}${back}</div>
+          ${o.edit ? `<button type="button" class="slc-edit" data-slip-edit data-n="${esc(s.name)}" data-c="${esc(s.className)}" aria-label="แก้ไขจำนวนใบของ ${esc(s.name)}">✏️ แก้ไขจำนวนใบ</button>` : ''}
+        </div>`;
+    }
+    function slcFlip(inner) {
+      const card = inner.closest('.slc'); if (!card) return;
+      const on = card.dataset.flip !== '1';
+      card.dataset.flip = on ? '1' : '0';
+      inner.setAttribute('aria-pressed', on ? 'true' : 'false');
+      const f = card.querySelector('.slc-front'), b = card.querySelector('.slc-back');
+      if (f) f.setAttribute('aria-hidden', on ? 'true' : 'false');
+      if (b) b.setAttribute('aria-hidden', on ? 'false' : 'true');
+    }
+    document.addEventListener('click', (e) => {
+      const ed = e.target.closest && e.target.closest('[data-slip-edit]');
+      if (ed) { slxEdit(ed.dataset.n, ed.dataset.c); return; }
+      const fl = e.target.closest && e.target.closest('.slc-in');
+      if (fl) slcFlip(fl);
+    });
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('slc-in')) { e.preventDefault(); slcFlip(e.target); }
+    });
+
+    // ---------- การ์ดในหน้าผลของนักเรียน / หน้ารายงานรายบุคคล ----------
+    function slipSlotHtml(name, cls) { return `<div class="slip-slot mb-5" data-n="${escHtml(name || '')}" data-c="${escHtml(cls || '')}"><div class="skeleton slx-sk rounded-3xl"></div></div>`; }
+    function slipFillSlots(root, editable, onlyN, onlyC) {
+      (root || document).querySelectorAll('.slip-slot').forEach(slot => {
+        const n = slot.dataset.n, c = slot.dataset.c;
+        if (!n || !c || (onlyN != null && (n !== onlyN || c !== onlyC))) return;
+        const ed = editable != null ? editable : slot.dataset.edit === '1';
+        slot.dataset.edit = ed ? '1' : '0';
+        const done = (html) => {   // หาช่องใหม่ตอนผลมาถึง (หน้าอาจวาดใหม่หรือเปลี่ยนคนไปแล้ว)
+          const cur = [...(root || document).querySelectorAll('.slip-slot')].find(x => x.dataset.n === n && x.dataset.c === c);
+          if (!cur) return null;
+          if (html == null) { cur.innerHTML = ''; cur.classList.add('hidden'); return null; }
+          cur.classList.remove('hidden'); cur.innerHTML = html; return cur;
+        };
+        callAPI('getSlip', { name: n, className: c }).then(res => {
+          if (!res || !res.success || !res.slip) { done(null); return; }   // ยังไม่ได้รันแพตช์ 12 หรือโหลดไม่ได้: ไม่แสดงการ์ด หน้าอื่นใช้ได้ตามปกติ
+          done(slipCardHtml(res.slip, { big: true, ay: res.ay, edit: ed }));
+        }).catch(() => done(null));
+      });
+    }
+
+    // ---------- เข้าจากการ์ดหน้าแรก: เลือกว่าเป็นใคร ----------
+    async function openSlips() {
+      let picked = null;
+      const roleCard = (v, grad, icon, title, sub, badge) => `<button type="button" class="ar-card sl-role" data-role="${v}"><span class="ar-ico" style="background:${grad}" aria-hidden="true">${icon}</span><span class="ar-txt"><span class="ar-t">${title}</span><span class="ar-s">${sub}</span><span class="ar-b">${badge}</span></span><span class="ar-go" aria-hidden="true">›</span></button>`;
+      const { value: role } = await Swal.fire({
+        html: `<div class="pw-hero pk-hero"><span class="pw-orb pw-orb1" aria-hidden="true"></span><span class="pw-orb pw-orb2" aria-hidden="true"></span>
+            <span class="mp-spark" style="left:12%;top:26%" aria-hidden="true">✦</span><span class="mp-spark" style="right:14%;top:18%;animation-delay:.8s" aria-hidden="true">✧</span>
+            <div class="pw-icon-wrap pk-icon-wrap" aria-hidden="true"><span class="pw-ring"></span><span class="pw-icon pk-icon">📜</span></div>
+            <div class="pw-kicker">WARNING SLIPS</div><div class="pw-title pk-title">ใบตักเตือน / ทัณฑ์บน</div><div class="pw-sub">สำหรับคุณครูและฝ่ายปกครอง</div></div>
+          <div class="ar-body">
+            <div class="sl-note">🎒 นักเรียนดูใบของตัวเองได้ที่ "สำหรับนักเรียน" หน้าเดียวกับผลตรวจแต่งกาย</div>
+            ${roleCard('teacher', 'linear-gradient(135deg,#9f1239,#fb7185)', '🧑‍🏫', 'คุณครู', 'ดูนักเรียนทั้งห้องที่ดูแล', '🔒 รหัสคุณครู')}
+            ${roleCard('disc', 'linear-gradient(135deg,#9a3412,#f59e0b)', '🛡️', 'ฝ่ายปกครอง', 'ดูภาพรวมทุกห้อง · กรอกจำนวนใบ', '🔒 รหัสฝ่ายปกครอง')}
+          </div>`,
+        showConfirmButton: false, showCancelButton: true, cancelButtonText: 'ยกเลิก', buttonsStyling: false, padding: 0, focusConfirm: false,
+        customClass: { popup: 'pw-pop pk-pop', htmlContainer: 'pw-pop-html', actions: 'pw-actions', cancelButton: 'pw-cancel', validationMessage: 'pw-valid' },
+        didOpen: (el) => {
+          const root = el || document, c = PW_THEMES.slipTeacher.c;
+          if (el && el.style) { el.style.setProperty('--c1', c[0]); el.style.setProperty('--c2', c[1]); el.style.setProperty('--c3', c[2]); }
+          root.querySelectorAll('.sl-role').forEach(b => b.addEventListener('click', () => { picked = b.dataset.role; Swal.clickConfirm(); }));
+        },
+        preConfirm: () => picked || false
+      });
+      if (role === 'teacher') {
+        const { value: pw } = await askPassword('slipTeacher');
+        if (!pw) return;
+        const acc = await checkAccess('teacher', pw);
+        if (!acc.ok) { MySwal.fire('ผิดพลาด', acc.msg, 'error'); return; }
+        currentTeacherAuth = pw;
+        const { value: pv } = await pickClassAnd('slip', 'class');
+        if (pv && pv.cls) slxOpen('teacher', pv.cls);
+      } else if (role === 'disc') {
+        const { value: pw } = await askPassword('slipDisc');
+        if (!pw) return;
+        const acc = await checkAccess('discipline', pw);
+        if (!acc.ok) { MySwal.fire('ผิดพลาด', acc.msg, 'error'); return; }
+        currentDisciplineAuth = pw;
+        slxOpen('disc', '');
+      }
+    }
+
+    // ---------- หน้าใบตักเตือน/ทัณฑ์บน ----------
+    function slxOpen(mode, cls) {
+      slx.mode = mode === 'disc' ? 'disc' : 'teacher'; slx.cls = cls || ''; slx.filter = 'all'; slx.q = ''; slx.rows = []; slx.err = '';
+      showView('view-slips');
+      slxLoad(false);
+    }
+    function slxLoad(quiet) {
+      const live = freshCall('slx'), isDisc = slx.mode === 'disc', all = isDisc && !slx.cls;
+      const auth = isDisc ? currentDisciplineAuth : currentTeacherAuth;
+      if (!quiet) {
+        slx.err = '';
+        slxRenderBar(); slxRenderHero(true); slxRenderTools(true);
+        document.getElementById('slx-list').innerHTML = `<div class="slx-grid">${'<div class="skeleton slx-sk rounded-3xl"></div>'.repeat(6)}</div>`;
+      }
+      const reqs = [isDisc ? callAPI('getSlipOverview', { password: auth }) : Promise.resolve(null)];
+      if (!all) reqs.push(callAPI('getSlipClass', { password: auth, className: slx.cls }));
+      Promise.all(reqs).then(([ov, cl]) => {
+        if (!live()) return;
+        if (isDisc && (!ov || !ov.success)) throw new Error(slxErr(ov));
+        if (!all && (!cl || !cl.success)) throw new Error(slxErr(cl));
+        if (ov) { slx.classes = ov.classes || []; slx.ay = ov.ay; }
+        slx.rows = all ? (ov.rows || []) : (cl.students || []);
+        if (cl) slx.ay = cl.ay;
+        slx.err = '';
+        slxRenderAll();
+      }).catch(err => {
+        if (!live()) return;
+        slx.err = (err && err.message && !/fetch|network|abort/i.test(err.message)) ? err.message : 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+        slxRenderAll();
+      });
+    }
+    function slxRenderAll() { slxRenderBar(); slxRenderHero(false); slxRenderTools(false); slxRenderList(); }
+    function slxRenderBar() {
+      const isDisc = slx.mode === 'disc';
+      const box = document.getElementById('slx-actions');
+      box.innerHTML = (isDisc ? '<button type="button" class="slx-btn slx-btn-main" data-slx="add">＋ บันทึกใบ</button><button type="button" class="slx-btn" data-slx="hist">🕘 ประวัติ</button>' : '')
+        + '<button type="button" class="slx-btn" data-slx="reload" aria-label="โหลดข้อมูลใหม่">↻<span class="slx-hide-sm"> รีเฟรช</span></button>';
+      box.querySelectorAll('[data-slx]').forEach(b => b.addEventListener('click', () => {
+        const k = b.dataset.slx;
+        if (k === 'add') slxAdd();
+        else if (k === 'hist') showAuditLog('slip', null, 'ประวัติใบตักเตือน/ทัณฑ์บน', 'การกรอกและแก้จำนวนใบ 150 ครั้งล่าสุด');
+        else slxLoad(false);
+      }));
+    }
+    function slxStats() {
+      const r = slx.rows, has = r.filter(x => (+x.warn || 0) + (+x.prob || 0) > 0);
+      return { n: r.length, has: has.length, prob: r.filter(x => +x.prob > 0).length, warnOnly: r.filter(x => +x.warn > 0 && !(+x.prob > 0)).length,
+               tw: r.reduce((a, x) => a + (+x.warn || 0), 0), tp: r.reduce((a, x) => a + (+x.prob || 0), 0) };
+    }
+    function slxRenderHero(loading) {
+      const esc = escHtml, isDisc = slx.mode === 'disc', all = isDisc && !slx.cls, st = slxStats();
+      const ay = slx.ay || currentAY;
+      const tiles = loading || slx.err ? [['–', all ? 'นักเรียนที่มีใบ' : 'นักเรียนที่มีใบ'], ['–', 'ใบตักเตือนรวม'], ['–', 'ใบทัณฑ์บนรวม']]
+        : [[st.has, all ? 'นักเรียนที่มีใบ' : `มีใบ · จาก ${st.n} คน`], [st.tw, 'ใบตักเตือนรวม'], [st.tp, 'ใบทัณฑ์บนรวม']];
+      document.getElementById('slx-hero').innerHTML = `<span class="slx-orb" aria-hidden="true"></span>
+        <p class="slx-kick">${isDisc ? '🛡️ ฝ่ายปกครอง' : '🧑‍🏫 สำหรับคุณครู'} · WARNING SLIPS</p>
+        <h2 class="slx-title">ใบตักเตือน / ทัณฑ์บน</h2>
+        <p class="slx-sub">${all ? 'ทุกห้อง' : 'ห้อง ' + esc(slx.cls)} · ปีการศึกษา ${esc(ay)}${isDisc ? '' : ' · ดูได้อย่างเดียว'}</p>
+        <div class="slx-tiles">${tiles.map(([v, l], i) => `<div class="slx-tile slx-t${i}"><b class="tabular">${v}</b><small>${l}</small></div>`).join('')}</div>`;
+    }
+    function slxRenderTools(loading) {
+      const esc = escHtml, isDisc = slx.mode === 'disc', all = isDisc && !slx.cls, box = document.getElementById('slx-tools');
+      let top = '';
+      if (isDisc) {
+        const by = Object.fromEntries((slx.classes || []).map(c => [c.cls, c]));
+        const totalWith = (slx.classes || []).reduce((a, c) => a + (+c.withSlips || 0), 0);
+        top = `<div class="slx-chips" role="group" aria-label="เลือกห้อง"><button type="button" class="slx-chip" data-cls="" data-on="${all ? 1 : 0}">ทุกห้อง${loading ? '' : `<i>${totalWith}</i>`}</button>`
+          + ALL_CLASSES.map(c => { const k = by[c] ? +by[c].withSlips || 0 : 0; return `<button type="button" class="slx-chip" data-cls="${esc(c)}" data-on="${slx.cls === c ? 1 : 0}">${esc(c.replace('ม.', ''))}${k ? `<i>${k}</i>` : ''}</button>`; }).join('') + '</div>';
+      } else {
+        top = `<label class="slx-pick"><span>ห้อง</span><select id="slx-cls" class="slx-sel">${ALL_CLASSES.map(c => `<option value="${esc(c)}"${c === slx.cls ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></label>`;
+      }
+      const st = slxStats();
+      const F = all ? [['all', 'ทั้งหมด', st.n], ['prob', 'มีใบทัณฑ์บน', st.prob], ['warn', 'ตักเตือนอย่างเดียว', st.warnOnly]]
+                    : [['all', 'ทั้งห้อง', st.n], ['has', 'มีใบ', st.has], ['prob', 'มีใบทัณฑ์บน', st.prob]];
+      box.innerHTML = top + `<div class="slx-row">
+          <div class="slx-search"><span aria-hidden="true">🔎</span><input id="slx-q" type="search" autocomplete="off" placeholder="ค้นหาชื่อนักเรียน" value="${esc(slx.q)}"></div>
+          <div class="slx-filters" role="group" aria-label="กรอง">${F.map(([k, l, n]) => `<button type="button" class="slx-f" data-f="${k}" data-on="${slx.filter === k ? 1 : 0}">${l}${loading ? '' : ` <b>${n}</b>`}</button>`).join('')}</div>
+        </div>`;
+      box.querySelectorAll('.slx-chip').forEach(b => b.addEventListener('click', () => { if (slx.cls === b.dataset.cls) return; slx.cls = b.dataset.cls; slx.filter = 'all'; slxLoad(false); }));
+      const sel = document.getElementById('slx-cls');
+      if (sel) sel.addEventListener('change', () => { slx.cls = sel.value; slx.filter = 'all'; slxLoad(false); });
+      box.querySelectorAll('.slx-f').forEach(b => b.addEventListener('click', () => { slx.filter = b.dataset.f; box.querySelectorAll('.slx-f').forEach(x => x.dataset.on = x === b ? '1' : '0'); slxRenderList(); }));
+      const q = document.getElementById('slx-q');
+      q.addEventListener('input', () => { slx.q = q.value; slxRenderList(); });
+    }
+    function slxRenderList() {
+      const esc = escHtml, box = document.getElementById('slx-list'), isDisc = slx.mode === 'disc', all = isDisc && !slx.cls;
+      if (slx.err) { box.innerHTML = `<div class="slx-empty slx-err"><div class="text-4xl mb-2">⚠️</div><b>${esc(slx.err)}</b><button type="button" class="slx-btn slx-btn-main mt-3" onclick="slxLoad(false)">↻ ลองใหม่</button></div>`; return; }
+      const k = slxNorm(slx.q).toLowerCase();
+      const rows = slx.rows.filter(r => {
+        const w = +r.warn || 0, p = +r.prob || 0;
+        if (slx.filter === 'has' && !(w + p > 0)) return false;
+        if (slx.filter === 'prob' && !(p > 0)) return false;
+        if (slx.filter === 'warn' && !(w > 0 && p === 0)) return false;
+        return !k || String(r.name).toLowerCase().includes(k);
+      });
+      if (!slx.rows.length) {
+        box.innerHTML = `<div class="slx-empty"><div class="text-4xl mb-2">${all ? '🎉' : '📭'}</div><b>${all ? 'ยังไม่มีนักเรียนที่ได้รับใบในปีการศึกษานี้' : 'ห้องนี้ยังไม่มีรายชื่อนักเรียน'}</b>${all ? '<span>กด "＋ บันทึกใบ" หรือเลือกห้องด้านบนเพื่อกรอกจำนวน</span>' : ''}</div>`;
+        return;
+      }
+      if (!rows.length) { box.innerHTML = '<div class="slx-empty"><div class="text-4xl mb-2">🔎</div><b>ไม่พบรายชื่อตามที่เลือก</b></div>'; return; }
+      box.innerHTML = `<div class="slx-grid">${rows.map(r => slipCardHtml(r, { edit: isDisc })).join('')}</div>`
+        + (all ? '<p class="slx-foot">แสดงเฉพาะนักเรียนที่มีใบ · เลือกห้องด้านบนเพื่อดูทั้งห้องและกรอกให้คนที่ยังไม่มี</p>' : '');
+    }
+
+    // ---------- ฝ่ายปกครอง: กรอก/แก้จำนวนใบ ----------
+    async function slxAdd() {
+      if (!currentDisciplineAuth) { MySwal.fire('ต้องเข้าสู่ระบบก่อน', 'กรุณาเข้าเมนูฝ่ายปกครองด้วยรหัสผ่านก่อน', 'info'); return; }
+      const { value: pv } = await pickClassAnd('slipAdd', 'class');
+      if (!pv || !pv.cls) return;
+      const name = await slxPickName(pv.cls);
+      if (name) slxEdit(name, pv.cls);
+    }
+    function slxPickName(cls) {
+      return new Promise(resolve => {
+        let picked = null;
+        edFire('slip', {
+          html: edHero('👤', 'เลือกนักเรียน', 'ห้อง ' + escHtml(cls)) + `<div class="ed-body">
+              <div class="ql-search"><span aria-hidden="true">🔎</span><input id="sln-q" type="search" autocomplete="off" placeholder="พิมพ์ชื่อเพื่อค้นหา" class="ql-filter"></div>
+              <div id="sln-list" class="ql-names"><div class="space-y-1.5">${'<div class="skeleton h-11 rounded-xl"></div>'.repeat(4)}</div></div></div>`,
+          showConfirmButton: false, cancelButtonText: 'ยกเลิก',
+          didOpen: (el) => {
+            const root = el || document;
+            callAPI('getStudentsByClass', { className: cls }).then(list => {
+              const box = root.querySelector('#sln-list'); if (!box || !box.isConnected) return;
+              list = Array.isArray(list) ? list : [];
+              box.innerHTML = list.length ? list.map(x => `<button type="button" class="ql-name" data-name="${escHtml(x.name)}"><span class="ql-ini">${escHtml(nameInitial(x.name))}</span><span class="ql-nm">${escHtml(x.name)}</span><span class="ql-ck" aria-hidden="true">›</span></button>`).join('') + '<div id="sln-none" class="ql-empty hidden">ไม่พบชื่อที่ค้นหา</div>'
+                : '<div class="ql-empty">ห้องนี้ยังไม่มีรายชื่อ</div>';
+              box.querySelectorAll('.ql-name').forEach(b => b.addEventListener('click', () => { picked = b.dataset.name; Swal.close(); }));
+            }).catch(() => { const box = root.querySelector('#sln-list'); if (box) box.innerHTML = '<div class="ql-empty" style="color:#ef4444">โหลดรายชื่อไม่สำเร็จ กรุณาปิดแล้วลองใหม่</div>'; });
+            const q = root.querySelector('#sln-q');
+            if (q) q.addEventListener('input', () => { const k = q.value.trim().toLowerCase(); let n = 0; root.querySelectorAll('#sln-list .ql-name').forEach(b => { const ok = !k || b.dataset.name.toLowerCase().includes(k); b.classList.toggle('hidden', !ok); if (ok) n++; }); const none = root.querySelector('#sln-none'); if (none) none.classList.toggle('hidden', n > 0); });
+          }
+        }).then(() => resolve(picked));
+      });
+    }
+    let slxEditBusy = false;
+    async function slxEdit(name, cls) {
+      if (!currentDisciplineAuth) { MySwal.fire('ต้องเข้าสู่ระบบก่อน', 'กรุณาเข้าเมนูฝ่ายปกครองด้วยรหัสผ่านก่อน', 'info'); return; }
+      if (slxEditBusy) return;   // กันกดปุ่มแก้ไขซ้ำระหว่างกำลังโหลด
+      slxEditBusy = true;
+      Swal.fire({ title: 'กำลังเปิด...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      let res = null;
+      try { res = await callAPI('getSlipEdit', { password: currentDisciplineAuth, name, className: cls }); } catch (e) { res = null; }
+      slxEditBusy = false;
+      if (!res || !res.success) { MySwal.fire('ผิดพลาด', slxErr(res, 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง'), 'error'); return; }
+      return slxEditor(res.slip, res.ay);
+    }
+    async function slxEditor(s, ay) {
+      const esc = escHtml;
+      let known = s.updatedAt == null ? '' : String(s.updatedAt);
+      let orig = { w: String(+s.warn || 0), p: String(+s.prob || 0), wn: slxNorm(s.warnNote), pn: slxNorm(s.probNote) };
+      const hasAuto = s.warnAuto != null && s.probAuto != null;
+      const html = edHero('📝', esc(s.name), `${esc(s.className)} · ปีการศึกษา ${esc(ay || currentAY)}`) + `<div class="ed-body">
+          ${s.onRoster === false ? '<div class="sle-warn">⚠️ ชื่อนี้ไม่อยู่ในรายชื่อนักเรียนปัจจุบันแล้ว (อาจย้ายห้องหรือแก้ชื่อ) ล้างให้เป็น 0 ได้อย่างเดียว</div>' : ''}
+          ${hasAuto ? `<div class="sle-ref"><span>📚 ระบบบันทึกพฤติกรรมออกให้ปีนี้: ตักเตือน <b>${+s.warnAuto}</b> · ทัณฑ์บน <b>${+s.probAuto}</b></span>${(+s.warnAuto || +s.probAuto) ? '<button type="button" id="sle-use">ใช้ตัวเลขนี้</button>' : ''}</div>` : ''}
+          <div class="sle-grid">
+            <div class="sle-box sle-bw"><span class="sle-lab">📄 ใบตักเตือน</span><div class="sle-step"><button type="button" data-k="w" data-d="-1" aria-label="ลดใบตักเตือน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M5.5 12h13"/></svg></button><input id="sle-w" type="text" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="จำนวนใบตักเตือน" value="${orig.w}"><button type="button" data-k="w" data-d="1" aria-label="เพิ่มใบตักเตือน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg></button></div><span class="sle-was">เดิม ${orig.w} ใบ</span></div>
+            <div class="sle-box sle-bp"><span class="sle-lab">📜 ใบทัณฑ์บน</span><div class="sle-step"><button type="button" data-k="p" data-d="-1" aria-label="ลดใบทัณฑ์บน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M5.5 12h13"/></svg></button><input id="sle-p" type="text" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="จำนวนใบทัณฑ์บน" value="${orig.p}"><button type="button" data-k="p" data-d="1" aria-label="เพิ่มใบทัณฑ์บน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg></button></div><span class="sle-was">เดิม ${orig.p} ใบ</span></div>
+          </div>
+          <label class="ed-f"><span class="ed-l flex justify-between"><span>📄 โดนเรื่องอะไร (ใบตักเตือน)</span><span id="sle-wn-len" class="font-semibold text-gray-400">0/300</span></span><textarea id="sle-wn" maxlength="300" rows="2" class="ed-in sle-ta" placeholder="เช่น มาสาย 3 ครั้ง · ผมยาวผิดระเบียบ">${esc(orig.wn)}</textarea></label>
+          <label class="ed-f"><span class="ed-l flex justify-between"><span>📜 โดนเรื่องอะไร (ใบทัณฑ์บน)</span><span id="sle-pn-len" class="font-semibold text-gray-400">0/300</span></span><textarea id="sle-pn" maxlength="300" rows="2" class="ed-in sle-ta" placeholder="เช่น ทะเลาะวิวาท · หนีเรียนซ้ำ">${esc(orig.pn)}</textarea></label>
+          <div id="sle-sum" class="sle-sum" data-on="0">ยังไม่ได้เปลี่ยนอะไร</div>
+          <div class="pw-note" style="margin-top:0">นักเรียนและครูจะเห็นตัวเลขและข้อความนี้ · ตั้งเป็น 0 ทั้งคู่และลบข้อความ = ล้างข้อมูลของคนนี้ · ทุกครั้งที่แก้ ระบบเก็บประวัติไว้</div>
+        </div>`;
+      const g = (id) => document.getElementById(id);
+      const read = () => ({ w: (g('sle-w') || {}).value || '', p: (g('sle-p') || {}).value || '', wn: slxNorm((g('sle-wn') || {}).value), pn: slxNorm((g('sle-pn') || {}).value) });
+      const paint = () => {
+        const v = read(), ch = [];
+        if (String(+v.w) !== orig.w || v.w === '') ch.push(`ตักเตือน ${orig.w} → ${v.w === '' ? '?' : +v.w}`);
+        if (String(+v.p) !== orig.p || v.p === '') ch.push(`ทัณฑ์บน ${orig.p} → ${v.p === '' ? '?' : +v.p}`);
+        if (v.wn !== orig.wn || v.pn !== orig.pn) ch.push('แก้เรื่องที่โดน');
+        const box = g('sle-sum'); if (box) { box.dataset.on = ch.length ? '1' : '0'; box.textContent = ch.length ? '✓ ' + ch.join(' · ') : 'ยังไม่ได้เปลี่ยนอะไร'; }
+        const wl = g('sle-wn-len'), pl = g('sle-pn-len');
+        if (wl) wl.textContent = ((g('sle-wn') || {}).value || '').length + '/300';
+        if (pl) pl.textContent = ((g('sle-pn') || {}).value || '').length + '/300';
+      };
+      const setVals = (x) => {
+        g('sle-w').value = String(+x.warn || 0); g('sle-p').value = String(+x.prob || 0);
+        g('sle-wn').value = slxNorm(x.warnNote); g('sle-pn').value = slxNorm(x.probNote);
+        paint();
+      };
+      const r = await edFire('slip', {
+        html, confirmButtonText: '💾 บันทึก',
+        didOpen: (el) => {
+          const root = el || document;
+          root.querySelectorAll('.sle-step button').forEach(b => b.addEventListener('click', () => {
+            const inp = g(b.dataset.k === 'w' ? 'sle-w' : 'sle-p');
+            inp.value = String(Math.max(0, Math.min(99, (parseInt(inp.value, 10) || 0) + (+b.dataset.d)))); paint();
+          }));
+          ['sle-w', 'sle-p'].forEach(id => { const inp = g(id); inp.addEventListener('input', () => { const d = inp.value.replace(/\D+/g, '').slice(0, 2); if (d !== inp.value) inp.value = d; paint(); }); inp.addEventListener('focus', () => { try { inp.select(); } catch (e) {} }); });
+          ['sle-wn', 'sle-pn'].forEach(id => g(id).addEventListener('input', paint));
+          const use = g('sle-use'); if (use) use.addEventListener('click', () => { g('sle-w').value = String(+s.warnAuto || 0); g('sle-p').value = String(+s.probAuto || 0); paint(); });
+          paint();
+        },
+        preConfirm: () => {
+          const v = read();
+          if (!/^\d{1,2}$/.test(v.w) || !/^\d{1,2}$/.test(v.p)) { Swal.showValidationMessage('จำนวนใบต้องเป็นตัวเลข 0–99'); return false; }
+          if (String(+v.w) === orig.w && String(+v.p) === orig.p && v.wn === orig.wn && v.pn === orig.pn) { Swal.showValidationMessage('ยังไม่ได้เปลี่ยนอะไร'); return false; }
+          return callAPI('saveSlip', { password: currentDisciplineAuth, name: s.name, className: s.className, warn: +v.w, prob: +v.p, warnNote: v.wn, probNote: v.pn, known }).then(res => {
+            if (res && res.success) return res;
+            if (res && res.conflict && res.slip) {   // อีกเครื่องเพิ่งแก้: โชว์ตัวเลขล่าสุดให้ดูก่อน แล้วค่อยแก้ทับ
+              known = res.slip.updatedAt == null ? '' : String(res.slip.updatedAt);
+              orig = { w: String(+res.slip.warn || 0), p: String(+res.slip.prob || 0), wn: slxNorm(res.slip.warnNote), pn: slxNorm(res.slip.probNote) };
+              document.querySelectorAll('.sle-was').forEach((e, i) => { e.textContent = 'เดิม ' + (i ? orig.p : orig.w) + ' ใบ'; });
+              setVals(res.slip);
+              Swal.showValidationMessage(res.message + ' (ตอนนี้แสดงตัวเลขล่าสุดแล้ว)');
+              return false;
+            }
+            Swal.showValidationMessage(slxErr(res, 'บันทึกไม่สำเร็จ')); return false;
+          }).catch(() => { Swal.showValidationMessage('เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่'); return false; });
+        }
+      });
+      if (r && r.isConfirmed && r.value) {
+        MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: r.value.unchanged ? 'ไม่มีอะไรเปลี่ยน' : 'บันทึกจำนวนใบแล้ว', text: s.name + ' (' + s.className + ')', showConfirmButton: false, timer: 2200, timerProgressBar: true });
+        slxAfterSave(s.name, s.className);
+      }
+    }
+    function slxAfterSave(name, cls) {
+      if (window.__currentView === 'view-slips') slxLoad(true);   // โหลดใหม่เงียบๆ (ไม่กระพริบเป็นโครง)
+      slipFillSlots(document, null, name, cls);                   // การ์ดในหน้ารายงานรายบุคคลของคนนี้
+    }
+    // SLIPS-END>>>
+
     // <<<STUDENTUI-BEGIN
     // ==================== หน้านักเรียน: เลือกห้องด้วยปุ่ม + ค้นหาชื่อ ====================
     // ช่อง select เดิม (#studentSearchClass / #studentSearchName) ยังอยู่ (ซ่อนจากสายตา) เป็นแหล่งค่าจริงของ searchStudent()
@@ -5006,7 +5471,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
           <p class="cl-note">หักตามพฤติกรรมที่ฝ่ายปกครองบันทึก นับรวมทั้งปีการศึกษา</p>
         </div>
       </div>`;
-      container.innerHTML += heroCard + conductCard;
+      container.innerHTML += heroCard + slipSlotHtml(studentName, studentClass) + conductCard;
 
       // --- คำเตือนเรื่องที่ทำผิดซ้ำ (โทนให้กำลังใจ ไม่ตำหนิ) ---
       const repeatedUniformIssues = Object.entries(overallBroken).filter(([, count]) => count >= 2).sort((a, b) => b[1] - a[1]);
@@ -5022,6 +5487,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         container.innerHTML += `<div class="sx sx-plain mb-5"><div class="sx-empty"><span class="sx-empty-ico" aria-hidden="true">${SX_ICO.cal}</span><b>ยังไม่มีผลตรวจแต่งกายในภาคเรียนที่ ${currentSemester}</b><small>อาจยังไม่ถึงรอบตรวจ หรือผลตรวจอยู่ในอีกภาคเรียน</small><button type="button" class="sx-btn" data-sr-switch="${other}">ดูผลภาคเรียนที่ ${other}</button></div></div>`;
         const btn = container.querySelector('[data-sr-switch]');
         if (btn) btn.addEventListener('click', () => { setSemester(+btn.dataset.srSwitch); if ((containerId || '') === 'studentHistoryContainer') searchStudentHistory(); else searchStudent(); });
+        slipFillSlots(container, !stuMode);
         srHeroInit(container, stuMode);
         return;
       }
@@ -5069,6 +5535,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       });
       monthlyHtml += '</div></div></div>';
       container.innerHTML += monthlyHtml;
+      slipFillSlots(container, !stuMode);
       srHeroInit(container, stuMode);
     }
 
@@ -5783,7 +6250,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       del:    ['#7f1d1d', '#991b1b', '#f87171'],
       hist:   ['#3730a3', '#4f46e5', '#a5b4fc'],
       pw:     ['#334155', '#475569', '#a5b4fc'],
-      rep:    ['#7f1d1d', '#b91c1c', '#f59e0b']
+      rep:    ['#7f1d1d', '#b91c1c', '#f59e0b'],
+      slip:   ['#7c2d12', '#c2410c', '#fbbf24']
     };
     function edHero(icon, title, sub) {
       return `<div class="pw-hero pk-hero"><span class="pw-orb pw-orb1" aria-hidden="true"></span><span class="pw-orb pw-orb2" aria-hidden="true"></span>
@@ -5941,6 +6409,9 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         const RK = { rule: 'ข้อความ', points: 'คะแนน' };
         if (e.action === 'edit') body = Object.keys(RK).filter(k => String(b[k]) !== String(a[k])).map(k => `<div class="au-d"><span class="au-k">${RK[k]}</span><span class="au-o">${esc(k === 'points' ? '−' + b[k] : b[k])}</span><span class="au-ar">→</span><span class="au-n">${esc(k === 'points' ? '−' + a[k] : a[k])}</span></div>`).join('');
         else { const x = e.action === 'create' ? a : b; body = `<div class="au-d"><span class="${e.action === 'create' ? 'au-n' : 'au-o'}">${esc(x.rule || '')} · −${esc(x.points)}</span></div>`; }
+      } else if (e.kind === 'slip') {
+        const SK = { warn: 'ใบตักเตือน', prob: 'ใบทัณฑ์บน', warnNote: 'เรื่อง (ตักเตือน)', probNote: 'เรื่อง (ทัณฑ์บน)' }, sv = (o, k) => (o[k] == null ? '' : String(o[k]));
+        body = Object.keys(SK).filter(k => sv(b, k) !== sv(a, k)).map(k => `<div class="au-d"><span class="au-k">${SK[k]}</span><span class="au-o">${esc(sv(b, k) || '–')}</span><span class="au-ar">→</span><span class="au-n">${esc(sv(a, k) || '–')}</span></div>`).join('');
       } else if (e.kind === 'settings') {
         body = Object.keys(a).map(k => `<div class="au-d"><span class="au-k">${esc(ST_KEY_LABEL[k] || k)}</span><span class="au-o">${esc(auditFmt(k, b[k]))}</span><span class="au-ar">→</span><span class="au-n">${esc(auditFmt(k, a[k]))}</span></div>`).join('');
       }
@@ -6068,21 +6539,23 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       return new Promise((ok, bad) => { const s = document.createElement('script'); s.src = XLSX_CDN; s.onload = () => window.XLSX ? ok(window.XLSX) : bad(new Error('x')); s.onerror = () => bad(new Error('โหลดตัวสร้างไฟล์ Excel ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต')); document.head.appendChild(s); });
     }
     const BACKUP_TABLES = [['students', 'นักเรียน'], ['attendance', 'เช็คชื่อ'], ['inspections', 'ตรวจแต่งกาย'], ['conduct', 'บันทึกพฤติกรรม'], ['conduct_rules', 'เกณฑ์คะแนน'],
-      ['monitor_comments', 'หมายเหตุหัวหน้าห้อง'], ['inspection_rules', 'รายการตรวจ'], ['locked_rules', 'รายการที่ล็อก'], ['settings', 'ค่าตั้งระบบ'], ['audit_log', 'ประวัติการแก้ไข']];
+      ['monitor_comments', 'หมายเหตุหัวหน้าห้อง'], ['inspection_rules', 'รายการตรวจ'], ['locked_rules', 'รายการที่ล็อก'], ['settings', 'ค่าตั้งระบบ'], ['audit_log', 'ประวัติการแก้ไข'], ['slips', 'ใบตักเตือน-ทัณฑ์บน', true]];
     async function exportBackup(btn) {
       if (!lockButton(btn)) return;
       const prog = (t) => { const el = document.getElementById('bk-prog'); if (el) el.textContent = t; };
       Swal.fire({ title: 'กำลังสำรองข้อมูล...', html: '<span id="bk-prog">เตรียมตัว...</span>', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       try {
         const X = await loadXlsx(), wb = X.utils.book_new(), counts = [];
-        for (const [t, label] of BACKUP_TABLES) {
-          let rows = [], off = 0, more = true;
+        for (const [t, label, optional] of BACKUP_TABLES) {
+          let rows = [], off = 0, more = true, skip = false;
           while (more) {
             prog(`${label} · ${rows.length.toLocaleString()} แถว`);
             const r = await callAPI('exportTable', { password: currentDisciplineAuth, t, offset: off });
+            if (optional && r && !r.success && /ไม่รู้จักตาราง/.test(r.message || '')) { skip = true; break; }   // ฐานข้อมูลยังไม่ได้อัปเดต
             if (!r || !r.success) throw new Error((r && (r.message || r.error)) || 'ดึงข้อมูลไม่สำเร็จ');
             rows = rows.concat(r.rows || []); off += 5000; more = !!r.more;
           }
+          if (skip) continue;
           const flat = rows.map(o => { const x = {}; Object.keys(o).forEach(k => { const v = o[k]; x[k] = (v && typeof v === 'object') ? JSON.stringify(v) : v; }); return x; });
           X.utils.book_append_sheet(wb, flat.length ? X.utils.json_to_sheet(flat) : X.utils.aoa_to_sheet([['(ไม่มีข้อมูล)']]), label.slice(0, 31));
           counts.push(`${label} ${rows.length.toLocaleString()}`);
