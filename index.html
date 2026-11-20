@@ -1843,6 +1843,59 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 .slc-big .slc-n small{font-size:12.5px}
 .slc-cap{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:900;color:var(--sa);letter-spacing:.01em}
 .slc-cap span:last-child{color:#9ca3af;font-weight:800}
+/* การ์ดใบตักเตือน/ทัณฑ์บนในหน้าผลของนักเรียน (ตัวใหญ่ เด่นชัด): แถบหัวสีตามสถานะ + ช่องตัวเลขสีเข้มตัวใหญ่ */
+.slc-big{perspective:2600px;-webkit-perspective:2600px}
+.slc-big .slc-in{border-radius:28px}
+.slc-big .slc-face{padding:0;gap:0;overflow:hidden;border-radius:28px;border:0;background:#fff;
+  box-shadow:0 0 0 2px var(--rg),0 26px 44px -26px var(--sh),0 10px 22px -16px var(--sh)}
+.slc-big .slc-face::before{display:none}
+.slc-big.slc-w{--h1:#7c2d12;--h2:#c2410c;--h3:#f59e0b;--rg:rgba(245,158,11,.55)}
+.slc-big.slc-p{--h1:#4c0519;--h2:#9f1239;--h3:#f43f5e;--rg:rgba(225,29,72,.55)}
+.slc-big.slc-ok{--h1:#064e3b;--h2:#047857;--h3:#34d399;--rg:rgba(16,185,129,.45)}
+.slb-head{position:relative;display:flex;align-items:center;gap:12px;padding:14px 16px;color:#fff;overflow:hidden;
+  background:linear-gradient(120deg,var(--h1) 0%,var(--h2) 55%,var(--h3) 130%)}
+.slb-head::after{content:"";position:absolute;right:-50px;top:-70px;width:190px;height:190px;border-radius:999px;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(255,255,255,0) 70%);pointer-events:none}
+.slb-ico{flex:none;width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:radial-gradient(circle at 32% 26%,#fffdf2 0%,#fde68a 35%,#f59e0b 75%,#b45309 100%);box-shadow:0 0 0 2px rgba(255,255,255,.8),0 8px 16px -6px rgba(0,0,0,.45)}
+.slb-ht{position:relative;flex:1;min-width:0;display:flex;flex-direction:column}
+.slb-ht b{font-size:18px;font-weight:900;line-height:1.25;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.slb-ht small{font-size:12px;font-weight:700;opacity:.88;line-height:1.35;overflow-wrap:anywhere}
+.slb-badge{position:relative;flex:none;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:900;white-space:nowrap;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.slb-body{display:flex;flex-direction:column;gap:12px;padding:16px;flex:1;background:linear-gradient(180deg,#fff 0%,#fffaf6 100%)}
+.slb-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.slb-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:118px;padding:12px 8px;border-radius:22px;color:#fff;text-align:center}
+.slb-tw{background:linear-gradient(140deg,#fbbf24 0%,#f97316 55%,#c2410c 100%);box-shadow:0 16px 26px -16px rgba(194,65,12,.9),inset 0 1px 0 rgba(255,255,255,.4)}
+.slb-tp{background:linear-gradient(140deg,#fb7185 0%,#e11d48 50%,#881337 100%);box-shadow:0 16px 26px -16px rgba(136,19,55,.95),inset 0 1px 0 rgba(255,255,255,.35)}
+.slb-tile b{position:relative;font-size:52px;font-weight:900;line-height:1;text-shadow:0 3px 12px rgba(0,0,0,.25)}
+.slb-tile small{position:relative;margin-top:6px;font-size:14px;font-weight:900;letter-spacing:.01em}
+.slb-ti{position:absolute;right:-6px;bottom:-14px;font-size:64px;line-height:1;opacity:.22;transform:rotate(-12deg);pointer-events:none}
+.slb-zero{background:#f8fafc;color:#94a3b8;box-shadow:inset 0 0 0 1.5px #e9eef5}
+.slb-zero b{text-shadow:none}.slb-zero .slb-ti{opacity:.12;filter:grayscale(1)}
+.slb-cta{align-self:center;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;font-size:13.5px;font-weight:900;color:var(--h2);background:#fff;
+  box-shadow:0 0 0 1.5px var(--rg),0 8px 16px -10px var(--sh)}
+.slb-cta span{font-size:16px}
+.slb-rows{display:flex;flex-direction:column;gap:10px}
+.slc-back .slb-rows{flex:1}
+.slb-row{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:16px;border-left:5px solid}
+.slb-rw{background:#fff7ed;border-left-color:#f97316}.slb-rp{background:#fff1f2;border-left-color:#e11d48}
+.slb-rt{font-size:14px;font-weight:900;color:#374151}.slb-rt b{font-size:17px}
+.slb-rw .slb-rt b{color:#c2410c}.slb-rp .slb-rt b{color:#be123c}
+.slb-rd{font-size:15px;font-weight:700;color:#1f2937;line-height:1.5;overflow-wrap:anywhere}
+.slc-big .slc-clean{font-size:15px;padding:18px 10px}
+.slc-big .slc-upd{margin-top:auto;padding-top:2px}
+.slc-big .slc-in:hover .slb-cta{transform:translateY(-1px)}
+.slb-cta{transition:transform .15s}
+@media (min-width:768px){
+  .slb-head{padding:16px 22px;gap:14px}.slb-ico{width:50px;height:50px;font-size:25px}.slb-ht b{font-size:21px}.slb-ht small{font-size:13px}
+  .slb-badge{font-size:14px;padding:7px 15px}
+  .slb-body{padding:20px 22px;gap:14px}.slb-tiles{gap:16px}
+  .slb-tile{min-height:150px;flex-direction:row;gap:16px}.slb-tile b{font-size:72px}.slb-tile small{margin-top:0;font-size:18px;text-align:left}
+  .slb-ti{font-size:96px;right:6px;bottom:-22px}
+  .slb-rows{flex-direction:row}.slb-row{flex:1;padding:14px 18px}.slb-rd{font-size:16px}
+}
+@media (max-width:767.98px){.slb-head{flex-wrap:wrap;row-gap:8px}.slb-ht{flex:1 1 calc(100% - 60px)}.slb-badge{order:3;margin-left:56px}}
+@media (max-width:380px){.slb-badge{margin-left:48px}.slb-head{padding:12px 12px;gap:10px}.slb-ico{width:38px;height:38px;font-size:19px}.slb-ht b{font-size:16px}.slb-badge{font-size:11.5px;padding:5px 9px}.slb-body{padding:12px}.slb-tile{min-height:104px}.slb-tile b{font-size:44px}}
 .sl-note{font-size:12.5px;font-weight:700;color:#7c2d12;background:#fff7ed;border:1px dashed #fdba74;border-radius:14px;padding:9px 12px;line-height:1.5}
 .slx-back{color:#9a3412;font-weight:800;background:#fff7ed;padding:8px 16px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;white-space:nowrap}
 .slx-back:hover{background:#ffedd5}
@@ -4673,8 +4726,30 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     const slxNorm = (t) => String(t == null ? '' : t).replace(/[\r\n\t]+/g, ' ').trim();
 
     // ---------- การ์ดพลิก (ใช้ร่วมกันทุกหน้า) ----------
+    function slipBigHtml(s, o) {
+      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, any = w > 0 || p > 0 || !!s.warnNote || !!s.probNote;
+      const tone = p > 0 ? 'p' : w > 0 ? 'w' : 'ok';
+      const badge = p > 0 ? '🚨 มีใบทัณฑ์บน' : w > 0 ? '⚠️ มีใบตักเตือน' : '🌟 ไม่มีใบ';
+      const note = (t) => t ? esc(t) : '<span class="slc-none">ไม่ได้ระบุ</span>';
+      const head = (title, right) => `<span class="slb-head"><span class="slb-ico" aria-hidden="true">📜</span><span class="slb-ht"><b>${title}</b><small>ปีการศึกษา ${esc(o.ay || currentAY)}${s.onRoster === false ? ' · ไม่อยู่ในรายชื่อปัจจุบัน' : ''}</small></span>${right}</span>`;
+      const tile = (k, n, ico, label) => `<span class="slb-tile slb-t${k}${n ? '' : ' slb-zero'}"><span class="slb-ti" aria-hidden="true">${ico}</span><b class="tabular">${n}</b><small>${label}</small></span>`;
+      const front = `<span class="slc-face slc-front">${head('ใบตักเตือน / ใบทัณฑ์บน', `<span class="slb-badge">${badge}</span>`)}
+          <span class="slb-body"><span class="slb-tiles">${tile('w', w, '📄', 'ใบตักเตือน')}${tile('p', p, '📜', 'ใบทัณฑ์บน')}</span>
+          <span class="slb-cta"><span aria-hidden="true">↻</span> ${any ? 'แตะเพื่อดูว่าโดนเรื่องอะไร' : 'แตะเพื่อดูรายละเอียด'}</span></span></span>`;
+      const back = `<span class="slc-face slc-back" aria-hidden="true">${head('โดนเรื่องอะไร', '<span class="slb-badge">↺ พลิกกลับ</span>')}
+          <span class="slb-body">${any ? `<span class="slb-rows">
+            <span class="slb-row slb-rw"><span class="slb-rt"><span aria-hidden="true">📄</span> ใบตักเตือน <b>${w}</b> ใบ</span><span class="slb-rd">${w || s.warnNote ? note(s.warnNote) : '–'}</span></span>
+            <span class="slb-row slb-rp"><span class="slb-rt"><span aria-hidden="true">📜</span> ใบทัณฑ์บน <b>${p}</b> ใบ</span><span class="slb-rd">${p || s.probNote ? note(s.probNote) : '–'}</span></span></span>`
+            : '<span class="slc-clean">🌟 ยังไม่มีใบตักเตือนหรือใบทัณฑ์บนในปีการศึกษานี้<br>รักษาไว้นะ!</span>'}
+            <span class="slc-upd">${s.updatedAt ? 'อัปเดต ' + esc(thDateTime(s.updatedAt)) : ''}</span></span></span>`;
+      return `<div class="slc slc-${tone} slc-big" data-flip="0" data-n="${esc(s.name)}" data-c="${esc(s.className)}">
+          <div class="slc-in" role="button" tabindex="0" aria-pressed="false" aria-label="ใบตักเตือน ${w} ใบ ใบทัณฑ์บน ${p} ใบ ของ ${esc(s.name)} แตะเพื่อพลิกดูรายละเอียด">${front}${back}</div>
+          ${o.edit ? `<button type="button" class="slc-edit" data-slip-edit data-n="${esc(s.name)}" data-c="${esc(s.className)}" aria-label="แก้ไขจำนวนใบของ ${esc(s.name)}">✏️ แก้ไขจำนวนใบ</button>` : ''}
+        </div>`;
+    }
     function slipCardHtml(s, o) {
       o = o || {};
+      if (o.big) return slipBigHtml(s, o);
       const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, any = w > 0 || p > 0 || !!s.warnNote || !!s.probNote;
       const tone = p > 0 ? 'p' : w > 0 ? 'w' : 'ok';
       const note = (t) => t ? esc(t) : '<span class="slc-none">ไม่ได้ระบุ</span>';
