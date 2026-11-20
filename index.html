@@ -1902,7 +1902,30 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 .slx-btn{border:1px solid #fed7aa;background:#fff;color:#9a3412;padding:8px 14px;border-radius:12px;font-size:13.5px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 4px 10px -8px rgba(154,52,18,.6)}
 .slx-btn:hover{background:#fff7ed}
 #slx-actions{flex-wrap:nowrap}
+@media (max-width:420px){#slx-actions .slx-btn{padding-left:9px;padding-right:9px}}
+@media (max-width:359.98px){#slx-actions{flex-wrap:wrap}}
 @media (max-width:420px){.slx-hide-sm{display:none}}
+.ab-word{border:0;color:#fff;background:linear-gradient(135deg,#0369a1,#0ea5e9);padding:8px 14px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 10px 18px -10px rgba(3,105,161,.9)}
+.ab-word:hover{background:linear-gradient(135deg,#075985,#0284c7)}.ab-word:disabled{opacity:.6;cursor:wait}
+.adp{padding:6px 18px 4px;text-align:left}
+.adp-lbl{font-size:12.5px;font-weight:900;color:#0c4a6e;letter-spacing:.02em;margin:10px 2px 7px}
+.adp-sems{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.adp-sem{position:relative;text-align:left;border:2px solid #e0f2fe;background:#fff;border-radius:16px;padding:11px 12px;cursor:pointer;font-family:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
+.adp-sem b{display:block;font-size:15.5px;font-weight:900;color:#0f172a}.adp-sem span{display:block;font-size:11.5px;font-weight:700;color:#64748b;margin-top:2px}
+.adp-sem i{display:inline-block;margin-top:6px;font-style:normal;font-size:10.5px;font-weight:900;color:#0369a1;background:#e0f2fe;border-radius:999px;padding:2px 8px}
+.adp-sem[data-on="1"]{border-color:#38bdf8;background:linear-gradient(160deg,#f0f9ff,#fff)}
+.adp-sem:not([disabled]):hover{border-color:#0ea5e9;box-shadow:0 12px 22px -16px rgba(3,105,161,.8);transform:translateY(-1px)}
+.adp-sem[disabled]{opacity:.55;cursor:not-allowed}.adp-sem i.adp-off{color:#64748b;background:#f1f5f9}
+.adp-mrow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.adp-ml{flex:0 0 46px;font-size:11.5px;font-weight:800;color:#64748b}
+.adp-ms{flex:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.adp-m{border:1.5px solid #e2e8f0;background:#fff;border-radius:11px;padding:6px 0 4px;cursor:pointer;font-family:inherit;line-height:1.1;transition:border-color .15s,background .15s}
+.adp-m b{display:block;font-size:13px;font-weight:900;color:#0f172a}.adp-m span{display:block;font-size:10px;font-weight:700;color:#94a3b8}
+.adp-m[data-now="1"]{border-color:#38bdf8;background:#f0f9ff}
+.adp-m:not([disabled]):hover{border-color:#0ea5e9;background:#e0f2fe}
+.adp-m[disabled]{opacity:.4;cursor:not-allowed;background:#f8fafc}
+.adp-note{margin:8px 2px 0;font-size:11px;font-weight:600;color:#94a3b8;line-height:1.45}
+@media (max-width:400px){.adp{padding:4px 12px 2px}.adp-mrow{flex-direction:column;align-items:stretch;gap:4px}.adp-ml{flex:none}.adp-sem b{font-size:14.5px}}
 .slx-btn-main{border:0;color:#fff;background:linear-gradient(135deg,#9a3412,#ea580c 60%,#f59e0b);box-shadow:0 10px 18px -10px rgba(154,52,18,.9)}
 .slx-btn-main:hover{background:linear-gradient(135deg,#7c2d12,#c2410c 60%,#d97706)}
 .slx-hero{position:relative;overflow:hidden;border-radius:28px;padding:22px 20px 18px;color:#fff;background:linear-gradient(135deg,#7c2d12 0%,#b45309 58%,#f59e0b 125%);box-shadow:0 26px 42px -28px rgba(124,45,18,.85)}
@@ -2545,7 +2568,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     <div id="view-absence-stats" class="hidden">
       <div class="flex justify-between items-center mb-4 no-print glass-card p-3 rounded-2xl vbar">
         <button onclick="goHome(true)" class="text-blue-600 font-bold flex items-center gap-1 hover:text-blue-800 bg-blue-50 px-4 py-2 rounded-xl transition whitespace-nowrap"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> กลับหน้าแรก</button>
-        <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> พิมพ์รายงาน</button>
+        <div class="flex items-center gap-2"><button type="button" id="btn-absence-doc" onclick="exportAbsenceDoc(this)" class="ab-word" title="ดาวน์โหลดรายงานการขาดเรียนส่งผู้อำนวยการ">📄<span class="slx-hide-sm"> รายงาน</span> Word</button><button onclick="window.print()" title="พิมพ์รายงาน" aria-label="พิมพ์รายงาน" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-sm shadow flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg><span class="slx-hide-sm">พิมพ์รายงาน</span></button></div>
       </div>
       <div class="ab-hero mb-5">
         <span class="ab-orb ab-orb1" aria-hidden="true"></span><span class="ab-orb ab-orb2" aria-hidden="true"></span>
@@ -2804,7 +2827,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     let currentSemester = 2;
     let currentAY = (new Date().getFullYear() + 543) - (new Date().getMonth() < 4 ? 1 : 0);
     // คำสั่งที่นับ/แสดงข้อมูลตามเทอม — callAPI แนบ semester และ academicYear ให้เองทุกครั้ง (หน้าเว็บที่เรียกไม่ต้องรู้เรื่องนี้)
-    const SEM_ACTIONS = new Set(['getSlip','getSlipClass','getSlipOverview','getSlipEdit','saveSlip','getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview','getSemesterProgress','getWorkCenter','getSemesterSummary','getConductRecords']);
+    const SEM_ACTIONS = new Set(['getAbsenceDoc','getSlip','getSlipClass','getSlipOverview','getSlipEdit','saveSlip','getStudentsForInspection','saveInspections','getInspectionsForVerification','saveInspectionVerification','getDisciplineReport','exportMonthlyDisciplineReportDoc','getAbsenceReport','getComparisonData','studentLoginByName','studentLoginById','getStudentFullHistory','exportStudentHistoryDoc','classMonitorOverview','saveMonitorComment','getConductOverview','getSemesterProgress','getWorkCenter','getSemesterSummary','getConductRecords']);
     const discReportSort = (a, b) => a.className === b.className
       ? (a.month === b.month ? thSort(a.name, b.name) : MONTH_ORDER.indexOf(a.month) - MONTH_ORDER.indexOf(b.month))
       : thSort(a.className, b.className);
@@ -3157,10 +3180,12 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       { act: 'verify', icon: '🔍', title: 'ตรวจแต่งกาย (ฝ่ายปกครอง)', desc: 'ตรวจสอบซ้ำได้ทุกข้อเหมือนครูประจำชั้น', grad: 'from-cyan-500 to-sky-500' },
       { act: 'work', icon: '📌', title: 'ศูนย์งานค้าง', desc: 'ห้องที่ยังไม่ตรวจ · ขาดติดกัน · พฤติกรรมต่ำ', grad: 'from-amber-500 to-orange-500' },
       { act: 'summary', icon: '📄', title: 'สรุปรายภาคเรียน (Word)', desc: 'รายงานเสนอผู้บริหารปลายภาคเรียน', grad: 'from-emerald-500 to-teal-500' },
+      { act: 'absdoc', icon: '🗓️', title: 'รายงานการขาดเรียน (Word)', desc: 'รายภาคเรียน/รายเดือน · สรุปรายห้อง · รายชื่อที่ขาด · ส่ง ผอ.', grad: 'from-sky-600 to-cyan-400' },
+      { act: 'slipdoc', icon: '🧾', title: 'สรุปใบตักเตือน / ทัณฑ์บน (Word)', desc: 'จำนวนใบรายห้อง · รายชื่อ · เรื่องที่โดน · ส่ง ผอ.', grad: 'from-orange-800 to-orange-500' },
       { act: 'rules', icon: '📐', title: 'เกณฑ์ตัดคะแนนพฤติกรรม', desc: 'เพิ่ม · แก้ไข · ลบ · เรียงลำดับข้อความผิด', grad: 'from-orange-500 to-rose-500' },
       { act: 'settings', icon: '⚙️', title: 'ตั้งค่าระบบ', desc: 'รหัสผ่าน · เทอม · วันเปิด-ปิด · เดือนที่แสดง', grad: 'from-slate-600 to-indigo-600' }
     ];
-    const DISC_GRAD = { slips: 'linear-gradient(135deg,#9a3412,#f59e0b)', conduct: 'linear-gradient(135deg,#e11d48,#fb923c)', report: 'linear-gradient(135deg,#a855f7,#6366f1)', verify: 'linear-gradient(135deg,#06b6d4,#3b82f6)', work: 'linear-gradient(135deg,#f59e0b,#f97316)', summary: 'linear-gradient(135deg,#10b981,#14b8a6)', rules: 'linear-gradient(135deg,#f97316,#f43f5e)', settings: 'linear-gradient(135deg,#475569,#4f46e5)' };
+    const DISC_GRAD = { slips: 'linear-gradient(135deg,#9a3412,#f59e0b)', absdoc: 'linear-gradient(135deg,#0369a1,#22d3ee)', slipdoc: 'linear-gradient(135deg,#7c2d12,#ea580c)', conduct: 'linear-gradient(135deg,#e11d48,#fb923c)', report: 'linear-gradient(135deg,#a855f7,#6366f1)', verify: 'linear-gradient(135deg,#06b6d4,#3b82f6)', work: 'linear-gradient(135deg,#f59e0b,#f97316)', summary: 'linear-gradient(135deg,#10b981,#14b8a6)', rules: 'linear-gradient(135deg,#f97316,#f43f5e)', settings: 'linear-gradient(135deg,#475569,#4f46e5)' };
     function discMenuHtml() {
       return '<div class="ar-body dm-body">' + DISC_MENU.map(m => `<button type="button" class="ar-card dm-card" data-act="${m.act}"><span class="ar-ico" style="background:${DISC_GRAD[m.act] || '#6366f1'}" aria-hidden="true">${m.icon}</span><span class="ar-txt"><span class="ar-t">${m.title}</span><span class="ar-s">${m.desc}</span></span><span class="ar-go dm-go" aria-hidden="true">›</span></button>`).join('') + '</div>';
     }
@@ -3173,6 +3198,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       else if (act === 'conduct') { conductPasswordVerified = true; loadConductOverview(); }
       else if (act === 'rules') openConductRules();
       else if (act === 'slips') slxOpen('disc', '');
+      else if (act === 'absdoc') exportAbsenceDoc();
+      else if (act === 'slipdoc') exportSlipDoc();
     }
     async function openDisciplineMenu() {
       const c = ['#3730a3', '#4f46e5', '#a5b4fc'];
@@ -3266,6 +3293,79 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
         .finally(() => { if (btn) unlockButton(btn); });
     }
+
+    // <<<DIRECTOR-REPORTS-BEGIN
+    // ==================== รายงาน Word เสนอผู้อำนวยการ: การขาดเรียน + ใบตักเตือน/ทัณฑ์บน ====================
+    const ABS_DOC_PATCH_MSG = 'ฐานข้อมูลยังไม่รองรับรายงานการขาดเรียน (Word) กรุณารันไฟล์ supabase-patch13.sql ใน Supabase ก่อน';
+    let directorDocBusy = false;
+    function isoLocal(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    // เลือกช่วงเวลา: ทั้งภาคเรียน หรือรายเดือน (เดือนที่ยังไม่ถึงกดไม่ได้)
+    function chooseAbsencePeriod() {
+      return new Promise(resolve => {
+        let done = false; const fin = (v) => { if (done) return; done = true; resolve(v); };
+        const ay = +currentAY, y0 = ay - 543, today = isoLocal(new Date());
+        const startOf = (mi) => isoLocal(new Date(mi >= 5 ? y0 : y0 + 1, mi - 1, 1));
+        const curMi = new Date().getMonth() + 1, curYm = today.slice(0, 7);
+        const semCard = (n) => {
+          const st = n === 1 ? startOf(5) : startOf(11), off = st > today, on = n === +currentSemester;
+          return `<button type="button" class="adp-sem" data-sem="${n}" data-on="${on ? 1 : 0}"${off ? ' disabled' : ''}><b>ภาคเรียนที่ ${n}</b><span>${n === 1 ? 'พ.ค. – ต.ค.' : 'พ.ย. – เม.ย.'} · ปีการศึกษา ${ay}</span>${off ? '<i class="adp-off">ยังไม่ถึง</i>' : (on ? '<i>เทอมที่เลือกอยู่</i>' : '')}</button>`;
+        };
+        const chip = (mi) => {
+          const st = startOf(mi), off = st > today, now = st.slice(0, 7) === curYm;
+          return `<button type="button" class="adp-m" data-month="${THMONTHS_CAL[mi - 1]}" data-now="${now ? 1 : 0}"${off ? ' disabled' : ''} title="${THMONTHS_CAL[mi - 1]} ${(mi >= 5 ? y0 : y0 + 1) + 543}"><b>${TH_MON_SHORT[mi - 1]}</b><span>${String((mi >= 5 ? y0 : y0 + 1) + 543).slice(-2)}</span></button>`;
+        };
+        edFire('abs', {
+          html: edHero('🗓️', 'รายงานการขาดเรียน (Word)', 'เลือกช่วงเวลาที่ต้องการสรุปส่งผู้อำนวยการ') + `<div class="adp">
+              <div class="adp-lbl">สรุปทั้งภาคเรียน</div>
+              <div class="adp-sems">${semCard(1)}${semCard(2)}</div>
+              <div class="adp-lbl">หรือสรุปรายเดือน</div>
+              <div class="adp-mrow"><span class="adp-ml">เทอม 1</span><div class="adp-ms">${[5, 6, 7, 8, 9, 10].map(chip).join('')}</div></div>
+              <div class="adp-mrow"><span class="adp-ml">เทอม 2</span><div class="adp-ms">${[11, 12, 1, 2, 3, 4].map(chip).join('')}</div></div>
+              <p class="adp-note">นับเฉพาะนักเรียนในรายชื่อปัจจุบัน · มีลายเซ็นหัวหน้าฝ่ายปกครอง รองฯ และผู้อำนวยการ</p>
+            </div>`,
+          showConfirmButton: false, cancelButtonText: 'ยกเลิก',
+          didOpen: (el) => {
+            (el || document).querySelectorAll('.adp-sem:not([disabled])').forEach(b => b.addEventListener('click', () => { fin({ semester: +b.dataset.sem }); Swal.close(); }));
+            (el || document).querySelectorAll('.adp-m:not([disabled])').forEach(b => b.addEventListener('click', () => { fin({ month: b.dataset.month }); Swal.close(); }));
+            setTimeout(() => { const a = document.activeElement; if (a && a.classList && (a.classList.contains('adp-sem') || a.classList.contains('adp-m'))) a.blur(); }, 0);
+          }
+        }).then(() => fin(null));
+      });
+    }
+    async function exportAbsenceDoc(btn) {
+      if (directorDocBusy) return;
+      const pick = await chooseAbsencePeriod(); if (!pick) return;
+      if (directorDocBusy || (btn && !lockButton(btn))) return;
+      directorDocBusy = true;
+      const what = pick.month ? 'เดือน' + pick.month : 'ภาคเรียนที่ ' + pick.semester;
+      MySwal.fire({ title: 'กำลังสร้างรายงานการขาดเรียน...', html: `${what} · ปีการศึกษา ${currentAY}<br>กรุณารอสักครู่ ระบบกำลังรวบรวมข้อมูลการเช็คชื่อ`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      const payload = { password: currentDisciplineAuth };
+      if (pick.month) payload.month = pick.month; else payload.semester = pick.semester;
+      callAPI('getAbsenceDoc', payload).then(res => {
+        if (!res || res.error || res.success === false) {
+          const m = (res && (res.message || res.error)) || 'สร้างรายงานไม่สำเร็จ';
+          MySwal.fire('สร้างรายงานไม่ได้', /ไม่รู้จัก action/.test(m) ? ABS_DOC_PATCH_MSG : m, /ยังไม่เริ่ม/.test(m) ? 'info' : 'error'); return;
+        }
+        const tag = res.month ? res.month : 'เทอม' + res.semester;
+        return loadDocx().then(B => presentDocx(B.buildAbsenceDoc(res), `รายงานการขาดเรียน_${tag}_${res.academicYear}`,
+          `<p class="text-sm text-gray-500">${escHtml(res.label)} ปีการศึกษา ${escHtml(res.academicYear)}<br>นักเรียนขาดเรียน ${(res.rows || []).filter(r => +r.absent > 0).length} คน · เช็คชื่อ ${+res.days || 0} วัน</p>`));
+      }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
+        .finally(() => { directorDocBusy = false; if (btn) unlockButton(btn); });
+    }
+    function exportSlipDoc(btn) {
+      if (directorDocBusy || (btn && !lockButton(btn))) return;
+      directorDocBusy = true;
+      MySwal.fire({ title: 'กำลังสร้างรายงานสรุปใบตักเตือน/ทัณฑ์บน...', html: `ปีการศึกษา ${currentAY} · กรุณารอสักครู่`, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      callAPI('getSlipOverview', { password: currentDisciplineAuth }).then(res => {
+        if (!res || res.error || !res.success) { MySwal.fire('สร้างรายงานไม่ได้', slxErr(res, 'สร้างรายงานไม่สำเร็จ'), 'error'); return; }
+        res.generated = isoLocal(new Date());
+        const n = (res.rows || []).filter(r => (+r.warn || 0) + (+r.prob || 0) > 0).length;
+        return loadDocx().then(B => presentDocx(B.buildSlipDoc(res), `สรุปใบตักเตือน-ทัณฑ์บน_ปีการศึกษา${res.ay}`,
+          `<p class="text-sm text-gray-500">ปีการศึกษา ${escHtml(res.ay)} · นักเรียนที่ได้รับใบ ${n} คน</p>`));
+      }).catch(err => MySwal.fire('ผิดพลาด', docxErrText(err), 'error'))
+        .finally(() => { directorDocBusy = false; if (btn) unlockButton(btn); });
+    }
+    // DIRECTOR-REPORTS-END>>>
     // WORKCENTER-END>>>
 
     // <<<ROOMS-BEGIN
@@ -4146,13 +4246,17 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
             }) });
           }) });
       }
+      // ช่องลงนาม 3 ท่านอยู่ในกล่องเดียวที่ห้ามแยกหน้า (Word / Google Docs / Pages จะไม่ปล่อยให้ลายเซ็นค้างแยกหน้า)
       function signBlocks() {
-        var out = [para('', { after: 360 })];
-        SIGNERS.forEach(function (s) {
-          out.push(para('ลงชื่อ..........................................................', { align: C, after: 0, keepNext: true }));
-          out.push(para('(' + s[0] + ')\n' + s[1], { align: C, after: 300 }));
+        var ps = [];
+        SIGNERS.forEach(function (s, i) {
+          ps.push(para('ลงชื่อ..........................................................', { align: C, after: 0 }));
+          ps.push(para('(' + s[0] + ')\n' + s[1], { align: C, after: i < SIGNERS.length - 1 ? 300 : 0 }));
         });
-        return out;
+        return [para('', { after: 360 }),
+          new D.Table({ width: { size: 9400, type: D.WidthType.DXA }, columnWidths: [9400], borders: D.TableBorders.NONE,
+            rows: [new D.TableRow({ cantSplit: true, children: [new D.TableCell({ width: { size: 9400, type: D.WidthType.DXA }, children: ps })] })] }),
+          para('', { size: 2, after: 0 })];
       }
       function doc(children) {
         return new D.Document({ styles: { default: { document: { run: { font: FONT, size: 32 } } } },
@@ -4459,7 +4563,184 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         return doc(kids.concat(signBlocks()));
       }
 
-      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, buildSemesterSummary: buildSemesterSummary, buildConductOverview: buildConductOverview, thDigits: thDigits };
+      // ---- ตัวช่วยของรายงานเสนอผู้อำนวยการ (6, 7) ----
+      var TH_MS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      function thD(iso) { var p = String(iso || '').split('-'); return p.length < 3 ? '-' : (+p[2]) + ' ' + TH_MS[(+p[1]) - 1] + ' ' + (+p[0] + 543); }
+      // วันที่ขาดเรียนรวมตามเดือน เช่น "2, 4, 5 พ.ย. 69 · 3 ธ.ค. 69"
+      function datesByMonth(list) {
+        var groups = [], cur = null;
+        (list || []).forEach(function (iso) {
+          var p = String(iso).split('-'); if (p.length < 3) return;
+          var key = p[0] + '-' + p[1];
+          if (!cur || cur.key !== key) { cur = { key: key, m: +p[1], y: +p[0] + 543, d: [] }; groups.push(cur); }
+          cur.d.push(+p[2]);
+        });
+        return groups.map(function (g) { return g.d.join(', ') + ' ' + TH_MS[g.m - 1] + ' ' + String(g.y).slice(-2); }).join(' · ') || '-';
+      }
+      function reportKit() {
+        var no = 0;
+        return {
+          n0: function (v) { return Number(v) || 0; },
+          pct: function (a, b) { return b > 0 ? (Math.round(a * 1000 / b) / 10).toFixed(1) : '-'; },
+          line: function (text, o) { o = o || {}; return para(text, { size: o.size || 30, indent: { left: 360 }, after: o.after === undefined ? 40 : o.after, bold: o.bold }); },
+          h: function (text) { no += 1; return para(no + '. ' + text, { bold: true, before: 220, keepNext: true }); },
+          sub: function (text) { return para(text, { size: 30, bold: true, before: 140, after: 60, indent: { left: 360 }, keepNext: true }); },
+          none: function (text) { return para('- ' + text + ' -', { align: C, size: 28 }); },
+          byName: function (a, b) { return String(a.name).localeCompare(String(b.name), 'th'); }
+        };
+      }
+      // 6) รายงานการขาดเรียน (เสนอผู้อำนวยการ) — ข้อมูลจาก getAbsenceDoc (แพตช์ 13)
+      function buildAbsenceDoc(d) {
+        var K = reportKit(), n0 = K.n0, pct = K.pct, line = K.line, h = K.h, sub = K.sub, none = K.none;
+        var rooms = d.rooms || [], rows = d.rows || [], students = n0(d.students);
+        var T = { recs: 0, pr: 0, ab: 0, la: 0, le: 0 };
+        rooms.forEach(function (r) { T.recs += n0(r.records); T.pr += n0(r.present); T.ab += n0(r.absent); T.la += n0(r.late); T.le += n0(r.leave); });
+        var absentees = rows.filter(function (r) { return n0(r.absent) > 0; });
+        var watch = rows.filter(function (r) { return n0(r.absent) >= 3 || n0(r.maxStreak) >= 3; }).sort(function (a, b) {
+          return n0(b.absent) - n0(a.absent) || n0(b.maxStreak) - n0(a.maxStreak) || String(a.className).localeCompare(String(b.className), 'th') || K.byName(a, b);
+        });
+        var lates = rows.filter(function (r) { return n0(r.late) >= 3; }).sort(function (a, b) {
+          return n0(b.late) - n0(a.late) || String(a.className).localeCompare(String(b.className), 'th') || K.byName(a, b);
+        });
+        var checked = rooms.filter(function (r) { return n0(r.days) > 0; }), unchecked = rooms.filter(function (r) { return n0(r.days) === 0; });
+        var kids = [
+          para('รายงานสรุปการขาดเรียนของนักเรียน', { bold: true, align: C, after: 0 }),
+          para(d.label + ' ปีการศึกษา ' + d.academicYear, { bold: true, align: C, after: 0 }),
+          para('โรงเรียนธนาคารออมสิน ระดับมัธยมศึกษาตอนปลาย', { align: C, after: 0 }),
+          para('ช่วงเวลา ' + thD(d.from) + ' – ' + thD(d.to) + '     ข้อมูล ณ วันที่ ' + thD(d.generated), { size: 28, align: C, after: 160 }),
+          h('ภาพรวม'),
+          line('นักเรียนทั้งหมด ' + students + ' คน (' + rooms.length + ' ห้อง)   เช็คชื่อแล้ว ' + n0(d.days) + ' วัน' + (d.firstDate ? ' (' + thD(d.firstDate) + (d.lastDate && d.lastDate !== d.firstDate ? ' – ' + thD(d.lastDate) : '') + ')' : ''))
+        ];
+        if (!T.recs) kids.push(line('ยังไม่มีข้อมูลการเช็คชื่อในช่วงเวลานี้', { after: 120 }));
+        else {
+          kids.push(line('อัตราการมาเรียนเฉลี่ยร้อยละ ' + pct(T.pr, T.recs) + ' (มาเรียนและมาสาย ' + T.pr + ' จากการเช็คชื่อ ' + T.recs + ' ครั้ง)'));
+          kids.push(line('ขาดเรียนรวม ' + T.ab + ' ครั้ง จากนักเรียน ' + absentees.length + ' คน (ร้อยละ ' + pct(absentees.length, students) + ' ของนักเรียนทั้งหมด)'));
+          kids.push(line('มาสายรวม ' + T.la + ' ครั้ง   ลา/ป่วยรวม ' + T.le + ' ครั้ง'));
+          kids.push(line('นักเรียนที่ควรติดตาม (ขาด 3 ครั้งขึ้นไป หรือขาดติดต่อกัน 3 วันขึ้นไป) ' + watch.length + ' คน', { after: 120 }));
+        }
+
+        kids.push(h('สรุปรายห้อง'));
+        if (!rooms.length) kids.push(none('ไม่มีรายชื่อนักเรียน'));
+        else {
+          var rr = [['ห้อง', 'นักเรียน (คน)', 'เช็คชื่อ (วัน)', 'ขาด (ครั้ง)', 'นร.ที่ขาด (คน)', 'สาย (ครั้ง)', 'ลา/ป่วย (ครั้ง)', 'มาเรียน (ร้อยละ)']];
+          rooms.forEach(function (r) {
+            var on = n0(r.days) > 0;
+            rr.push([r.cls, String(n0(r.students)), on ? String(n0(r.days)) : '-', on ? String(n0(r.absent)) : '-', on ? String(n0(r.studentsAbsent)) : '-',
+                     on ? String(n0(r.late)) : '-', on ? String(n0(r.leave)) : '-', on ? pct(n0(r.present), n0(r.records)) : 'ยังไม่เช็คชื่อ']);
+          });
+          rr.push(['รวม', String(students), String(n0(d.days)), String(T.ab), String(absentees.length), String(T.la), String(T.le), pct(T.pr, T.recs)]);
+          kids.push(table(rr, [1000, 1250, 1150, 1050, 1150, 1050, 1150, 1600], { header: true, center: [0, 1, 2, 3, 4, 5, 6, 7], boldRows: [rr.length - 1] }));
+        }
+
+        kids.push(h('นักเรียนที่ควรติดตาม (ขาด 3 ครั้งขึ้นไป หรือติดกัน 3 วันขึ้นไป)'));
+        if (!watch.length) kids.push(none('ไม่มีนักเรียนที่เข้าเกณฑ์'));
+        else {
+          var wr = [['ที่', 'ชื่อ-สกุล', 'ชั้น', 'ขาด (ครั้ง)', 'ขาดติดต่อกันสูงสุด (วัน)', 'สาย (ครั้ง)', 'ลา/ป่วย (ครั้ง)']];
+          watch.forEach(function (r, i) { wr.push([String(i + 1), r.name, r.className, String(n0(r.absent)), String(n0(r.maxStreak)), String(n0(r.late)), String(n0(r.leave))]); });
+          kids.push(table(wr, [600, 3400, 900, 950, 1450, 950, 1150], { header: true, center: [0, 2, 3, 4, 5, 6] }));
+        }
+
+        kids.push(h('รายชื่อนักเรียนที่ขาดเรียน แยกรายห้อง'));
+        if (!absentees.length) kids.push(none(T.recs ? 'ไม่มีนักเรียนขาดเรียนในช่วงเวลานี้' : 'ยังไม่มีข้อมูลการเช็คชื่อ'));
+        else {
+          var noAbs = [];
+          checked.forEach(function (room) {
+            var list = absentees.filter(function (r) { return r.className === room.cls; });
+            if (!list.length) { noAbs.push(room.cls); return; }
+            var cnt = list.reduce(function (a, r) { return a + n0(r.absent); }, 0);
+            kids.push(sub('ห้อง ' + room.cls + '   ขาดเรียน ' + list.length + ' คน รวม ' + cnt + ' ครั้ง'));
+            var dr = [['ที่', 'ชื่อ-สกุล', 'ขาด', 'สาย', 'ลา/ป่วย', 'วันที่ขาดเรียน']];
+            list.forEach(function (r, i) { dr.push([String(i + 1), r.name, String(n0(r.absent)), String(n0(r.late)), String(n0(r.leave)), datesByMonth(r.absentDates)]); });
+            kids.push(table(dr, [600, 3300, 700, 700, 900, 3200], { header: true, center: [0, 2, 3, 4] }));
+          });
+          if (noAbs.length) kids.push(para('ห้องที่ไม่มีนักเรียนขาดเรียน: ' + noAbs.join(', '), { size: 28, indent: { left: 360 }, before: 120 }));
+        }
+
+        kids.push(h('นักเรียนที่มาสายบ่อย (3 ครั้งขึ้นไป)'));
+        if (!lates.length) kids.push(none('ไม่มีนักเรียนที่มาสาย 3 ครั้งขึ้นไป'));
+        else {
+          var lr = [['ที่', 'ชื่อ-สกุล', 'ชั้น', 'สาย (ครั้ง)', 'ขาด (ครั้ง)', 'ลา/ป่วย (ครั้ง)']];
+          lates.forEach(function (r, i) { lr.push([String(i + 1), r.name, r.className, String(n0(r.late)), String(n0(r.absent)), String(n0(r.leave))]); });
+          kids.push(table(lr, [650, 3600, 1150, 1300, 1300, 1400], { header: true, center: [0, 2, 3, 4, 5] }));
+        }
+
+        var notes = ['1 ครั้ง = การเช็คชื่อ 1 วัน และ "ขาดติดต่อกัน" นับตามวันที่มีการเช็คชื่อ'];
+        if (T.recs && unchecked.length) notes.push('ห้องที่ยังไม่มีข้อมูลการเช็คชื่อในช่วงนี้: ' + unchecked.map(function (r) { return r.cls; }).join(', '));
+        if (n0(d.excluded) > 0) notes.push('มีบันทึกขาด/สาย/ลา ' + n0(d.excluded) + ' รายการของนักเรียนที่ไม่อยู่ในรายชื่อปัจจุบัน (เช่น ย้ายออกหรือเปลี่ยนชื่อ) ไม่ได้นับรวมในรายงานนี้');
+        kids.push(para('หมายเหตุ: ' + notes.join(' / '), { size: 26, before: 200 }));
+        return doc(kids.concat(signBlocks()));
+      }
+      // 7) สรุปใบตักเตือน / ใบทัณฑ์บน (เสนอผู้อำนวยการ) — ข้อมูลจาก getSlipOverview (แพตช์ 12)
+      function buildSlipDoc(d) {
+        var K = reportKit(), n0 = K.n0, pct = K.pct, line = K.line, h = K.h, sub = K.sub, none = K.none;
+        var rows = (d.rows || []).filter(function (r) { return n0(r.warn) + n0(r.prob) > 0; });
+        var classes = (d.classes || []).slice(), known = {};
+        classes.forEach(function (c) { known[c.cls] = true; });
+        rows.forEach(function (r) { if (!known[r.className]) { known[r.className] = true; classes.push({ cls: r.className, students: 0 }); } });
+        var students = classes.reduce(function (a, c) { return a + n0(c.students); }, 0);
+        var onR = rows.filter(function (r) { return r.onRoster !== false; }), offR = rows.length - onR.length;
+        var W = 0, P = 0, wn = 0, pn = 0, both = 0;
+        rows.forEach(function (r) { W += n0(r.warn); P += n0(r.prob); if (n0(r.warn)) wn++; if (n0(r.prob)) pn++; if (n0(r.warn) && n0(r.prob)) both++; });
+        function nm(r) { return r.name + (r.onRoster === false ? ' *' : ''); }
+        var kids = [
+          para('รายงานสรุปการบันทึกใบตักเตือนและใบทัณฑ์บน', { bold: true, align: C, after: 0 }),
+          para('ปีการศึกษา ' + d.ay, { bold: true, align: C, after: 0 }),
+          para('โรงเรียนธนาคารออมสิน ระดับมัธยมศึกษาตอนปลาย', { align: C, after: 0 }),
+          para('ข้อมูล ณ วันที่ ' + thD(d.generated), { size: 28, align: C, after: 160 }),
+          h('ภาพรวม'),
+          line('นักเรียนทั้งหมด ' + students + ' คน (' + (d.classes || []).length + ' ห้อง)'),
+          line('นักเรียนที่ได้รับใบตักเตือนหรือใบทัณฑ์บน ' + onR.length + ' คน คิดเป็นร้อยละ ' + pct(onR.length, students) + ' ของนักเรียนทั้งหมด'),
+          line('ใบตักเตือนรวม ' + W + ' ใบ (' + wn + ' คน)   ใบทัณฑ์บนรวม ' + P + ' ใบ (' + pn + ' คน)'),
+          line('นักเรียนที่ได้รับทั้งใบตักเตือนและใบทัณฑ์บน ' + both + ' คน', { after: 120 }),
+          h('สรุปรายห้อง')
+        ];
+        if (!classes.length) kids.push(none('ไม่มีรายชื่อนักเรียน'));
+        else {
+          var cr = [['ห้อง', 'นักเรียน (คน)', 'ได้รับใบ (คน)', 'ใบตักเตือน (ใบ)', 'ใบทัณฑ์บน (ใบ)', 'ร้อยละของห้อง']];
+          classes.forEach(function (c) {
+            var list = rows.filter(function (r) { return r.className === c.cls; }), inR = list.filter(function (r) { return r.onRoster !== false; }).length;
+            cr.push([c.cls, n0(c.students) ? String(n0(c.students)) : '-', String(list.length), String(list.reduce(function (a, r) { return a + n0(r.warn); }, 0)),
+                     String(list.reduce(function (a, r) { return a + n0(r.prob); }, 0)), n0(c.students) ? pct(inR, n0(c.students)) : '-']);
+          });
+          cr.push(['รวม', String(students), String(rows.length), String(W), String(P), pct(onR.length, students)]);
+          kids.push(table(cr, [1300, 1500, 1500, 1650, 1650, 1800], { header: true, center: [0, 1, 2, 3, 4, 5], boldRows: [cr.length - 1] }));
+        }
+
+        kids.push(h('นักเรียนที่ได้รับใบทัณฑ์บน'));
+        var probs = rows.filter(function (r) { return n0(r.prob) > 0; });
+        if (!probs.length) kids.push(none('ไม่มีนักเรียนที่ได้รับใบทัณฑ์บน'));
+        else {
+          var pr = [['ที่', 'ชื่อ-สกุล', 'ชั้น', 'ทัณฑ์บน (ใบ)', 'ตักเตือน (ใบ)', 'เรื่องที่ทำทัณฑ์บน']];
+          probs.forEach(function (r, i) { pr.push([String(i + 1), nm(r), r.className, String(n0(r.prob)), String(n0(r.warn)), r.probNote || '-']); });
+          kids.push(table(pr, [600, 2900, 900, 1300, 1300, 2400], { header: true, center: [0, 2, 3, 4] }));
+        }
+
+        kids.push(h('รายชื่อนักเรียนที่ได้รับใบตักเตือน / ใบทัณฑ์บน แยกรายห้อง'));
+        if (!rows.length) kids.push(none('ยังไม่มีการบันทึกใบตักเตือนหรือใบทัณฑ์บนในปีการศึกษานี้'));
+        else {
+          classes.forEach(function (c) {
+            var list = rows.filter(function (r) { return r.className === c.cls; });
+            if (!list.length) return;
+            var w = list.reduce(function (a, r) { return a + n0(r.warn); }, 0), p = list.reduce(function (a, r) { return a + n0(r.prob); }, 0);
+            kids.push(sub('ห้อง ' + c.cls + '   ได้รับใบ ' + list.length + ' คน · ตักเตือน ' + w + ' ใบ · ทัณฑ์บน ' + p + ' ใบ'));
+            var lr = [['ที่', 'ชื่อ-สกุล', 'ตักเตือน', 'ทัณฑ์บน', 'เรื่องที่โดน']];
+            list.forEach(function (r, i) {
+              var why = [];
+              if (n0(r.warn) && r.warnNote) why.push('ตักเตือน: ' + r.warnNote);
+              if (n0(r.prob) && r.probNote) why.push('ทัณฑ์บน: ' + r.probNote);
+              lr.push([String(i + 1), nm(r), n0(r.warn) ? String(n0(r.warn)) : '-', n0(r.prob) ? String(n0(r.prob)) : '-', why.join('\n') || '-']);
+            });
+            kids.push(table(lr, [600, 3000, 1300, 1300, 3200], { header: true, center: [0, 2, 3] }));
+          });
+        }
+
+        var notes = ['จำนวนใบเป็นยอดสะสมทั้งปีการศึกษา ' + d.ay + ' ตามที่ฝ่ายปกครองบันทึกในระบบ'];
+        if (offR) notes.push('* ไม่อยู่ในรายชื่อนักเรียนปัจจุบัน (เช่น ย้ายออกหรือเปลี่ยนชื่อ) ' + offR + ' คน นับรวมในจำนวนใบ แต่ไม่นับในร้อยละ');
+        kids.push(para('หมายเหตุ: ' + notes.join(' / '), { size: 26, before: 200 }));
+        return doc(kids.concat(signBlocks()));
+      }
+
+      return { buildDisciplineReport: buildDisciplineReport, buildStudentHistory: buildStudentHistory, buildConductLetter: buildConductLetter, buildSemesterSummary: buildSemesterSummary, buildConductOverview: buildConductOverview, buildAbsenceDoc: buildAbsenceDoc, buildSlipDoc: buildSlipDoc, thDigits: thDigits };
     }
 
     var DOCX_CDN = 'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js';
@@ -4885,12 +5166,13 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     function slxRenderBar() {
       const isDisc = slx.mode === 'disc';
       const box = document.getElementById('slx-actions');
-      box.innerHTML = (isDisc ? '<button type="button" class="slx-btn slx-btn-main" data-slx="add">＋ บันทึกใบ</button><button type="button" class="slx-btn" data-slx="hist">🕘 ประวัติ</button>' : '')
+      box.innerHTML = (isDisc ? '<button type="button" class="slx-btn slx-btn-main" data-slx="add">＋ บันทึกใบ</button><button type="button" class="slx-btn" data-slx="hist">🕘 ประวัติ</button><button type="button" class="slx-btn" data-slx="doc" title="ดาวน์โหลดรายงานสรุปส่งผู้อำนวยการ">📄<span class="slx-hide-sm"> รายงาน</span> Word</button>' : '')
         + '<button type="button" class="slx-btn" data-slx="reload" aria-label="โหลดข้อมูลใหม่">↻<span class="slx-hide-sm"> รีเฟรช</span></button>';
       box.querySelectorAll('[data-slx]').forEach(b => b.addEventListener('click', () => {
         const k = b.dataset.slx;
         if (k === 'add') slxAdd();
         else if (k === 'hist') showAuditLog('slip', null, 'ประวัติใบตักเตือน/ทัณฑ์บน', 'การกรอกและแก้จำนวนใบ 150 ครั้งล่าสุด');
+        else if (k === 'doc') exportSlipDoc(b);
         else slxLoad(false);
       }));
     }
@@ -6326,7 +6608,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       hist:   ['#3730a3', '#4f46e5', '#a5b4fc'],
       pw:     ['#334155', '#475569', '#a5b4fc'],
       rep:    ['#7f1d1d', '#b91c1c', '#f59e0b'],
-      slip:   ['#7c2d12', '#c2410c', '#fbbf24']
+      slip:   ['#7c2d12', '#c2410c', '#fbbf24'],
+      abs:    ['#075985', '#0284c7', '#7dd3fc']
     };
     function edHero(icon, title, sub) {
       return `<div class="pw-hero pk-hero"><span class="pw-orb pw-orb1" aria-hidden="true"></span><span class="pw-orb pw-orb2" aria-hidden="true"></span>
