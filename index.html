@@ -696,7 +696,9 @@ div:where(.swal2-container) .swal2-popup.he-pop{width:min(980px,96vw)!important;
 .he-ph-g{display:grid;grid-template-columns:1fr 1fr;gap:14px}.he-ph-g i{display:block;height:120px;border-radius:24px;background:linear-gradient(135deg,#f9a8d4,#c4b5fd)}
 .he-drop{position:absolute;inset:8px;border-radius:14px;display:none;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#be185d;background:rgba(253,242,248,.9);pointer-events:none}
 .he-frame.he-over .he-drop{display:flex}
-.he-src{margin:8px 2px 0;min-height:16px}.he-src-note{font-size:11px;font-weight:800;color:#a855f7}
+.he-src{margin:8px 2px 0;min-height:16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}.he-src-note{font-size:11px;font-weight:800;color:#a855f7}
+.he-qual{font-size:11px;font-weight:800;border-radius:999px;padding:2px 9px;line-height:1.5}.he-qual:empty{display:none}
+.he-qual[data-q="ok"]{color:#047857;background:#ecfdf5}.he-qual[data-q="mid"]{color:#b45309;background:#fffbeb}.he-qual[data-q="low"]{color:#be123c;background:#fff1f2}
 .he-tools{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:8px}
 .he-btn{display:inline-flex;align-items:center;gap:5px;border:1px solid #fbcfe8;cursor:pointer;font-family:inherit;font-size:13px;font-weight:900;color:#be185d;background:#fff;border-radius:12px;padding:8px 11px;white-space:nowrap}
 .he-btn:hover{background:#fdf2f8}
@@ -2065,7 +2067,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         <span class="hx-spark hx-sp1" aria-hidden="true">✦</span><span class="hx-spark hx-sp2" aria-hidden="true">✧</span><span class="hx-spark hx-sp3" aria-hidden="true">✦</span><span class="hx-spark hx-sp4" aria-hidden="true">✧</span><span class="hx-spark hx-sp5" aria-hidden="true">✦</span>
         <!-- Mobile image -->
         <div id="hero-m-box" class="block lg:hidden absolute top-0 left-0 w-full h-[360px] pointer-events-none z-0 overflow-hidden" style="-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,1) 20%,rgba(0,0,0,0.85) 55%,transparent 100%);">
-          <img id="hero-m-img" data-hero-mobile="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_20%] opacity-95">
+          <img id="hero-m-img" data-hero-mobile="https://i.postimg.cc/k4WHbwjX/A00F33E8-EB87-4A8B-AB23-7F78401E83B7.png" alt="Students Mobile" class="w-full h-full object-cover object-[50%_20%]">
         </div>
         <!-- Mobile quote -->
         <div id="hero-m-quote" class="hq hq-m absolute left-4 sm:left-8 top-8 block lg:hidden text-left pointer-events-none z-10">
@@ -2074,7 +2076,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         </div>
         <!-- Desktop image -->
         <div id="hero-d-box" class="hidden lg:block absolute top-0 right-0 h-full w-[65%] pointer-events-none z-0 overflow-hidden" style="-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,1) 35%);">
-          <img id="hero-d-img" data-hero-desktop="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[50%_top] opacity-95">
+          <img id="hero-d-img" data-hero-desktop="https://i.postimg.cc/pdrxKN88/2D508CFE-D7DA-4821-8BA0-6C6A7CE52750.png" alt="Students Desktop" class="w-full h-full object-cover object-[50%_top]">
         </div>
         <script>
           // โหลดรูป hero แค่รูปเดียวตามขนาดจอจริง (เดิม img ทั้ง 2 ตัวมี src ตรงๆ ทำให้เบราว์เซอร์
@@ -7680,7 +7682,8 @@ function renderClassroomOverview(res) {
     function heroPlaceImg(img, boxW, boxH, c) {
       if (!img || !img.naturalWidth || !boxW || !boxH) return null;
       const r = heroCalc(img.naturalWidth, img.naturalHeight, boxW, boxH, c);
-      Object.assign(img.style, { position: 'absolute', maxWidth: 'none', objectFit: 'fill', width: r.w + 'px', height: r.h + 'px', left: r.l + 'px', top: r.t + 'px' });
+      const dpr = window.devicePixelRatio || 1, px = (n) => (Math.round(n * dpr) / dpr) + 'px';   // ตรงพิกเซลจอ รูปจะไม่ถูกวาดคร่อมพิกเซลจนนุ่ม
+      Object.assign(img.style, { position: 'absolute', maxWidth: 'none', objectFit: 'fill', width: px(r.w), height: px(r.h), left: px(r.l), top: px(r.t) });
       return r;
     }
     function heroPlaceQuote(q, areaW, areaH, c) {
@@ -7707,7 +7710,10 @@ function renderClassroomOverview(res) {
       heroLayout();
     }
     function heroCacheGet(v) { try { return JSON.parse(localStorage.getItem('oomsin_hero_' + v) || 'null'); } catch (e) { return null; } }
-    function heroCacheSet(v, data) { try { if (data) localStorage.setItem('oomsin_hero_' + v, JSON.stringify(data)); else localStorage.removeItem('oomsin_hero_' + v); } catch (e) {} }
+    function heroCacheSet(v, data) {
+      try { if (data) localStorage.setItem('oomsin_hero_' + v, JSON.stringify(data)); else localStorage.removeItem('oomsin_hero_' + v); }
+      catch (e) { try { localStorage.removeItem('oomsin_hero_' + v); } catch (_) {} }   // ที่เก็บในเครื่องเต็ม: ไม่เก็บ ดีกว่าค้างรูปเก่า
+    }
     function heroBoot() {
       const v = heroVariant(), cached = heroCacheGet(v);
       if (cached && cached.src) heroApply(v, cached.cfg, cached.src); else heroLayout();
@@ -7740,20 +7746,45 @@ function renderClassroomOverview(res) {
       return { W, H: Math.round(bh * 1.75), box: { l: 0, t: 0, w: W, h: bh } };
     }
     let heEd = null;
+    // ย่อรูปก่อนบันทึก — เก็บละเอียดพอสำหรับจอความละเอียดสูง (มือถือ 3 เท่า · คอม Retina 2 เท่า)
+    // side = ด้านยาวสุด · px = จำนวนพิกเซลรวมสูงสุด · chars = ขนาดข้อมูลที่ส่งไปเก็บ (ฐานข้อมูลรับได้ถึง 2.5 ล้าน)
+    const HERO_LIMIT = { mobile: { side: 2400, px: 4.2e6, chars: 1400000 }, desktop: { side: 2880, px: 6.2e6, chars: 2000000 } };
+    function heroDraw(im, w, h) {
+      // ย่อทีละครึ่งก่อน แล้วค่อยย่อครั้งสุดท้าย (ย่อทีเดียวจากรูปใหญ่มาก รายละเอียดจะหายและแตกเป็นหยัก)
+      let src = im, sw = im.naturalWidth || im.width, sh = im.naturalHeight || im.height;
+      while (sw >= w * 2 && sh >= h * 2) {
+        const c = document.createElement('canvas'); c.width = Math.round(sw / 2); c.height = Math.round(sh / 2);
+        const x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high'; x.drawImage(src, 0, 0, c.width, c.height);
+        src = c; sw = c.width; sh = c.height;
+      }
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);   // รูป PNG พื้นใส → พื้นขาว (ไม่กลายเป็นดำตอนเป็น JPG)
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(src, 0, 0, w, h);
+      return cv;
+    }
     async function heroShrink(file, v) {
-      const maxW = v === 'desktop' ? 1800 : 1200, maxH = 1800;
-      const url = URL.createObjectURL(file);
+      const L = HERO_LIMIT[v] || HERO_LIMIT.mobile, url = URL.createObjectURL(file);
       try {
         const im = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
-        const s = Math.min(1, maxW / im.naturalWidth, maxH / im.naturalHeight);
-        const cv = document.createElement('canvas'); cv.width = Math.round(im.naturalWidth * s); cv.height = Math.round(im.naturalHeight * s);
-        cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
-        let q = 0.85, out = cv.toDataURL('image/webp', q);
-        const type = out.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
-        if (type === 'image/jpeg') out = cv.toDataURL(type, q);
-        while (out.length > 900000 && q > 0.45) { q -= 0.1; out = cv.toDataURL(type, q); }
+        const W0 = im.naturalWidth, H0 = im.naturalHeight;
+        let s = Math.min(1, L.side / Math.max(W0, H0), Math.sqrt(L.px / (W0 * H0))), out = '';
+        for (let tries = 0; tries < 5; tries++) {
+          const cv = heroDraw(im, Math.max(1, Math.round(W0 * s)), Math.max(1, Math.round(H0 * s)));
+          let q = 0.9; out = cv.toDataURL('image/webp', q);
+          const type = out.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';   // Safari ทำ webp ไม่ได้ → ใช้ JPG
+          if (type === 'image/jpeg') out = cv.toDataURL(type, q);
+          while (out.length > L.chars && q > 0.74) { q -= 0.05; out = cv.toDataURL(type, q); }
+          if (out.length <= L.chars) break;
+          s *= 0.85;   // ยังใหญ่เกิน: ลดขนาดลงเล็กน้อย แทนการลดคุณภาพจนภาพแตก
+        }
         return out;
       } finally { URL.revokeObjectURL(url); }
+    }
+    // ความคมของรูปบนจอจริง: 1 พิกเซลของรูปถูกขยายเป็นกี่พิกเซลจอ (มากกว่า 1 = ถูกยืด → เริ่มไม่คม)
+    function heroSharpness(v, natW, natH, c, F) {
+      const dpr = v === 'mobile' ? 3 : 2, bw = v === 'mobile' ? Math.max(F.box.w, 430) : F.box.w, bh = F.box.h;
+      const r = Math.max(bw / natW, bh / natH) * Math.max(1, heroNum(c.zoom, 1)) * dpr;
+      return { r, needW: Math.ceil(natW * r / 10) * 10, needH: Math.ceil(natH * r / 10) * 10 };
     }
     function heFrameHtml(v) {
       const F = heEd.F[v], b = F.box;
@@ -7795,6 +7826,15 @@ function renderClassroomOverview(res) {
       if (g('he-zoom')) { g('he-zoom').value = Math.round(heroNum(c.zoom, 1) * 100); g('he-zoom-v').textContent = Math.round(heroNum(c.zoom, 1) * 100) + '%'; }
       if (g('he-showq')) g('he-showq').checked = c.showQuote !== false;
       const st = heEd.state[v];
+      const ql = g('he-qual');
+      if (ql) {
+        if (img && img.naturalWidth) {
+          const k = heroSharpness(v, img.naturalWidth, img.naturalHeight, c, F), dev = v === 'mobile' ? 'มือถือ' : 'คอม';
+          const lvl = k.r <= 1.2 ? 'ok' : k.r <= 1.7 ? 'mid' : 'low';
+          ql.dataset.q = lvl;
+          ql.textContent = `รูป ${img.naturalWidth.toLocaleString()}×${img.naturalHeight.toLocaleString()} px · ` + (lvl === 'ok' ? `✓ คมชัดบน${dev}` : (lvl === 'mid' ? `พอใช้ อาจนุ่มเล็กน้อยบน${dev}จอละเอียด` : `⚠️ รูปเล็กไป ภาพจะไม่คมบน${dev}`) + ` · แนะนำรูปขนาด ${k.needW.toLocaleString()}×${k.needH.toLocaleString()} px ขึ้นไป`);
+        } else { ql.textContent = ''; ql.dataset.q = ''; }
+      }
       if (g('he-src-note')) g('he-src-note').textContent = st.reset ? 'จะใช้รูปตั้งต้นของระบบ' : (st.srcChanged ? 'รูปใหม่ (ยังไม่บันทึก)' : (heEd.custom[v] ? 'รูปที่ตั้งไว้' : 'รูปตั้งต้นของระบบ'));
       document.querySelectorAll('[data-he-tab]').forEach(t => { t.dataset.on = t.dataset.heTab === v ? '1' : '0'; t.querySelector('.he-dot').style.display = heEd.state[t.dataset.heTab].dirty ? '' : 'none'; });
       const n = ['desktop', 'mobile'].filter(k => heEd.state[k].dirty).length;
@@ -7879,7 +7919,7 @@ function renderClassroomOverview(res) {
         html: `<div class="he-head"><div><div class="he-kicker">🖼️ รูปหน้าแรก</div><div class="he-title">จัดรูปและมุมมอง</div></div><div class="he-tabs">${tab('desktop', '💻', 'คอมพิวเตอร์')}${tab('mobile', '📱', 'มือถือ')}</div></div>
           <div class="he-hint">✋ ลากรูปเพื่อเลื่อนมุม · ลากกล่องข้อความเพื่อย้าย · หมุนล้อเมาส์/ใช้แถบเพื่อซูม · ลากไฟล์รูปมาวางได้</div>
           <div class="he-frame" id="he-frame"></div>
-          <div class="he-src"><span id="he-src-note" class="he-src-note"></span></div>
+          <div class="he-src"><span id="he-src-note" class="he-src-note"></span><span id="he-qual" class="he-qual"></span></div>
           <div class="he-tools">
             <label class="he-btn he-btn-main"><input type="file" accept="image/*" id="he-file" hidden>📁 เลือกรูป</label>
             <button type="button" class="he-btn" id="he-link">🔗 ลิงก์รูป</button>
