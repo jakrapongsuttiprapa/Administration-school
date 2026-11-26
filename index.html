@@ -1976,8 +1976,64 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
 .sle-sum[data-on="1"]{color:#047857;background:#ecfdf5}
 @media (max-width:380px){.slc-n b{font-size:26px}.slc-big .slc-n b{font-size:34px}.slx-title{font-size:23px}.slx-tile b{font-size:22px}.sle-step button{width:32px;height:32px}.sle-step input{width:48px}}
 @media (min-width:768px){.slx-hero{padding:26px 28px 22px}.slx-title{font-size:30px}}
-@media (prefers-reduced-motion:reduce){.slc-in{transition:none}}
-@media print{.slc-in{transform:none!important}.slc-back{display:none}}
+.slc-face{overflow:hidden;max-height:6000px;transition:max-height 0s linear .11s}
+.slc[data-flip="0"] .slc-back,.slc[data-flip="1"] .slc-front{max-height:0}
+.sli{display:flex;flex-direction:column;gap:9px}
+.sli-sec{display:flex;flex-direction:column;gap:7px;border-radius:16px;padding:10px 11px 11px;border:1px solid}
+.sli-w{background:#fff7ed;border-color:#fed7aa;--c:#c2410c;--c2:#f97316;--ct:#ffedd5}
+.sli-p{background:#fff1f2;border-color:#fecdd3;--c:#be123c;--c2:#f43f5e;--ct:#ffe4e6}
+.sli-h{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:900;color:#374151}
+.sli-ic{font-size:15px}.sli-hl{flex:1;min-width:0}
+.sli-hn{flex:none;font-size:12.5px;font-weight:900;color:var(--c);background:#fff;border:1px solid var(--ct);border-radius:999px;padding:1px 10px}
+.sli-hn b{font-size:15px}
+.sli-list{display:flex;flex-direction:column;gap:6px}
+.sli-it{display:flex;align-items:flex-start;gap:9px;background:#fff;border-radius:12px;padding:8px 10px;box-shadow:0 3px 10px -8px rgba(0,0,0,.35);border:1px solid rgba(15,23,42,.05)}
+.sli-no{flex:none;width:22px;height:22px;margin-top:1px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--c2),var(--c));box-shadow:0 3px 8px -4px var(--c)}
+.sli-tx{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;font-size:14px;font-weight:700;color:#1f2937;line-height:1.45;overflow-wrap:anywhere}
+.sli-dt{font-size:11.5px;font-weight:800;color:var(--c);background:var(--ct);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.sli-none{font-size:13px;font-weight:600;color:#9ca3af;font-style:italic;padding:0 2px}
+.sli-zero{display:block;font-size:12.5px;font-weight:800;color:#94a3b8;background:#f8fafc;border:1px dashed #e2e8f0;border-radius:12px;padding:7px 11px}
+.sli-zero b{font-weight:900}
+.sli-memo{display:flex;flex-direction:column;gap:4px;border-radius:16px;padding:10px 12px 11px;background:linear-gradient(160deg,#f0f9ff,#fff);border:1px solid #bae6fd}
+.sli-mh{font-size:13px;font-weight:900;color:#0369a1;margin-bottom:2px}
+.sli-ml{position:relative;padding-left:15px;font-size:13.5px;font-weight:700;color:#1e293b;line-height:1.45;overflow-wrap:anywhere}
+.sli-ml::before{content:"";position:absolute;left:3px;top:.62em;width:6px;height:6px;border-radius:999px;background:#0ea5e9}
+.slc-big .sli-tx{font-size:15px}.slc-big .sli-h{font-size:14.5px}.slc-big .sli-ml{font-size:14.5px}.slc-big .sli-no{width:24px;height:24px;font-size:12.5px}
+.sle-body{gap:12px}
+.sle-sec{display:flex;flex-direction:column;gap:8px;border-radius:18px;padding:11px 11px 12px;border:1.5px solid}
+.sle-sw{background:#fff7ed;border-color:#fed7aa;color:#c2410c;--c:#c2410c;--c2:#f97316}
+.sle-sp{background:#fff1f2;border-color:#fecdd3;color:#be123c;--c:#be123c;--c2:#f43f5e}
+.sle-sm{background:#f0f9ff;border-color:#bae6fd;color:#0369a1;--c2:#0ea5e9}
+.sle-sh{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.sle-sh .sle-lab{font-size:15px}
+.sle-step{border-radius:14px}
+.sle-meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:800;margin-top:-2px}
+.sle-meta .sle-was{font-size:11.5px}
+.sle-items{display:flex;flex-direction:column;gap:7px}
+.sle-it{display:flex;align-items:flex-start;gap:8px;background:#fff;border-radius:14px;padding:8px;box-shadow:0 4px 12px -10px rgba(0,0,0,.45);border:1px solid rgba(15,23,42,.06)}
+.sle-no{flex:none;width:24px;height:24px;margin-top:8px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--c2),var(--c))}
+.sle-itb{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.sle-itx{display:block;width:100%;box-sizing:border-box;min-height:40px;border:1.5px solid #eef0f4;border-radius:11px;padding:7px 9px;font-size:16px;font-weight:700;color:#1f2937;line-height:1.4;font-family:inherit;resize:none;overflow:hidden;outline:none;background:#fff}
+.sle-itx:focus,.sle-dt:focus{border-color:var(--c2);box-shadow:0 0 0 3px color-mix(in srgb,var(--c2) 15%,transparent)}
+.sle-itd{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:#6b7280;cursor:pointer}
+.sle-dt{box-sizing:border-box;min-height:36px;border:1.5px solid #eef0f4;border-radius:10px;padding:4px 8px;font-size:15px;font-weight:700;color:#374151;font-family:inherit;background:#fff;outline:none;max-width:100%}
+.sle-dh{font-size:11.5px;font-weight:700;color:#9ca3af}
+.sle-del{flex:none;width:34px;height:34px;margin-top:3px;border:0;border-radius:11px;background:#f8fafc;color:#94a3b8;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit}
+.sle-del:hover{background:#fee2e2;color:#dc2626}
+.sle-add{border:1.5px dashed currentColor;background:rgba(255,255,255,.7);color:inherit;border-radius:13px;padding:9px 10px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;transition:background .15s}
+.sle-add:hover{background:#fff}.sle-add:disabled{opacity:.45;cursor:not-allowed}
+.sle-noitem{font-size:12.5px;font-weight:700;color:#9ca3af;text-align:center;padding:4px 6px}
+.sle-len{font-size:12px;font-weight:700;color:#94a3b8}
+.sle-memo{min-height:84px;resize:none;overflow:hidden}
+.sle-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sle-chip{border:1px solid #bae6fd;background:#fff;color:#0369a1;border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}
+.sle-chip:hover{background:#e0f2fe}
+.sle-conv{font-size:12.5px;font-weight:800;color:#6d28d9;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:14px;padding:8px 10px}
+.sle-flash{animation:sleFlash .9s ease}
+@keyframes sleFlash{0%{box-shadow:0 0 0 0 rgba(249,115,22,.55)}100%{box-shadow:0 0 0 10px rgba(249,115,22,0)}}
+@media (max-width:380px){.sle-it{padding:7px;gap:6px}.sle-del{width:30px;height:30px}.sli-it{padding:7px 8px;gap:7px}}
+@media (prefers-reduced-motion:reduce){.slc-in,.slc-face{transition:none}.sle-flash{animation:none}}
+@media print{.slc-in{transform:none!important}.slc-back{display:none}.slc-front{max-height:none!important}}
 </style>
 </head>
 <body class="text-gray-800 min-h-screen flex flex-col relative" onload="initDashboard()">
@@ -3359,6 +3415,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       callAPI('getSlipOverview', { password: currentDisciplineAuth }).then(res => {
         if (!res || res.error || !res.success) { MySwal.fire('สร้างรายงานไม่ได้', slxErr(res, 'สร้างรายงานไม่สำเร็จ'), 'error'); return; }
         res.generated = isoLocal(new Date());
+        (res.rows || []).forEach(r => { r.view = slipView(r); });   // เรื่องที่โดนเป็นข้อๆ (รวมข้อความแบบเก่า)
         const n = (res.rows || []).filter(r => (+r.warn || 0) + (+r.prob || 0) > 0).length;
         return loadDocx().then(B => presentDocx(B.buildSlipDoc(res), `สรุปใบตักเตือน-ทัณฑ์บน_ปีการศึกษา${res.ay}`,
           `<p class="text-sm text-gray-500">ปีการศึกษา ${escHtml(res.ay)} · นักเรียนที่ได้รับใบ ${n} คน</p>`));
@@ -4682,6 +4739,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         var W = 0, P = 0, wn = 0, pn = 0, both = 0;
         rows.forEach(function (r) { W += n0(r.warn); P += n0(r.prob); if (n0(r.warn)) wn++; if (n0(r.prob)) pn++; if (n0(r.warn) && n0(r.prob)) both++; });
         function nm(r) { return r.name + (r.onRoster === false ? ' *' : ''); }
+        function V(r) { return r.view || { wi: r.warnNote ? [{ t: r.warnNote, d: '' }] : [], pi: r.probNote ? [{ t: r.probNote, d: '' }] : [], memo: [] }; }
+        function itemsText(list) { return list.map(function (it, i) { return (i + 1) + ') ' + it.t + (it.d ? ' (' + thD(it.d).replace(/ (\d{4})$/, function (m, y) { return ' ' + y.slice(-2); }) + ')' : ''); }).join('\n'); }
         var kids = [
           para('รายงานสรุปการบันทึกใบตักเตือนและใบทัณฑ์บน', { bold: true, align: C, after: 0 }),
           para('ปีการศึกษา ' + d.ay, { bold: true, align: C, after: 0 }),
@@ -4711,7 +4770,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         if (!probs.length) kids.push(none('ไม่มีนักเรียนที่ได้รับใบทัณฑ์บน'));
         else {
           var pr = [['ที่', 'ชื่อ-สกุล', 'ชั้น', 'ทัณฑ์บน (ใบ)', 'ตักเตือน (ใบ)', 'เรื่องที่ทำทัณฑ์บน']];
-          probs.forEach(function (r, i) { pr.push([String(i + 1), nm(r), r.className, String(n0(r.prob)), String(n0(r.warn)), r.probNote || '-']); });
+          probs.forEach(function (r, i) { pr.push([String(i + 1), nm(r), r.className, String(n0(r.prob)), String(n0(r.warn)), itemsText(V(r).pi) || '-']); });
           kids.push(table(pr, [600, 2900, 900, 1300, 1300, 2400], { header: true, center: [0, 2, 3, 4] }));
         }
 
@@ -4725,9 +4784,10 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
             kids.push(sub('ห้อง ' + c.cls + '   ได้รับใบ ' + list.length + ' คน · ตักเตือน ' + w + ' ใบ · ทัณฑ์บน ' + p + ' ใบ'));
             var lr = [['ที่', 'ชื่อ-สกุล', 'ตักเตือน', 'ทัณฑ์บน', 'เรื่องที่โดน']];
             list.forEach(function (r, i) {
-              var why = [];
-              if (n0(r.warn) && r.warnNote) why.push('ตักเตือน: ' + r.warnNote);
-              if (n0(r.prob) && r.probNote) why.push('ทัณฑ์บน: ' + r.probNote);
+              var why = [], v = V(r);
+              if (v.wi.length) why.push('ตักเตือน:\n' + itemsText(v.wi));
+              if (v.pi.length) why.push('ทัณฑ์บน:\n' + itemsText(v.pi));
+              if (v.memo.length) why.push('บันทึกเพิ่มเติม: ' + v.memo.join(' / '));
               lr.push([String(i + 1), nm(r), n0(r.warn) ? String(n0(r.warn)) : '-', n0(r.prob) ? String(n0(r.prob)) : '-', why.join('\n') || '-']);
             });
             kids.push(table(lr, [600, 3000, 1300, 1300, 3200], { header: true, center: [0, 2, 3] }));
@@ -5005,22 +5065,71 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     function slxErr(res, fallback) { const m = (res && (res.message || res.error)) || ''; return /ไม่รู้จัก action/.test(m) ? SLX_PATCH_MSG : (m || fallback || 'โหลดข้อมูลไม่สำเร็จ'); }
     const slx = { mode: 'teacher', cls: '', ay: null, rows: [], classes: [], filter: 'all', q: '', err: '' };
     const slxNorm = (t) => String(t == null ? '' : t).replace(/[\r\n\t]+/g, ' ').trim();
+    const SLX_PATCH14_MSG = 'ต้องอัปเดตฐานข้อมูลก่อน: กรุณารันไฟล์ supabase-patch14.sql ใน Supabase แล้วลองใหม่ (เพื่อบันทึกเรื่องที่โดนเป็นข้อๆ และบันทึกเพิ่มเติม)';
+
+    // ---------- เรื่องที่โดน "เป็นข้อๆ" (แพตช์ 14) ----------
+    // ข้อความแบบเก่า (ช่องเดียว) เช่น "1. มาสาย 1 กันยายน 2569 2. ขาดเรียน **พบผู้ปกครองแล้ว" → แยกเป็นข้อ + วันที่ + บันทึกเพิ่มเติม
+    const SL_MON = THMONTHS_CAL.concat(TH_MON_SHORT);
+    const SL_DATE_RX = new RegExp('\\s*\\(?\\s*(?:วันที่|เมื่อ|ณ)?\\s*(\\d{1,2})\\s*(' + SL_MON.map(m => m.replace(/\./g, '\\.')).join('|') + ')\\s*(?:พ\\.ศ\\.\\s*)?(\\d{4}|\\d{2})\\s*\\)?\\s*$');
+    const SL_DMY_RX = /\s*\(?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*\)?\s*$/;
+    function slYear(y) { y = +y; if (y < 100) y += 2500; return y > 2400 ? y - 543 : y; }
+    function slIso(y, m, d) { const dt = new Date(y, m - 1, d); return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d ? isoLocal(dt) : ''; }
+    function slipSplitDate(t) {
+      let m = SL_DATE_RX.exec(t), iso = '';
+      if (m) iso = slIso(slYear(m[3]), SL_MON.indexOf(m[2]) % 12 + 1, +m[1]);
+      else if ((m = SL_DMY_RX.exec(t))) iso = slIso(slYear(m[3]), +m[2], +m[1]);
+      if (!iso || iso > isoLocal(new Date())) return { t: t, d: '' };   // วันที่ในอนาคต = น่าจะไม่ใช่วันที่โดน คงไว้ในข้อความ
+      const rest = t.slice(0, m.index).replace(/[\s,·:\-–]+$/, '').trim();
+      return rest ? { t: rest, d: iso } : { t: t, d: '' };
+    }
+    function slipParseLegacy(text) {
+      let s = String(text == null ? '' : text).replace(/\r\n?/g, '\n').trim();
+      const items = [], memo = [];
+      if (!s) return { items, memo };
+      s = s.replace(/\*{2,}\s*([^*]+?)\s*(?:\*{2,}|$)/g, (m, x) => { if (x.trim()) memo.push(x.replace(/\s+/g, ' ').trim()); return '\n'; });
+      s = s.replace(/(?:^|\n|\s)หมายเหตุ\s*[:：]\s*([^\n]+)/g, (m, x) => { memo.push(x.trim()); return '\n'; });
+      s.split(/\n+|(?:^|\s)\d{1,2}[.)]\s+|(?:^|\n)\s*[•·\-–]\s+/).forEach(part => {
+        const t = String(part || '').replace(/\s+/g, ' ').trim().replace(/^[•·\-–]\s*/, '');
+        if (t) items.push(slipSplitDate(t));
+      });
+      return { items: items.slice(0, 30).map(x => ({ t: x.t.slice(0, 200), d: x.d })), memo };
+    }
+    // รวมแบบใหม่ (warnItems/probItems/memo) กับข้อความแบบเก่า → ใช้แสดงผลทุกที่
+    function slipView(s) {
+      s = s || {};
+      const arr = (a) => (Array.isArray(a) ? a : []).map(x => typeof x === 'string' ? { t: x, d: '' } : { t: String((x && x.t) || ''), d: String((x && x.d) || '') }).filter(x => x.t.trim());
+      const lw = slipParseLegacy(s.warnNote), lp = slipParseLegacy(s.probNote), memoRaw = String(s.memo || '').replace(/\r/g, '').trim();
+      const memoText = [memoRaw].concat(lw.memo, lp.memo).filter(Boolean).join('\n');
+      return { wi: arr(s.warnItems).concat(lw.items), pi: arr(s.probItems).concat(lp.items), memoText,
+               memo: memoText.split('\n').map(x => x.trim()).filter(Boolean),
+               legacy: !!(String(s.warnNote || '').trim() || String(s.probNote || '').trim()) };
+    }
+    // ด้านหลังการ์ด: เป็นข้อๆ + วันที่ + บันทึกเพิ่มเติม
+    function slipDetailHtml(s, v) {
+      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0;
+      const sec = (k, ico, label, n, items) => {
+        if (!n && !items.length) return `<span class="sli-zero"><span aria-hidden="true">${ico}</span> ${label} <b>0</b> ใบ · ไม่มี</span>`;
+        const list = items.length
+          ? `<span class="sli-list">${items.map((it, i) => `<span class="sli-it"><span class="sli-no" aria-hidden="true">${i + 1}</span><span class="sli-tx"><span>${esc(it.t)}</span>${it.d ? `<span class="sli-dt">📅 ${esc(thDateShort(it.d))}</span>` : ''}</span></span>`).join('')}</span>`
+          : '<span class="sli-none">ยังไม่ได้ระบุเรื่องที่โดน</span>';
+        return `<span class="sli-sec sli-${k}"><span class="sli-h"><span class="sli-ic" aria-hidden="true">${ico}</span><span class="sli-hl">${label}</span><span class="sli-hn"><b class="tabular">${n}</b> ใบ</span></span>${list}</span>`;
+      };
+      const memo = v.memo.length ? `<span class="sli-memo"><span class="sli-mh"><span aria-hidden="true">📝</span> บันทึกเพิ่มเติม</span>${v.memo.map(l => `<span class="sli-ml">${esc(l)}</span>`).join('')}</span>` : '';
+      return `<span class="sli">${sec('w', '📄', 'ใบตักเตือน', w, v.wi)}${sec('p', '📜', 'ใบทัณฑ์บน', p, v.pi)}${memo}</span>`;
+    }
 
     // ---------- การ์ดพลิก (ใช้ร่วมกันทุกหน้า) ----------
     function slipBigHtml(s, o) {
-      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, any = w > 0 || p > 0 || !!s.warnNote || !!s.probNote;
+      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, v = slipView(s), nIt = v.wi.length + v.pi.length, any = w > 0 || p > 0 || nIt > 0 || v.memo.length > 0;
       const tone = p > 0 ? 'p' : w > 0 ? 'w' : 'ok';
       const badge = p > 0 ? '🚨 มีใบทัณฑ์บน' : w > 0 ? '⚠️ มีใบตักเตือน' : '🌟 ไม่มีใบ';
-      const note = (t) => t ? esc(t) : '<span class="slc-none">ไม่ได้ระบุ</span>';
       const head = (title, right) => `<span class="slb-head"><span class="slb-ico" aria-hidden="true">📜</span><span class="slb-ht"><b>${title}</b><small>ปีการศึกษา ${esc(o.ay || currentAY)}${s.onRoster === false ? ' · ไม่อยู่ในรายชื่อปัจจุบัน' : ''}</small></span>${right}</span>`;
       const tile = (k, n, ico, label) => `<span class="slb-tile slb-t${k}${n ? '' : ' slb-zero'}"><span class="slb-ti" aria-hidden="true">${ico}</span><b class="tabular">${n}</b><small>${label}</small></span>`;
       const front = `<span class="slc-face slc-front">${head('ใบตักเตือน / ใบทัณฑ์บน', `<span class="slb-badge">${badge}</span>`)}
           <span class="slb-body"><span class="slb-tiles">${tile('w', w, '📄', 'ใบตักเตือน')}${tile('p', p, '📜', 'ใบทัณฑ์บน')}</span>
-          <span class="slb-cta"><span aria-hidden="true">↻</span> ${any ? 'แตะเพื่อดูว่าโดนเรื่องอะไร' : 'แตะเพื่อดูรายละเอียด'}</span></span></span>`;
+          <span class="slb-cta"><span aria-hidden="true">↻</span> ${nIt ? `แตะเพื่อดู ${nIt} เรื่องที่โดน` : any ? 'แตะเพื่อดูรายละเอียด' : 'แตะเพื่อดูรายละเอียด'}</span></span></span>`;
       const back = `<span class="slc-face slc-back" aria-hidden="true">${head('โดนเรื่องอะไร', '<span class="slb-badge">↺ พลิกกลับ</span>')}
-          <span class="slb-body">${any ? `<span class="slb-rows">
-            <span class="slb-row slb-rw"><span class="slb-rt"><span aria-hidden="true">📄</span> ใบตักเตือน <b>${w}</b> ใบ</span><span class="slb-rd">${w || s.warnNote ? note(s.warnNote) : '–'}</span></span>
-            <span class="slb-row slb-rp"><span class="slb-rt"><span aria-hidden="true">📜</span> ใบทัณฑ์บน <b>${p}</b> ใบ</span><span class="slb-rd">${p || s.probNote ? note(s.probNote) : '–'}</span></span></span>`
+          <span class="slb-body">${any ? slipDetailHtml(s, v)
             : '<span class="slc-clean">🌟 ยังไม่มีใบตักเตือนหรือใบทัณฑ์บนในปีการศึกษานี้<br>รักษาไว้นะ!</span>'}
             <span class="slc-upd">${s.updatedAt ? 'อัปเดต ' + esc(thDateTime(s.updatedAt)) : ''}</span></span></span>`;
       return `<div class="slc slc-${tone} slc-big" data-flip="0" data-n="${esc(s.name)}" data-c="${esc(s.className)}">
@@ -5031,18 +5140,16 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
     function slipCardHtml(s, o) {
       o = o || {};
       if (o.big) return slipBigHtml(s, o);
-      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, any = w > 0 || p > 0 || !!s.warnNote || !!s.probNote;
+      const esc = escHtml, w = +s.warn || 0, p = +s.prob || 0, v = slipView(s), nIt = v.wi.length + v.pi.length, any = w > 0 || p > 0 || nIt > 0 || v.memo.length > 0;
       const tone = p > 0 ? 'p' : w > 0 ? 'w' : 'ok';
-      const note = (t) => t ? esc(t) : '<span class="slc-none">ไม่ได้ระบุ</span>';
       const cap = o.big ? `<span class="slc-cap"><span>📜 ใบตักเตือน / ทัณฑ์บน</span><span>ปีการศึกษา ${esc(o.ay || currentAY)}</span></span>` : '';
       const front = `<span class="slc-face slc-front">${cap}
           <span class="slc-top"><span class="slc-av" aria-hidden="true">${esc(nameInitial(s.name))}</span><span class="slc-id"><b>${esc(s.name)}</b><small>${esc(s.className)}${s.onRoster === false ? ' · <em>ไม่อยู่ในรายชื่อปัจจุบัน</em>' : ''}</small></span><span class="slc-turn" aria-hidden="true">↻</span></span>
           <span class="slc-nums"><span class="slc-n slc-nw${w ? '' : ' slc-zero'}"><b class="tabular">${w}</b><small>ใบตักเตือน</small></span><span class="slc-n slc-np${p ? '' : ' slc-zero'}"><b class="tabular">${p}</b><small>ใบทัณฑ์บน</small></span></span>
-          <span class="slc-hint">${any ? 'แตะเพื่อดูว่าโดนเรื่องอะไร' : 'ยังไม่มีใบ · แตะเพื่อดูรายละเอียด'}</span></span>`;
+          <span class="slc-hint">${nIt ? `แตะเพื่อดู ${nIt} เรื่องที่โดน` : any ? 'แตะเพื่อดูรายละเอียด' : 'ยังไม่มีใบ · แตะเพื่อดูรายละเอียด'}</span></span>`;
       const back = `<span class="slc-face slc-back" aria-hidden="true">
           <span class="slc-bh"><b>รายละเอียด</b><span class="slc-bn">${esc(s.name)}</span><span class="slc-turn" aria-hidden="true">↺</span></span>
-          ${any ? `<span class="slc-row slc-rw"><span class="slc-rt">📄 ใบตักเตือน ${w} ใบ</span><span class="slc-rd">${w || s.warnNote ? 'โดน: ' + note(s.warnNote) : '–'}</span></span>
-          <span class="slc-row slc-rp"><span class="slc-rt">📜 ใบทัณฑ์บน ${p} ใบ</span><span class="slc-rd">${p || s.probNote ? 'โดน: ' + note(s.probNote) : '–'}</span></span>`
+          ${any ? slipDetailHtml(s, v)
           : '<span class="slc-clean">🌟 ยังไม่มีใบตักเตือนหรือใบทัณฑ์บนในปีการศึกษานี้<br>รักษาไว้นะ!</span>'}
           <span class="slc-upd">${s.updatedAt ? 'อัปเดต ' + esc(thDateTime(s.updatedAt)) : ''}</span></span>`;
       return `<div class="slc slc-${tone}${o.big ? ' slc-big' : ''}" data-flip="0" data-n="${esc(s.name)}" data-c="${esc(s.className)}">
@@ -5278,67 +5385,143 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
       try { res = await callAPI('getSlipEdit', { password: currentDisciplineAuth, name, className: cls }); } catch (e) { res = null; }
       slxEditBusy = false;
       if (!res || !res.success) { MySwal.fire('ผิดพลาด', slxErr(res, 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง'), 'error'); return; }
+      if (!res.slip || !(+res.slip.v >= 2)) { MySwal.fire('ต้องอัปเดตฐานข้อมูล', SLX_PATCH14_MSG, 'info'); return; }
       return slxEditor(res.slip, res.ay);
     }
     async function slxEditor(s, ay) {
-      const esc = escHtml;
+      const esc = escHtml, MAXI = 30, MAXM = 1000, today = isoLocal(new Date());
       let known = s.updatedAt == null ? '' : String(s.updatedAt);
-      let orig = { w: String(+s.warn || 0), p: String(+s.prob || 0), wn: slxNorm(s.warnNote), pn: slxNorm(s.probNote) };
+      const copy = (a) => a.map(i => ({ t: i.t, d: i.d }));
+      const take = (x) => { const v = slipView(x); return { w: String(+x.warn || 0), p: String(+x.prob || 0), wi: copy(v.wi), pi: copy(v.pi), memo: v.memoText, legacy: v.legacy }; };
+      let orig = take(s);
+      const st = { wi: copy(orig.wi), pi: copy(orig.pi) };
+      const clean = (a) => a.map(i => ({ t: String(i.t || '').replace(/\s+/g, ' ').trim(), d: i.d || '' })).filter(i => i.t);
+      const memoNorm = (m) => String(m || '').replace(/\r/g, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+      const same = (a, b) => JSON.stringify(clean(a)) === JSON.stringify(clean(b));
       const hasAuto = s.warnAuto != null && s.probAuto != null;
-      const html = edHero('📝', esc(s.name), `${esc(s.className)} · ปีการศึกษา ${esc(ay || currentAY)}`) + `<div class="ed-body">
-          ${s.onRoster === false ? '<div class="sle-warn">⚠️ ชื่อนี้ไม่อยู่ในรายชื่อนักเรียนปัจจุบันแล้ว (อาจย้ายห้องหรือแก้ชื่อ) ล้างให้เป็น 0 ได้อย่างเดียว</div>' : ''}
+      const PH = { w: 'เช่น มาสายบ่อยโดยไม่มีเหตุผลอันสมควร', p: 'เช่น ทะเลาะวิวาทในโรงเรียน' }, LB = { w: 'ใบตักเตือน', p: 'ใบทัณฑ์บน' };
+      const MINUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M5.5 12h13"/></svg>';
+      const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg>';
+      const sec = (k, ico) => `<div class="sle-sec sle-s${k}">
+          <div class="sle-sh"><span class="sle-lab">${ico} ${LB[k]}</span>
+            <div class="sle-step" id="sle-${k}-step"><button type="button" data-k="${k}" data-d="-1" aria-label="ลด${LB[k]}">${MINUS}</button><input id="sle-${k}" type="text" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="จำนวน${LB[k]}" value="${orig[k]}"><button type="button" data-k="${k}" data-d="1" aria-label="เพิ่ม${LB[k]}">${PLUS}</button></div></div>
+          <div class="sle-meta"><span>เรื่องที่โดน <b id="sle-${k}-n">0</b> ข้อ</span><span class="sle-was" id="sle-${k}-was">เดิม ${orig[k]} ใบ</span></div>
+          <div class="sle-items" id="sle-${k}i"></div>
+          <button type="button" class="sle-add" data-add="${k}">＋ เพิ่มเรื่องที่โดน</button>
+        </div>`;
+      const html = edHero('📝', esc(s.name), `${esc(s.className)} · ปีการศึกษา ${esc(ay || currentAY)}`) + `<div class="ed-body sle-body">
+          ${s.onRoster === false ? '<div class="sle-warn">⚠️ ชื่อนี้ไม่อยู่ในรายชื่อนักเรียนปัจจุบันแล้ว (อาจย้ายห้องหรือแก้ชื่อ) ล้างข้อมูลได้อย่างเดียว</div>' : ''}
+          ${orig.legacy ? '<div class="sle-conv">✨ แยกข้อความเดิมเป็นข้อๆ ให้แล้ว ตรวจดูความถูกต้อง แล้วกด “บันทึก”</div>' : ''}
           ${hasAuto ? `<div class="sle-ref"><span>📚 ระบบบันทึกพฤติกรรมออกให้ปีนี้: ตักเตือน <b>${+s.warnAuto}</b> · ทัณฑ์บน <b>${+s.probAuto}</b></span>${(+s.warnAuto || +s.probAuto) ? '<button type="button" id="sle-use">ใช้ตัวเลขนี้</button>' : ''}</div>` : ''}
-          <div class="sle-grid">
-            <div class="sle-box sle-bw"><span class="sle-lab">📄 ใบตักเตือน</span><div class="sle-step"><button type="button" data-k="w" data-d="-1" aria-label="ลดใบตักเตือน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M5.5 12h13"/></svg></button><input id="sle-w" type="text" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="จำนวนใบตักเตือน" value="${orig.w}"><button type="button" data-k="w" data-d="1" aria-label="เพิ่มใบตักเตือน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg></button></div><span class="sle-was">เดิม ${orig.w} ใบ</span></div>
-            <div class="sle-box sle-bp"><span class="sle-lab">📜 ใบทัณฑ์บน</span><div class="sle-step"><button type="button" data-k="p" data-d="-1" aria-label="ลดใบทัณฑ์บน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M5.5 12h13"/></svg></button><input id="sle-p" type="text" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="จำนวนใบทัณฑ์บน" value="${orig.p}"><button type="button" data-k="p" data-d="1" aria-label="เพิ่มใบทัณฑ์บน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg></button></div><span class="sle-was">เดิม ${orig.p} ใบ</span></div>
+          ${sec('w', '📄')}
+          ${sec('p', '📜')}
+          <div class="sle-sec sle-sm">
+            <div class="sle-sh"><span class="sle-lab">📝 บันทึกเพิ่มเติม</span><span id="sle-m-len" class="sle-len">0/${MAXM}</span></div>
+            <textarea id="sle-memo" rows="3" maxlength="${MAXM}" class="ed-in sle-ta sle-memo" placeholder="เช่น พบผู้ปกครองแล้ว 1 ครั้ง&#10;(ขึ้นบรรทัดใหม่ = อีกข้อ)">${esc(orig.memo)}</textarea>
+            <div class="sle-chips">${['พบผู้ปกครองแล้ว', 'โทรแจ้งผู้ปกครองแล้ว', 'ส่งต่อครูแนะแนว'].map(t => `<button type="button" class="sle-chip" data-chip="${t}">＋ ${t}</button>`).join('')}</div>
           </div>
-          <label class="ed-f"><span class="ed-l flex justify-between"><span>📄 โดนเรื่องอะไร (ใบตักเตือน)</span><span id="sle-wn-len" class="font-semibold text-gray-400">0/300</span></span><textarea id="sle-wn" maxlength="300" rows="2" class="ed-in sle-ta" placeholder="เช่น มาสาย 3 ครั้ง · ผมยาวผิดระเบียบ">${esc(orig.wn)}</textarea></label>
-          <label class="ed-f"><span class="ed-l flex justify-between"><span>📜 โดนเรื่องอะไร (ใบทัณฑ์บน)</span><span id="sle-pn-len" class="font-semibold text-gray-400">0/300</span></span><textarea id="sle-pn" maxlength="300" rows="2" class="ed-in sle-ta" placeholder="เช่น ทะเลาะวิวาท · หนีเรียนซ้ำ">${esc(orig.pn)}</textarea></label>
           <div id="sle-sum" class="sle-sum" data-on="0">ยังไม่ได้เปลี่ยนอะไร</div>
-          <div class="pw-note" style="margin-top:0">นักเรียนและครูจะเห็นตัวเลขและข้อความนี้ · ตั้งเป็น 0 ทั้งคู่และลบข้อความ = ล้างข้อมูลของคนนี้ · ทุกครั้งที่แก้ ระบบเก็บประวัติไว้</div>
+          <div class="pw-note" style="margin-top:0">นักเรียนและครูจะเห็นจำนวนใบ เรื่องที่โดน และบันทึกเพิ่มเติม · ตั้งเป็น 0 และลบทุกข้อ = ล้างข้อมูลของคนนี้ · ทุกครั้งที่แก้ ระบบเก็บประวัติไว้</div>
         </div>`;
       const g = (id) => document.getElementById(id);
-      const read = () => ({ w: (g('sle-w') || {}).value || '', p: (g('sle-p') || {}).value || '', wn: slxNorm((g('sle-wn') || {}).value), pn: slxNorm((g('sle-pn') || {}).value) });
+      const read = () => ({ w: (g('sle-w') || {}).value || '', p: (g('sle-p') || {}).value || '', wi: st.wi, pi: st.pi, memo: (g('sle-memo') || {}).value || '' });
+      const grow = (t) => { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; };
+      const flash = (el) => { if (!el) return; el.classList.remove('sle-flash'); void el.offsetWidth; el.classList.add('sle-flash'); };
       const paint = () => {
         const v = read(), ch = [];
         if (String(+v.w) !== orig.w || v.w === '') ch.push(`ตักเตือน ${orig.w} → ${v.w === '' ? '?' : +v.w}`);
         if (String(+v.p) !== orig.p || v.p === '') ch.push(`ทัณฑ์บน ${orig.p} → ${v.p === '' ? '?' : +v.p}`);
-        if (v.wn !== orig.wn || v.pn !== orig.pn) ch.push('แก้เรื่องที่โดน');
+        if (!same(v.wi, orig.wi) || !same(v.pi, orig.pi)) ch.push('แก้เรื่องที่โดน');
+        if (memoNorm(v.memo) !== memoNorm(orig.memo)) ch.push('แก้บันทึกเพิ่มเติม');
+        if (!ch.length && orig.legacy) ch.push('จัดข้อความเดิมเป็นข้อๆ');
         const box = g('sle-sum'); if (box) { box.dataset.on = ch.length ? '1' : '0'; box.textContent = ch.length ? '✓ ' + ch.join(' · ') : 'ยังไม่ได้เปลี่ยนอะไร'; }
-        const wl = g('sle-wn-len'), pl = g('sle-pn-len');
-        if (wl) wl.textContent = ((g('sle-wn') || {}).value || '').length + '/300';
-        if (pl) pl.textContent = ((g('sle-pn') || {}).value || '').length + '/300';
+        const ml = g('sle-m-len'); if (ml) ml.textContent = v.memo.length + '/' + MAXM;
+        ['w', 'p'].forEach(k => { const n = g('sle-' + k + '-n'); if (n) n.textContent = clean(st[k + 'i']).length; });
       };
-      const setVals = (x) => {
-        g('sle-w').value = String(+x.warn || 0); g('sle-p').value = String(+x.prob || 0);
-        g('sle-wn').value = slxNorm(x.warnNote); g('sle-pn').value = slxNorm(x.probNote);
+      const itemRow = (k, it, i) => `<div class="sle-it" data-i="${i}">
+          <span class="sle-no" aria-hidden="true">${i + 1}</span>
+          <div class="sle-itb">
+            <textarea class="sle-itx" rows="1" maxlength="200" aria-label="${LB[k]} ข้อ ${i + 1}" placeholder="${PH[k]}">${esc(it.t)}</textarea>
+            <label class="sle-itd"><span aria-hidden="true">📅</span><input type="date" class="sle-dt" value="${esc(it.d)}" max="${today}" aria-label="วันที่ ${LB[k]} ข้อ ${i + 1}"><span class="sle-dh">${it.d ? esc(thDateShort(it.d)) : 'ไม่ระบุวันที่'}</span></label>
+          </div>
+          <button type="button" class="sle-del" aria-label="ลบ${LB[k]} ข้อ ${i + 1}">✕</button>
+        </div>`;
+      const renderItems = (k, focusIdx) => {
+        const box = g('sle-' + k + 'i'); if (!box) return;
+        const arr = st[k + 'i'];
+        box.innerHTML = arr.length ? arr.map((it, i) => itemRow(k, it, i)).join('') : '<div class="sle-noitem">ยังไม่มีข้อ · กด “เพิ่มเรื่องที่โดน” ด้านล่าง</div>';
+        box.querySelectorAll('.sle-itx').forEach(grow);
+        const add = document.querySelector(`.sle-add[data-add="${k}"]`); if (add) add.disabled = arr.length >= MAXI;
+        if (focusIdx != null) { const t = box.querySelectorAll('.sle-itx')[focusIdx]; if (t) { t.focus(); try { t.scrollIntoView({ block: 'nearest' }); } catch (e) {} } }
         paint();
       };
+      const setAll = (x) => {
+        g('sle-w').value = x.w; g('sle-p').value = x.p; g('sle-memo').value = x.memo;
+        st.wi = copy(x.wi); st.pi = copy(x.pi); renderItems('w'); renderItems('p');
+        g('sle-w-was').textContent = 'เดิม ' + x.w + ' ใบ'; g('sle-p-was').textContent = 'เดิม ' + x.p + ' ใบ';
+        grow(g('sle-memo')); paint();
+      };
       const r = await edFire('slip', {
-        html, confirmButtonText: '💾 บันทึก',
+        html, confirmButtonText: '💾 บันทึก', customClass: { popup: 'pw-pop pk-pop ed-pop sle-pop', htmlContainer: 'pw-pop-html', actions: 'pw-actions', confirmButton: 'pw-confirm', cancelButton: 'pw-cancel', validationMessage: 'pw-valid' },
         didOpen: (el) => {
           const root = el || document;
           root.querySelectorAll('.sle-step button').forEach(b => b.addEventListener('click', () => {
-            const inp = g(b.dataset.k === 'w' ? 'sle-w' : 'sle-p');
+            const inp = g('sle-' + b.dataset.k);
             inp.value = String(Math.max(0, Math.min(99, (parseInt(inp.value, 10) || 0) + (+b.dataset.d)))); paint();
           }));
           ['sle-w', 'sle-p'].forEach(id => { const inp = g(id); inp.addEventListener('input', () => { const d = inp.value.replace(/\D+/g, '').slice(0, 2); if (d !== inp.value) inp.value = d; paint(); }); inp.addEventListener('focus', () => { try { inp.select(); } catch (e) {} }); });
-          ['sle-wn', 'sle-pn'].forEach(id => g(id).addEventListener('input', paint));
+          ['w', 'p'].forEach(k => {
+            const box = g('sle-' + k + 'i'), arr = () => st[k + 'i'];
+            box.addEventListener('input', (e) => {
+              const row = e.target.closest('.sle-it'); if (!row) return;
+              const it = arr()[+row.dataset.i]; if (!it) return;
+              if (e.target.classList.contains('sle-itx')) { it.t = e.target.value; grow(e.target); }
+              else if (e.target.classList.contains('sle-dt')) { it.d = e.target.value || ''; const h = row.querySelector('.sle-dh'); if (h) h.textContent = it.d ? thDateShort(it.d) : 'ไม่ระบุวันที่'; }
+              paint();
+            });
+            box.addEventListener('change', (e) => {
+              if (!e.target.classList.contains('sle-dt')) return;
+              const row = e.target.closest('.sle-it'), it = row && arr()[+row.dataset.i]; if (!it) return;
+              it.d = e.target.value || ''; const h = row.querySelector('.sle-dh'); if (h) h.textContent = it.d ? thDateShort(it.d) : 'ไม่ระบุวันที่'; paint();
+            });
+            box.addEventListener('click', (e) => {
+              const del = e.target.closest('.sle-del'); if (!del) return;
+              const row = del.closest('.sle-it'); arr().splice(+row.dataset.i, 1); renderItems(k);
+            });
+            root.querySelector(`.sle-add[data-add="${k}"]`).addEventListener('click', () => {
+              if (arr().length >= MAXI) return;
+              arr().push({ t: '', d: today });
+              const inp = g('sle-' + k);
+              if (arr().length > (parseInt(inp.value, 10) || 0)) { inp.value = String(Math.min(99, arr().length)); flash(g('sle-' + k + '-step')); }   // เพิ่มเรื่องใหม่ = ได้ใบเพิ่ม 1 ใบ
+              renderItems(k, arr().length - 1);
+            });
+            renderItems(k);
+          });
+          const memo = g('sle-memo');
+          memo.addEventListener('input', () => { grow(memo); paint(); });
+          root.querySelectorAll('.sle-chip').forEach(b => b.addEventListener('click', () => {
+            const line = b.dataset.chip + ' (' + thDateShort(today) + ')', cur = memo.value.replace(/\s+$/, '');
+            if ((cur + '\n' + line).length > MAXM) return;
+            memo.value = cur ? cur + '\n' + line : line; grow(memo); flash(memo); paint();
+          }));
           const use = g('sle-use'); if (use) use.addEventListener('click', () => { g('sle-w').value = String(+s.warnAuto || 0); g('sle-p').value = String(+s.probAuto || 0); paint(); });
-          paint();
+          grow(memo); paint();
         },
         preConfirm: () => {
           const v = read();
           if (!/^\d{1,2}$/.test(v.w) || !/^\d{1,2}$/.test(v.p)) { Swal.showValidationMessage('จำนวนใบต้องเป็นตัวเลข 0–99'); return false; }
-          if (String(+v.w) === orig.w && String(+v.p) === orig.p && v.wn === orig.wn && v.pn === orig.pn) { Swal.showValidationMessage('ยังไม่ได้เปลี่ยนอะไร'); return false; }
-          return callAPI('saveSlip', { password: currentDisciplineAuth, name: s.name, className: s.className, warn: +v.w, prob: +v.p, warnNote: v.wn, probNote: v.pn, known }).then(res => {
+          const wi = clean(v.wi), pi = clean(v.pi), memo = memoNorm(v.memo);
+          const all = wi.map((x, i) => [LB.w, i, x]).concat(pi.map((x, i) => [LB.p, i, x]));
+          const bad = all.find(([, , x]) => x.t.length > 200 || (x.d && (x.d > today || x.d < '2000-01-01')));
+          if (bad) { Swal.showValidationMessage(`${bad[0]} ข้อ ${bad[1] + 1}: ${bad[2].t.length > 200 ? 'ยาวเกิน 200 ตัวอักษร' : 'วันที่ไม่ถูกต้อง'}`); return false; }
+          if (memo.length > MAXM) { Swal.showValidationMessage('บันทึกเพิ่มเติมยาวเกิน 1,000 ตัวอักษร'); return false; }
+          if (String(+v.w) === orig.w && String(+v.p) === orig.p && same(wi, orig.wi) && same(pi, orig.pi) && memo === memoNorm(orig.memo) && !orig.legacy) { Swal.showValidationMessage('ยังไม่ได้เปลี่ยนอะไร'); return false; }
+          return callAPI('saveSlip', { password: currentDisciplineAuth, name: s.name, className: s.className, warn: +v.w, prob: +v.p, warnItems: wi, probItems: pi, memo, known }).then(res => {
             if (res && res.success) return res;
-            if (res && res.conflict && res.slip) {   // อีกเครื่องเพิ่งแก้: โชว์ตัวเลขล่าสุดให้ดูก่อน แล้วค่อยแก้ทับ
+            if (res && res.conflict && res.slip) {   // อีกเครื่องเพิ่งแก้: โชว์ข้อมูลล่าสุดให้ดูก่อน แล้วค่อยแก้ทับ
               known = res.slip.updatedAt == null ? '' : String(res.slip.updatedAt);
-              orig = { w: String(+res.slip.warn || 0), p: String(+res.slip.prob || 0), wn: slxNorm(res.slip.warnNote), pn: slxNorm(res.slip.probNote) };
-              document.querySelectorAll('.sle-was').forEach((e, i) => { e.textContent = 'เดิม ' + (i ? orig.p : orig.w) + ' ใบ'; });
-              setVals(res.slip);
-              Swal.showValidationMessage(res.message + ' (ตอนนี้แสดงตัวเลขล่าสุดแล้ว)');
+              orig = take(res.slip); setAll(orig);
+              Swal.showValidationMessage(res.message + ' (ตอนนี้แสดงข้อมูลล่าสุดแล้ว)');
               return false;
             }
             Swal.showValidationMessage(slxErr(res, 'บันทึกไม่สำเร็จ')); return false;
@@ -5346,7 +5529,7 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         }
       });
       if (r && r.isConfirmed && r.value) {
-        MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: r.value.unchanged ? 'ไม่มีอะไรเปลี่ยน' : 'บันทึกจำนวนใบแล้ว', text: s.name + ' (' + s.className + ')', showConfirmButton: false, timer: 2200, timerProgressBar: true });
+        MySwal.fire({ toast: true, position: 'top-end', icon: 'success', title: r.value.unchanged ? 'ไม่มีอะไรเปลี่ยน' : 'บันทึกแล้ว', text: s.name + ' (' + s.className + ')', showConfirmButton: false, timer: 2200, timerProgressBar: true });
         slxAfterSave(s.name, s.className);
       }
     }
@@ -6768,7 +6951,8 @@ div:where(.swal2-container) .swal2-popup.swal2-toast{--t1:#047857;--t2:#10b981;-
         if (e.action === 'edit') body = Object.keys(RK).filter(k => String(b[k]) !== String(a[k])).map(k => `<div class="au-d"><span class="au-k">${RK[k]}</span><span class="au-o">${esc(k === 'points' ? '−' + b[k] : b[k])}</span><span class="au-ar">→</span><span class="au-n">${esc(k === 'points' ? '−' + a[k] : a[k])}</span></div>`).join('');
         else { const x = e.action === 'create' ? a : b; body = `<div class="au-d"><span class="${e.action === 'create' ? 'au-n' : 'au-o'}">${esc(x.rule || '')} · −${esc(x.points)}</span></div>`; }
       } else if (e.kind === 'slip') {
-        const SK = { warn: 'ใบตักเตือน', prob: 'ใบทัณฑ์บน', warnNote: 'เรื่อง (ตักเตือน)', probNote: 'เรื่อง (ทัณฑ์บน)' }, sv = (o, k) => (o[k] == null ? '' : String(o[k]));
+        const SK = { warn: 'ใบตักเตือน', prob: 'ใบทัณฑ์บน', warnItems: 'เรื่อง (ตักเตือน)', probItems: 'เรื่อง (ทัณฑ์บน)', memo: 'บันทึกเพิ่มเติม', warnNote: 'ข้อความเดิม (ตักเตือน)', probNote: 'ข้อความเดิม (ทัณฑ์บน)' };
+        const sv = (o, k) => { const x = o[k]; if (Array.isArray(x)) return x.map((it, i) => (i + 1) + ') ' + (typeof it === 'string' ? it : String((it && it.t) || '') + (it && it.d ? ' (' + thDateShort(it.d) + ')' : ''))).join('  '); return x == null ? '' : String(x).replace(/\n+/g, ' / '); };
         body = Object.keys(SK).filter(k => sv(b, k) !== sv(a, k)).map(k => `<div class="au-d"><span class="au-k">${SK[k]}</span><span class="au-o">${esc(sv(b, k) || '–')}</span><span class="au-ar">→</span><span class="au-n">${esc(sv(a, k) || '–')}</span></div>`).join('');
       } else if (e.kind === 'settings') {
         body = Object.keys(a).map(k => `<div class="au-d"><span class="au-k">${esc(ST_KEY_LABEL[k] || k)}</span><span class="au-o">${esc(auditFmt(k, b[k]))}</span><span class="au-ar">→</span><span class="au-n">${esc(auditFmt(k, a[k]))}</span></div>`).join('');
